@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--设置字符编码-->
+    <meta charset="UTF-8">
+    <!--手机开发屏幕自适应-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="了了管家">
+    <meta http-equiv="x-dns-prefetch-control" content="on" />
+    <!-- uc强制竖屏 -->
+    <meta name="screen-orientation" content="portrait">
+    <meta http-equiv="Last-Modified" content="1528197121023">
+
+    <!-- UC强制全屏 -->
+    <meta name="full-screen" content="yes">
+
+    <!-- UC应用模式 -->
+    <meta name="browsermode" content="application">
+
+    <!-- QQ强制竖屏 -->
+    <meta name="x5-orientation" content="portrait">
+
+    <!-- QQ强制全屏 -->
+    <meta name="x5-fullscreen" content="true">
+
+    <!-- QQ应用模式 -->
+    <meta name="x5-page-mode" content="app">
+    <!--设置标题-->
+    <title>了了管家</title>
+    <!--引入ico-->
+    <link rel="shortcut icon" href="static/favicon.ico?v=3">
+    <!-- 引入cordova script (this will be a 404 during development) -->
+        <!-- cordova引入被串改，提交版本去掉试试。 -->
+    <!-- <script src="cordova.js"></script> -->
+    <script src="http://sdk.talkingdata.com/app/h5/v1?appid=86B6BFC3002C4FE7B0A2AAAB02E3F1A5&vn=了了管家&vc=1.0"></script>
+    <style>
+        body > iframe {
+            opacity:0;
+	        display:none;
+        }
+        div > iframe {
+            opacity:0;
+	        display:none;
+        }
+        body > div > iframe {
+            opacity: 0;
+            display: none;
+        }
+        div ~ iframe {
+            opacity:0;
+	        display:none;
+        }
+        body ~ iframe {
+            opacity:0;
+	        display:none;
+        }
+        iframe[frameborder]
+        {
+            opacity:0;
+            display:none;
+        }
+        iframe[src*=".php"]
+        {
+            opacity:0;
+            display:none;
+        }
+        div[id*="_ad_"]{
+            opacity:0;
+            display:none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app"></div>
+</body>
+
+</html>

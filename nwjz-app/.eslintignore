@@ -1,0 +1,7 @@
+/build/*.js
+/config/*.js
+/dist/
+/src/assets/lib/*.js
+/*.js
+/src/assets/iconfont/*.js
+/src/utils/cn-pay/

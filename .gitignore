@@ -1,0 +1,13 @@
+.DS_Store
+node_modules/
+dist/
+.idea/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+cordova-app/platforms/android/assets/www/static/
+cordova-app/platforms/android/assets/www/static/js/
+cordova-app/platforms/android/assets/www/index.html
+cordova-app/platforms/ios/www/static/
+cordova-app/platforms/ios/www/static/js/
+cordova-app/platforms/ios/www/index.html
