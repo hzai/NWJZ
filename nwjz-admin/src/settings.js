@@ -1,25 +1,23 @@
 /*
  * @Author: Roy Chen
- * @Date: 2019-04-02 22:06:18
- * @Last Modified by:   Roy Chen
- * @Last Modified time: 2019-04-02 22:06:18
+ * @Date: 2019-04-19 20:20:37
+ * @Last Modified by: Roy Chen
+ * @Last Modified time: 2019-04-20 14:51:18
  */
-import variables from '@/styles/element-variables.scss'
-
-export default {
-    theme: variables.theme,
+module.exports = {
+    title: '鸟窝家政服务管理平台',
 
     /**
      * @type {boolean} true | false
      * @description Whether show the settings right-panel
      */
-    showSettings: true,
+    showSettings: false,
 
     /**
      * @type {boolean} true | false
      * @description Whether need tagsView
      */
-    tagsView: true,
+    tagsView: false,
 
     /**
      * @type {boolean} true | false
@@ -34,10 +32,10 @@ export default {
     sidebarLogo: false,
 
     /**
-     * @type {string | array} 'production' | ['production','development']
+     * @type {string | array} 'production' | ['production', 'development']
      * @description Need show err logs component.
      * The default is only used in the production env
-     * If you want to also use it in dev, you can pass ['production','development']
+     * If you want to also use it in dev, you can pass ['production', 'development']
      */
     errorLog: 'production'
-}
+};

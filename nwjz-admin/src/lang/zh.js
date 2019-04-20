@@ -2,9 +2,23 @@
  * @Author: Roy Chen
  * @Date: 2019-04-02 21:53:07
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-02 23:33:10
+ * @Last Modified time: 2019-04-20 14:29:22
  */
 export default {
+    common: {
+        operations: '操作',
+        add: '添加',
+        edit: '编辑',
+        delete: '删除',
+        active: '激活',
+        inactive: '禁用',
+        confirm: '确定',
+        cancel: '取消',
+        success: '成功',
+        warning: '警告',
+        status: '状态',
+        created_time: '创建时间'
+    },
     route: {
         dashboard: '首页',
         introduction: '简述',
@@ -69,7 +83,28 @@ export default {
         theme: '换肤',
         clipboardDemo: 'Clipboard',
         i18n: '国际化',
-        externalLink: '外链'
+        externalLink: '外链',
+        system: '系统管理',
+        privilege: '权限管理',
+        user: '账户管理',
+        company: '客户管理',
+        companyManage: '客户列表',
+        createCompany: '创建客户',
+        editCompany: '编辑客户',
+        worker: '服务人员管理',
+        workerManage: '服务人员管理',
+        createWorker: '创建服务人员',
+        editWorker: '编辑服务人员',
+        member: '会员管理',
+        memberList: '会员列表',
+        memberLevel: '会员等级',
+        memberDetail: '会员详情',
+        customer: '客户管理',
+        customerType: '客户类型',
+        customerProspect: '潜在客户',
+        customerClient: '雇主列表',
+        createCustomer: '创建客户',
+        editCustomer: '编辑客户'
     },
     navbar: {
         logOut: '退出登录',
@@ -79,7 +114,7 @@ export default {
         size: '布局大小'
     },
     login: {
-        title: '了了管家后台管理系统',
+        title: '鸟窝家政服务管理平台',
         logIn: '登录',
         username: '账号',
         password: '密码',
@@ -95,6 +130,7 @@ export default {
     },
     permission: {
         addRole: '新增角色',
+        editRole: '编辑角色',
         editPermission: '编辑权限',
         roles: '你的权限',
         switchRoles: '切换权限',
@@ -102,7 +138,26 @@ export default {
             '在某些情况下，不适合使用 v-permission。例如：Element-UI 的 Tab 组件或 el-table-column 以及其它动态渲染 dom 的场景。你只能通过手动设置 v-if 来实现。',
         delete: '删除',
         confirm: '确定',
-        cancel: '取消'
+        cancel: '取消',
+        key: '角色Key',
+        name: '角色名称',
+        description: '角色描述'
+    },
+    user: {
+        addUser: '新增用户',
+        editUser: '编辑用户',
+        identifier: '账号',
+        role: '角色',
+        name: '姓名',
+        contact_phone: '联系电话'
+    },
+    company: {
+        add: '新增客户',
+        edit: '编辑客户',
+        name: '公司名称',
+        email: '公司邮箱',
+        telephone: '联系电话',
+        website: '公司网址'
     },
     guide: {
         description:
@@ -185,4 +240,4 @@ export default {
         fixedHeader: '固定 Header',
         sidebarLogo: '侧边栏 Logo'
     }
-}
+};
