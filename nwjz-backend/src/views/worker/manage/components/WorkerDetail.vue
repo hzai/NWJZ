@@ -450,9 +450,7 @@ export default {
         // 后台标记
         remark: '',
         // 角色
-        roles: ['worker'],
-        // 保险记录
-        insurance: []
+        roles: ['worker']
       },
       fetchSuccess: true,
       loading: false,

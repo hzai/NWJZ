@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-12 23:54:27
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-09 17:32:27
+ * @Last Modified time: 2019-04-20 22:20:00
  */
 
 import Promise from 'bluebird';
@@ -101,6 +101,11 @@ const InsuranceSchema = new mongoose.Schema({
  */
 const WorkerSchema = new mongoose.Schema(
     {
+        /* ** 隶属于的公司 */
+        company: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Company'
+        },
         // 保姆编码
         worker_code: {
             type: String
@@ -247,10 +252,6 @@ const WorkerSchema = new mongoose.Schema(
         is_employed: {
             type: Boolean,
             default: false
-        },
-        insurance: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Insurance'
         },
         created_time: {
             type: Date,

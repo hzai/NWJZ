@@ -2,8 +2,9 @@
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:36:55
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-09 16:02:16
+ * @Last Modified time: 2019-04-20 22:13:34
  */
+import mongoose from 'mongoose';
 import Worker from '../models/worker.model';
 import Counters from '../models/counters.model';
 import config from '../../config/config';
@@ -45,6 +46,7 @@ async function create(req, res, next) {
     req.body.worker_code = counter.worker_code_seq;
     //console.log(req.body)
     const worker = new Worker(req.body);
+    worker.company = req.payload.company;
     worker.belong_to = req.payload.user;
     worker.create_by = req.payload.user;
     worker
@@ -190,9 +192,9 @@ async function getWorkers(req, res, next) {
             }
         });
     }
-    // _filter.$and.push({
-    //     belong_to: req.payload.user
-    // });
+    _filter.$and.push({
+        company: req.payload.company
+    });
 
     let total = await Worker.count(_filter);
     const query = Utils.handleQuery(req, total);
@@ -283,15 +285,16 @@ async function getFreeWorkers(req, res, next) {
  * @param {*} next
  */
 async function statWorkerStatus(req, res, next) {
-    let total = await Worker.count({});
+    let _filter = { company: mongoose.Types.ObjectId(req.payload.company) };
+    let total = await Worker.count(_filter);
     Worker.aggregate([
-        { $match: {} },
+        { $match: _filter },
         { $group: { _id: '$status', count: { $sum: 1 } } },
         { $sort: { _id: 1 } }
     ])
         .exec()
         .then(workers => {
-            console.log(workers);
+            console.log('workers = ', workers);
             res.json({
                 status: 0,
                 type: 'SUCCESS',
