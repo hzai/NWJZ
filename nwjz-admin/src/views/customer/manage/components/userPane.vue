@@ -14,7 +14,7 @@
       <el-table-column align="center" :label="$t('user.role')" width="200">
         <template slot-scope="scope">
           <el-tag v-for="role in scope.row.roles" :key="role">
-            {{ role }}
+            {{ role2name(role)}}
           </el-tag>
         </template>
       </el-table-column>
@@ -121,9 +121,6 @@ export default {
         1: '禁用'
       };
       return statusMap[status];
-    },
-    roleFilter(role) {
-      return this.rolesMap[role];
     }
   },
   data() {
@@ -388,27 +385,11 @@ export default {
           value: item.key,
           label: item.name
         });
+        this.rolesMap[item.key] = item.name;
       });
     },
-    // reference: src/view/layout/components/Sidebar/SidebarItem.vue
-    onlyOneShowingChild(children = [], parent) {
-      let onlyOneChild = null;
-      const showingChildren = children.filter(item => !item.hidden);
-
-      // When there is only one child route, the child route is displayed by default
-      if (showingChildren.length === 1) {
-        onlyOneChild = showingChildren[0];
-        onlyOneChild.path = path.resolve(parent.path, onlyOneChild.path);
-        return onlyOneChild;
-      }
-
-      // Show parent if there are no child route to display
-      if (showingChildren.length === 0) {
-        onlyOneChild = { ...parent, path: '', noShowingChildren: true };
-        return onlyOneChild;
-      }
-
-      return false;
+    role2name(role) {
+      return this.rolesMap[role];
     }
   }
 };

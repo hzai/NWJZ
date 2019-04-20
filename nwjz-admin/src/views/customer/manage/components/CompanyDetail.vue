@@ -1,28 +1,37 @@
 <template>
   <div class="createPost-container">
-    <el-alert v-if="postForm.remark" title="温馨提示" type="warning" :description="'备注: ' + postForm.remark" show-icon />
     <el-tabs v-model="activeTab" style="margin-top:15px;">
       <el-tab-pane label="基本信息" name="company">
         <el-form ref="postForm" :model="postForm" :rules="rules" label-width="85px" label-position="right" style="padding-top:10px;">
           <div class="createPost-main-container">
-            <el-form-item label="公司名称" prop="name">
-              <el-input v-model="postForm.name" placeholder="公司名称" />
-            </el-form-item>
-            <el-form-item label="联系电话" prop="telephone">
-              <el-input v-model="postForm.telephone" />
-            </el-form-item>
-            <el-form-item label="公司邮箱" prop="email">
-              <el-input v-model="postForm.email" />
-            </el-form-item>
-            <el-form-item label="公司网站" prop="website">
-              <el-input v-model="postForm.website" />
-            </el-form-item>
-            <el-form-item label="状态" prop="status">
-              <el-select v-model="postForm.status" class="filter-item" placeholder="请选择">
-                <el-option v-for="(item, key) in statusOptions" :key="key" :label="item.label" :value="item.value" />
-              </el-select>
-            </el-form-item>
-            <el-row :gutter="10" style="margin-top:20px;margin-left:85px">
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="公司名称" prop="name">
+                  <el-input v-model="postForm.name" placeholder="公司名称" />
+                </el-form-item>
+                <el-form-item label="联系电话" prop="telephone">
+                  <el-input v-model="postForm.telephone" />
+                </el-form-item>
+                <el-form-item label="公司邮箱" prop="email">
+                  <el-input v-model="postForm.email" />
+                </el-form-item>
+                <el-form-item label="公司网站" prop="website">
+                  <el-input v-model="postForm.website" />
+                </el-form-item>
+                <el-form-item label="状态" prop="status">
+                  <el-select v-model="postForm.status" class="filter-item" placeholder="请选择">
+                    <el-option v-for="(item, key) in statusOptions" :key="key" :label="item.label" :value="item.value" />
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="营业执照" prop="business_license_image">
+                  <el-upload class="avatar-uploader" :action="img_upload_api" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                    <img v-if="postForm.business_license_image" :src="postForm.business_license_image" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon" />
+                  </el-upload>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row style="margin-left:85px">
               <el-col>
                 <el-button v-if="!isEdit" v-loading="loading" size="medium" type="success" @click="submitForm()">保存</el-button>
                 <el-button v-if="isEdit" v-loading="loading" size="medium" type="success" @click="updateForm()">更新</el-button>
@@ -60,8 +69,8 @@ import { getShengXiao } from '@/utils';
 import CommunicationPane from '@/components/Communication';
 import UserPane from './userPane';
 
-const img_upload_api = process.env.BASE_API + '/upload/addimg';
-const img_url = process.env.IMG_URL;
+const img_upload_api = process.env.VUE_APP_BASE_API + '/upload/addimg';
+const img_url = process.env.VUE_APP_IMG_URL;
 const nationOptions = Object.assign([], nationData);
 export default {
   name: 'CompanyDetail',
@@ -100,6 +109,7 @@ export default {
         telephone: '',
         website: '',
         roles: [],
+        business_license_image: '',
         status: 0
       },
       fetchSuccess: true,
@@ -252,9 +262,11 @@ export default {
     },
     handleAvatarSuccess(res, file) {
       console.log(res);
+      console.log(img_url);
       if (res.status === 0) {
-        this.postForm.avatar = img_url + res.image_path;
+        this.postForm.business_license_image = img_url + res.image_path;
       }
+      console.log(this.postForm);
       // this.postForm.avatar = URL.createObjectURL(file.raw)
     },
     beforeAvatarUpload(file) {
@@ -288,6 +300,7 @@ export default {
       fetchCompany(_id)
         .then(response => {
           this.postForm = response.data.data.company;
+          console.log(this.postForm);
           this.fetchSuccess = true;
         })
         .catch(err => {
@@ -395,14 +408,14 @@ export default {
   border: 1px dashed;
   font-size: 28px;
   color: #e2e0e2;
-  width: 100px;
-  height: 100px;
-  line-height: 100px;
+  width: 200px;
+  height: 200px;
+  line-height: 200px;
   text-align: center;
 }
 .avatar {
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
   display: block;
 }
 .title-prompt {
