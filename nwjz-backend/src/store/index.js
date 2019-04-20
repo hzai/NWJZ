@@ -1,30 +1,30 @@
 /*
  * @Author: Roy Chen
- * @Date: 2019-04-03 13:27:59
- * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-03 20:58:08
+ * @Date: 2019-04-19 20:48:30
+ * @Last Modified by:   Roy Chen
+ * @Last Modified time: 2019-04-19 20:48:30
  */
 import Vue from 'vue';
 import Vuex from 'vuex';
-import app from './modules/app';
-import errorLog from './modules/errorLog';
-import permission from './modules/permission';
-import tagsView from './modules/tagsView';
-import settings from './modules/settings';
-import user from './modules/user';
 import getters from './getters';
 
 Vue.use(Vuex);
 
+// https://webpack.js.org/guides/dependency-management/#requirecontext
+const modulesFiles = require.context('./modules', false, /\.js$/);
+
+// you do not need `import app from './modules/app'`
+// it will auto require all vuex module from modules file
+const modules = modulesFiles.keys().reduce((modules, modulePath) => {
+    // set './app.js' => 'app'
+    const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, '$1');
+    const value = modulesFiles(modulePath);
+    modules[moduleName] = value.default;
+    return modules;
+}, {});
+
 const store = new Vuex.Store({
-    modules: {
-        app,
-        errorLog,
-        permission,
-        tagsView,
-        settings,
-        user
-    },
+    modules,
     getters
 });
 

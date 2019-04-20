@@ -1,10 +1,11 @@
 /*
  * @Author: Roy Chen
- * @Date: 2019-04-02 22:11:11
+ * @Date: 2019-04-19 20:48:43
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-03 20:58:20
+ * @Last Modified time: 2019-04-19 20:52:41
  */
 import Cookies from 'js-cookie';
+import { getLanguage } from '@/lang/index';
 
 const state = {
     sidebar: {
@@ -14,7 +15,7 @@ const state = {
         withoutAnimation: false
     },
     device: 'desktop',
-    language: Cookies.get('language') || 'zh',
+    language: getLanguage(),
     size: Cookies.get('size') || 'mini'
 };
 

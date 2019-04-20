@@ -1,9 +1,3 @@
-/*
- * @Author: Roy Chen
- * @Date: 2019-04-02 23:42:37
- * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-13 22:01:39
- */
 import { login, logout, getInfo } from '@/api/user';
 import { getToken, setToken, removeToken } from '@/utils/auth';
 import router, { resetRouter } from '@/router';
@@ -35,7 +29,6 @@ const mutations = {
 };
 
 const actions = {
-    // user login
     login({ commit }, userInfo) {
         const { username, password } = userInfo;
         return new Promise((resolve, reject) => {
@@ -58,11 +51,13 @@ const actions = {
             getInfo(state.token)
                 .then(response => {
                     const { data } = response.data;
+
                     if (!data) {
                         reject('Verification failed, please Login again.');
                     }
 
                     const { roles, name, avatar } = data.user;
+
                     // roles must be a non-empty array
                     if (!roles || roles.length <= 0) {
                         reject('getInfo: roles must be a non-null array!');

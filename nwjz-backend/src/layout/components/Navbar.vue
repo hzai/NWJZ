@@ -1,23 +1,22 @@
 <template>
   <div class="navbar">
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
-    <breadcrumb class="breadcrumb-container" />
+    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <search class="right-menu-item" />
+        <search id="header-search" class="right-menu-item" />
 
         <error-log class="errLog-container right-menu-item hover-effect" />
 
-        <screenfull class="right-menu-item hover-effect" />
+        <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
         <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
-          <size-select class="right-menu-item hover-effect" />
+          <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
 
         <!-- <lang-select class="right-menu-item hover-effect" /> -->
-        <span>{{ name }}</span>
 
       </template>
 
@@ -37,6 +36,9 @@
               {{ $t('navbar.github') }}
             </el-dropdown-item>
           </a>
+          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
+            <el-dropdown-item>Docs</el-dropdown-item>
+          </a>
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">{{ $t('navbar.logOut') }}</span>
           </el-dropdown-item>
@@ -53,32 +55,31 @@ import Hamburger from '@/components/Hamburger';
 import ErrorLog from '@/components/ErrorLog';
 import Screenfull from '@/components/Screenfull';
 import SizeSelect from '@/components/SizeSelect';
-// import LangSelect from '@/components/LangSelect';
+// import LangSelect from '@/components/LangSelect'
 import Search from '@/components/HeaderSearch';
 
 export default {
-    components: {
-        Breadcrumb,
-        Hamburger,
-        ErrorLog,
-        Screenfull,
-        SizeSelect,
-        // LangSelect,
-        Search
+  components: {
+    Breadcrumb,
+    Hamburger,
+    ErrorLog,
+    Screenfull,
+    SizeSelect,
+    // LangSelect,
+    Search
+  },
+  computed: {
+    ...mapGetters(['sidebar', 'avatar', 'device'])
+  },
+  methods: {
+    toggleSideBar() {
+      this.$store.dispatch('app/toggleSideBar');
     },
-    computed: {
-        ...mapGetters(['sidebar', 'name', 'avatar', 'device'])
-    },
-    methods: {
-        toggleSideBar() {
-            this.$store.dispatch('app/toggleSideBar');
-        },
-        async logout() {
-            await this.$store.dispatch('user/logout');
-            //   this.$router.push(`/login?redirect=${this.$route.fullPath}`);
-            this.$router.push(`/login`);
-        }
+    async logout() {
+      await this.$store.dispatch('user/logout');
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
     }
+  }
 };
 </script>
 

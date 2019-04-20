@@ -100,310 +100,310 @@ import { getRoles } from '@/api/role';
 import { fetchUserList, createUser, updateUser } from '@/api/user';
 
 export default {
-    name: 'SystemUser',
-    filters: {
-        statusTypeFilter(status) {
-            const statusMap = {
-                0: 'success',
-                1: 'danger'
-            };
-            return statusMap[status];
+  name: 'SystemUser',
+  filters: {
+    statusTypeFilter(status) {
+      const statusMap = {
+        0: 'success',
+        1: 'danger'
+      };
+      return statusMap[status];
+    },
+    statusFilter(status) {
+      const statusMap = {
+        0: '正常',
+        1: '禁用'
+      };
+      return statusMap[status];
+    },
+    roleFilter(role) {
+      return this.rolesMap[role];
+    }
+  },
+  data() {
+    return {
+      tableKey: 0,
+      list: null,
+      total: null,
+      listLoading: true,
+      listQuery: {
+        page: 1,
+        limit: 10
+      },
+      rolesMap: [],
+      roleOptions: [],
+      statusOptions: [
+        {
+          value: 0,
+          label: '正常'
         },
-        statusFilter(status) {
-            const statusMap = {
-                0: '正常',
-                1: '禁用'
-            };
-            return statusMap[status];
-        },
-        roleFilter(role) {
-            return this.rolesMap[role];
+        {
+          value: 1,
+          label: '禁用'
         }
+      ],
+      dialogType: 'new',
+      dialogFormVisible: false,
+      temp: {
+        _id: '',
+        identifier: '',
+        password: '',
+        name: '',
+        sex: 0,
+        email: '',
+        contact_phone: '',
+        birth: new Date(),
+        roles: [],
+        status: 0
+      },
+      rules: {
+        identifier: [
+          {
+            required: true,
+            message: '账号是必填项',
+            trigger: 'blur'
+          }
+        ],
+        password: [
+          {
+            required: true,
+            message: '密码是必填项',
+            trigger: 'blur'
+          }
+        ],
+        name: [
+          {
+            required: true,
+            message: '姓名是必填项',
+            trigger: 'blur'
+          }
+        ],
+        contact_phone: [
+          {
+            required: true,
+            message: '联系电话是必填项',
+            trigger: 'blur'
+          }
+        ],
+        birth: [
+          {
+            type: 'date',
+            required: true,
+            message: '日期格式不正确',
+            trigger: 'change'
+          }
+        ],
+        roles: [
+          {
+            required: true,
+            message: '角色是必填项',
+            trigger: 'change'
+          }
+        ]
+      }
+    };
+  },
+  computed: {
+    routesData() {
+      return this.routes;
+    }
+  },
+  created() {
+    this.getRoles();
+    this.getList();
+  },
+  methods: {
+    getList() {
+      this.listLoading = true;
+      fetchUserList(this.listQuery).then(response => {
+        this.list = response.data.data.users;
+        this.total = response.data.data.total;
+        this.listLoading = false;
+      });
     },
-    data() {
-        return {
-            tableKey: 0,
-            list: null,
-            total: null,
-            listLoading: true,
-            listQuery: {
-                page: 1,
-                limit: 10
-            },
-            rolesMap: [],
-            roleOptions: [],
-            statusOptions: [
-                {
-                    value: 0,
-                    label: '正常'
-                },
-                {
-                    value: 1,
-                    label: '禁用'
-                }
-            ],
-            dialogType: 'new',
-            dialogFormVisible: false,
-            temp: {
-                _id: '',
-                identifier: '',
-                password: '',
-                name: '',
-                sex: 0,
-                email: '',
-                contact_phone: '',
-                birth: new Date(),
-                roles: [],
-                status: 0
-            },
-            rules: {
-                identifier: [
-                    {
-                        required: true,
-                        message: '账号是必填项',
-                        trigger: 'blur'
-                    }
-                ],
-                password: [
-                    {
-                        required: true,
-                        message: '密码是必填项',
-                        trigger: 'blur'
-                    }
-                ],
-                name: [
-                    {
-                        required: true,
-                        message: '姓名是必填项',
-                        trigger: 'blur'
-                    }
-                ],
-                contact_phone: [
-                    {
-                        required: true,
-                        message: '联系电话是必填项',
-                        trigger: 'blur'
-                    }
-                ],
-                birth: [
-                    {
-                        type: 'date',
-                        required: true,
-                        message: '日期格式不正确',
-                        trigger: 'change'
-                    }
-                ],
-                roles: [
-                    {
-                        required: true,
-                        message: '角色是必填项',
-                        trigger: 'change'
-                    }
-                ]
-            }
-        };
+    handleSizeChange(val) {
+      this.listQuery.limit = val;
+      this.getList();
     },
-    computed: {
-        routesData() {
-            return this.routes;
-        }
+    handleCurrentChange(val) {
+      this.listQuery.page = val;
+      this.getList();
     },
-    created() {
-        this.getRoles();
-        this.getList();
+    handleModifyStatus(row, status) {
+      this.$message({
+        message: '操作成功',
+        type: 'success'
+      });
+      row.status = status;
+      this.updateData(row);
     },
-    methods: {
-        getList() {
-            this.listLoading = true;
-            fetchUserList(this.listQuery).then(response => {
-                this.list = response.data.data.users;
-                this.total = response.data.data.total;
-                this.listLoading = false;
-            });
-        },
-        handleSizeChange(val) {
-            this.listQuery.limit = val;
-            this.getList();
-        },
-        handleCurrentChange(val) {
-            this.listQuery.page = val;
-            this.getList();
-        },
-        handleModifyStatus(row, status) {
-            this.$message({
-                message: '操作成功',
-                type: 'success'
-            });
-            row.status = status;
-            this.updateData(row);
-        },
-        resetTemp() {
-            this.temp = {
-                identifier: '',
-                name: '',
-                sex: 0,
-                email: '',
-                contact_phone: '',
-                birth: new Date(),
-                roles: [],
-                status: 0
-            };
-        },
-        handleCreate() {
-            this.resetTemp();
-            this.dialogType = 'new';
-            this.dialogFormVisible = true;
-            this.$nextTick(() => {
-                this.$refs['dataForm'].clearValidate();
-            });
-        },
-        createData() {
-            this.$refs['dataForm'].validate(valid => {
-                if (valid) {
-                    createUser(this.temp).then(resp => {
-                        if (!resp.data) {
-                            this.$notify({
-                                title: '失败',
-                                message: '创建失败',
-                                type: 'error',
-                                duration: 2000
-                            });
-                        } else if (resp.data.status !== 0) {
-                            this.$notify({
-                                title: '失败',
-                                message: '创建失败: ' + resp.data.message,
-                                type: 'error',
-                                duration: 2000
-                            });
-                        } else {
-                            this.temp.nickname = this.temp.name;
-                            this.temp.created_time = new Date();
-                            this.temp._id = resp.data.data.user._id;
-                            this.list.unshift(this.temp);
-                            this.dialogFormVisible = false;
-                            this.$notify({
-                                title: '成功',
-                                message: '创建成功',
-                                type: 'success',
-                                duration: 2000
-                            });
-                        }
-                    });
-                }
-            });
-        },
-        handleUpdate(row) {
-            this.temp = Object.assign({}, row); // copy obj
-            this.temp.birth = new Date(this.temp.birth);
-            this.dialogType = 'edit';
-            this.dialogFormVisible = true;
-            this.$nextTick(() => {
-                this.$refs['dataForm'].clearValidate();
-            });
-        },
-        updateForm() {
-            this.$refs['dataForm'].validate(valid => {
-                if (valid) {
-                    const tempData = Object.assign({}, this.temp);
-                    this.updateData(tempData);
-                }
-            });
-        },
-        updateData(data) {
-            updateUser(data).then(resp => {
-                if (!resp.data) {
-                    this.$notify({
-                        title: '失败',
-                        message: '修改失败',
-                        type: 'error',
-                        duration: 2000
-                    });
-                } else if (resp.data.status !== 0) {
-                    this.$notify({
-                        title: '失败',
-                        message: '修改失败: ' + resp.data.message,
-                        type: 'error',
-                        duration: 2000
-                    });
-                } else {
-                    for (const v of this.list) {
-                        if (v._id === this.temp._id) {
-                            const index = this.list.indexOf(v);
-                            this.list.splice(index, 1, this.temp);
-                            break;
-                        }
-                    }
-                    this.dialogFormVisible = false;
-                    this.$notify({
-                        title: '成功',
-                        message: '更新成功',
-                        type: 'success',
-                        duration: 2000
-                    });
-                }
-            });
-        },
-        handleDelete(row) {
-            this.$notify({
+    resetTemp() {
+      this.temp = {
+        identifier: '',
+        name: '',
+        sex: 0,
+        email: '',
+        contact_phone: '',
+        birth: new Date(),
+        roles: [],
+        status: 0
+      };
+    },
+    handleCreate() {
+      this.resetTemp();
+      this.dialogType = 'new';
+      this.dialogFormVisible = true;
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate();
+      });
+    },
+    createData() {
+      this.$refs['dataForm'].validate(valid => {
+        if (valid) {
+          createUser(this.temp).then(resp => {
+            if (!resp.data) {
+              this.$notify({
+                title: '失败',
+                message: '创建失败',
+                type: 'error',
+                duration: 2000
+              });
+            } else if (resp.data.status !== 0) {
+              this.$notify({
+                title: '失败',
+                message: '创建失败: ' + resp.data.message,
+                type: 'error',
+                duration: 2000
+              });
+            } else {
+              this.temp.nickname = this.temp.name;
+              this.temp.created_time = new Date();
+              this.temp._id = resp.data.data.user._id;
+              this.list.unshift(this.temp);
+              this.dialogFormVisible = false;
+              this.$notify({
                 title: '成功',
-                message: '删除成功',
+                message: '创建成功',
                 type: 'success',
                 duration: 2000
-            });
-            const index = this.list.indexOf(row);
-            this.list.splice(index, 1);
-        },
-        // handleDownload() {
-        //   require.ensure([], () => {
-        //     const { export_json_to_excel } = require('vendor/Export2Excel');
-        //     const tHeader = ['时间', '地区', '类型', '标题', '重要性'];
-        //     const filterVal = ['timestamp', 'province', 'type', 'title', 'importance'];
-        //     const data = this.formatJson(filterVal, this.list);
-        //     export_json_to_excel(tHeader, data, 'table数据');
-        //   });
-        // },
-        // formatJson(filterVal, jsonData) {
-        //   return jsonData.map(v =>
-        //     filterVal.map(j => {
-        //       if (j === 'timestamp') {
-        //         return parseTime(v[j]);
-        //       } else {
-        //         return v[j];
-        //       }
-        //     })
-        //   );
-        // },
-        async getRoles() {
-            const res = await getRoles();
-            this.rolesList = res.data.data.roles;
-            this.rolesList.forEach(item => {
-                this.roleOptions.push({
-                    value: item.key,
-                    label: item.name
-                });
-            });
-        },
-        // reference: src/view/layout/components/Sidebar/SidebarItem.vue
-        onlyOneShowingChild(children = [], parent) {
-            let onlyOneChild = null;
-            const showingChildren = children.filter(item => !item.hidden);
-
-            // When there is only one child route, the child route is displayed by default
-            if (showingChildren.length === 1) {
-                onlyOneChild = showingChildren[0];
-                onlyOneChild.path = path.resolve(parent.path, onlyOneChild.path);
-                return onlyOneChild;
+              });
             }
-
-            // Show parent if there are no child route to display
-            if (showingChildren.length === 0) {
-                onlyOneChild = { ...parent, path: '', noShowingChildren: true };
-                return onlyOneChild;
-            }
-
-            return false;
+          });
         }
+      });
+    },
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row); // copy obj
+      this.temp.birth = new Date(this.temp.birth);
+      this.dialogType = 'edit';
+      this.dialogFormVisible = true;
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate();
+      });
+    },
+    updateForm() {
+      this.$refs['dataForm'].validate(valid => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp);
+          this.updateData(tempData);
+        }
+      });
+    },
+    updateData(data) {
+      updateUser(data).then(resp => {
+        if (!resp.data) {
+          this.$notify({
+            title: '失败',
+            message: '修改失败',
+            type: 'error',
+            duration: 2000
+          });
+        } else if (resp.data.status !== 0) {
+          this.$notify({
+            title: '失败',
+            message: '修改失败: ' + resp.data.message,
+            type: 'error',
+            duration: 2000
+          });
+        } else {
+          for (const v of this.list) {
+            if (v._id === this.temp._id) {
+              const index = this.list.indexOf(v);
+              this.list.splice(index, 1, this.temp);
+              break;
+            }
+          }
+          this.dialogFormVisible = false;
+          this.$notify({
+            title: '成功',
+            message: '更新成功',
+            type: 'success',
+            duration: 2000
+          });
+        }
+      });
+    },
+    handleDelete(row) {
+      this.$notify({
+        title: '成功',
+        message: '删除成功',
+        type: 'success',
+        duration: 2000
+      });
+      const index = this.list.indexOf(row);
+      this.list.splice(index, 1);
+    },
+    // handleDownload() {
+    //   require.ensure([], () => {
+    //     const { export_json_to_excel } = require('vendor/Export2Excel');
+    //     const tHeader = ['时间', '地区', '类型', '标题', '重要性'];
+    //     const filterVal = ['timestamp', 'province', 'type', 'title', 'importance'];
+    //     const data = this.formatJson(filterVal, this.list);
+    //     export_json_to_excel(tHeader, data, 'table数据');
+    //   });
+    // },
+    // formatJson(filterVal, jsonData) {
+    //   return jsonData.map(v =>
+    //     filterVal.map(j => {
+    //       if (j === 'timestamp') {
+    //         return parseTime(v[j]);
+    //       } else {
+    //         return v[j];
+    //       }
+    //     })
+    //   );
+    // },
+    async getRoles() {
+      const res = await getRoles();
+      this.rolesList = res.data.data.roles;
+      this.rolesList.forEach(item => {
+        this.roleOptions.push({
+          value: item.key,
+          label: item.name
+        });
+      });
+    },
+    // reference: src/view/layout/components/Sidebar/SidebarItem.vue
+    onlyOneShowingChild(children = [], parent) {
+      let onlyOneChild = null;
+      const showingChildren = children.filter(item => !item.hidden);
+
+      // When there is only one child route, the child route is displayed by default
+      if (showingChildren.length === 1) {
+        onlyOneChild = showingChildren[0];
+        onlyOneChild.path = path.resolve(parent.path, onlyOneChild.path);
+        return onlyOneChild;
+      }
+
+      // Show parent if there are no child route to display
+      if (showingChildren.length === 0) {
+        onlyOneChild = { ...parent, path: '', noShowingChildren: true };
+        return onlyOneChild;
+      }
+
+      return false;
     }
+  }
 };
 </script>
 

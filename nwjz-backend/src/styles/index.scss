@@ -97,14 +97,20 @@ div:focus {
     }
 }
 
-code {
+aside {
     background: #eef1f6;
-    padding: 15px 16px;
+    padding: 8px 24px;
     margin-bottom: 20px;
+    border-radius: 2px;
     display: block;
-    line-height: 36px;
-    font-size: 15px;
-    font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 32px;
+    font-size: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    color: #2c3e50;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 
     a {
         color: #337ab7;
@@ -115,21 +121,6 @@ code {
         }
     }
 }
-
-.warn-content {
-    background: rgba(66, 185, 131, 0.1);
-    border-radius: 2px;
-    padding: 16px;
-    padding: 1rem;
-    line-height: 1.6rem;
-    word-spacing: 0.05rem;
-
-    a {
-        color: #42b983;
-        font-weight: 600;
-    }
-}
-
 //main-container全局样式
 .app-container {
     padding: 20px;
@@ -179,10 +170,6 @@ code {
     .subtitle {
         font-size: 20px;
         color: #fff;
-    }
-
-    &.0 {
-        background: #d0d0d0;
     }
 
     &.draft {

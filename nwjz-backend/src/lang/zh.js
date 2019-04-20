@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2019-04-02 21:53:07
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-11 12:05:10
+ * @Last Modified time: 2019-04-20 20:37:45
  */
 export default {
     common: {
@@ -87,10 +87,14 @@ export default {
         system: '系统管理',
         privilege: '权限管理',
         user: '账户管理',
-        worker: '服务人员管理',
-        workerManage: '服务人员管理',
-        createWorker: '创建服务人员',
-        editWorker: '编辑服务人员',
+        company: '客户管理',
+        companyManage: '客户列表',
+        createCompany: '创建客户',
+        editCompany: '编辑客户',
+        worker: '阿姨管理',
+        workerManage: '阿姨筛选',
+        createWorker: '新增阿姨',
+        editWorker: '编辑阿姨',
         member: '会员管理',
         memberList: '会员列表',
         memberLevel: '会员等级',
@@ -98,9 +102,15 @@ export default {
         customer: '客户管理',
         customerType: '客户类型',
         customerProspect: '潜在客户',
-        customerClient: '雇主列表',
-        createCustomer: '创建客户',
-        editCustomer: '编辑客户'
+        customerClient: '客户状态',
+        createCustomer: '新建客户',
+        editCustomer: '编辑客户',
+        order: '订单管理',
+        createOrder: '新增订单',
+        createContract: '新增合同',
+        statistic: '统计分析',
+        statisticShop: '门店统计分析',
+        statisticSale: '销售统计分析'
     },
     navbar: {
         logOut: '退出登录',
@@ -110,7 +120,7 @@ export default {
         size: '布局大小'
     },
     login: {
-        title: '了了管家后台管理系统',
+        title: '鸟窝家政服务管理平台',
         logIn: '登录',
         username: '账号',
         password: '密码',
@@ -146,6 +156,14 @@ export default {
         role: '角色',
         name: '姓名',
         contact_phone: '联系电话'
+    },
+    company: {
+        add: '新增客户',
+        edit: '编辑客户',
+        name: '公司名称',
+        email: '公司邮箱',
+        telephone: '联系电话',
+        website: '公司网址'
     },
     guide: {
         description:

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { transactionList } from '@/api/remoteSearch'
+import { transactionList } from '@/api/remote-search';
 
 export default {
   filters: {
@@ -29,20 +29,20 @@ export default {
       const statusMap = {
         success: 'success',
         pending: 'danger'
-      }
-      return statusMap[status]
+      };
+      return statusMap[status];
     },
     orderNoFilter(str) {
-      return str.substring(0, 30)
+      return str.substring(0, 30);
     }
   },
   data() {
     return {
       list: null
-    }
+    };
   },
   created() {
-    this.fetchData()
+    this.fetchData();
   },
   methods: {
     fetchData() {
@@ -51,5 +51,5 @@ export default {
       //   })
     }
   }
-}
+};
 </script>
