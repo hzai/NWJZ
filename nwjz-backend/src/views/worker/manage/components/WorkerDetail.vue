@@ -347,8 +347,8 @@ import { getShengXiao } from '@/utils';
 import insurancePane from './insurancePane';
 import CommunicationPane from '@/components/Communication';
 
-const img_upload_api = process.env.BASE_API + '/upload/addimg';
-const img_url = process.env.IMG_URL;
+const img_upload_api = process.env.VUE_APP_BASE_API + '/upload/addimg';
+const img_url = process.env.VUE_APP_IMG_URL;
 const nationOptions = Object.assign([], nationData);
 export default {
   name: 'WorkerDetail',
@@ -610,8 +610,9 @@ export default {
     },
     handleAvatarSuccess(res, file) {
       console.log(res);
+      console.log('img_url = ', img_url);
       if (res.status === 0) {
-        this.postForm.avatar = img_url + res.image_path;
+        this.postForm.avatar = this.img_url + res.image_path;
       }
       // this.postForm.avatar = URL.createObjectURL(file.raw)
     },
@@ -642,7 +643,6 @@ export default {
     },
     fetchData() {
       const _id = this.$route.query.id;
-      console.log('_id = ', _id);
       fetchWorker(_id)
         .then(response => {
           this.postForm = response.data.data.worker;
