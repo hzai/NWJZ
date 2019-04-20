@@ -328,10 +328,10 @@
 
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label="保险购买记录" name="insurance">
+      <el-tab-pane v-if="isEdit" label="保险购买记录" name="insurance">
         <insurance-pane :worker-id="this.$route.query.id" />
       </el-tab-pane>
-      <el-tab-pane label="沟通记录" name="communication">
+      <el-tab-pane v-if="isEdit" label="沟通记录" name="communication">
         <communication-pane type="worker" :worker-id="this.$route.query.id" />
       </el-tab-pane>
     </el-tabs>
@@ -351,395 +351,395 @@ const img_upload_api = process.env.BASE_API + '/upload/addimg';
 const img_url = process.env.IMG_URL;
 const nationOptions = Object.assign([], nationData);
 export default {
-    name: 'WorkerDetail',
-    components: {
-        insurancePane,
-        CommunicationPane
-    },
-    props: {
-        isEdit: {
-            type: Boolean,
-            default: false
-        }
-    },
-    data() {
-        var validateIDCard = (rule, value, callback) => {
-            if (value === '') {
-                callback();
-            } else if (value.length < 18) {
-                callback(new Error('请输入正确的身份证号'));
-            } else if (!value || !/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/i.test(value)) {
-                callback(new Error('请输入正确的身份证号'));
-            } else {
-                callback();
-            }
-        };
-        return {
-            activeTab: 'worker',
-            dialogImageUrl: '',
-            dialogVisible: false,
-            img_upload_api,
-            img_url,
-            city: city,
-            postForm: {
-                status: 0,
-                // 是否受雇为员工，默认false
-                is_employed: false,
-                // 昵称
-                nickname: '',
-                // 头像
-                avatar: '',
-                // 姓名
-                name: '',
-                // 性别
-                sex: '女',
-                // 籍贯
-                native_place: '',
-                // 民族
-                nation: '',
-                // 属相
-                zodiac: '',
-                // 户籍地址
-                address: '',
-                // 年龄
-                age: undefined,
-                // 婚姻状况
-                marriaged: true,
-                // 生日
-                birth: undefined,
-                // 身份证号
-                id_card: '',
-                // 身份证图片
-                id_card_images: [],
-                // 学历
-                academic: '',
-                // 身高
-                height: undefined,
-                // 老家电话
-                town_phone: '',
-                // 紧急电话
-                urgent_phone: '',
-                // 联系电话 本人电话
-                contact_phone: '',
-                // 身体状况
-                healthy: '',
-                // 电子邮箱
-                email: '',
-                // 其他证件
-                other_credentials: '',
-                // 语言能力
-                languages: [],
-                // 证件
-                credentials: [],
-                // 工作类型
-                work_type: [],
-                // 其他工作类型
-                other_work_type: '',
-                // 介绍人或担保人
-                recommend_person: '',
-                // 介绍人联系电话
-                recommend_phone: '',
-                // 家庭成员
-                family: [],
-                // 工作经验
-                working_experience: '',
-                // 自我介绍
-                introduce: '',
-                // 附件
-                attachment: [],
-                // 后台标记
-                remark: '',
-                // 角色
-                roles: ['worker'],
-                // 保险记录
-                insurance: []
-            },
-            fetchSuccess: true,
-            loading: false,
-            statusOptions: [
-                {
-                    value: 0,
-                    label: '未分配'
-                },
-                {
-                    value: 1,
-                    label: '已分配'
-                },
-                {
-                    value: 2,
-                    label: '离职'
-                },
-                {
-                    value: 3,
-                    label: '黑名单'
-                }
-            ],
-            nationOptions,
-            academicOptions: [
-                {
-                    value: '小学',
-                    label: '小学'
-                },
-                {
-                    value: '初中',
-                    label: '初中'
-                },
-                {
-                    value: '高中',
-                    label: '高中'
-                },
-                {
-                    value: '中专',
-                    label: '中专'
-                },
-                {
-                    value: '大专',
-                    label: '大专'
-                },
-                {
-                    value: '大学',
-                    label: '大学'
-                }
-            ],
-            rules: {
-                name: [
-                    {
-                        required: true,
-                        message: '请输入姓名',
-                        trigger: 'blur'
-                    }
-                ],
-                age: [
-                    {
-                        required: true,
-                        message: '请输入年龄',
-                        trigger: 'blur'
-                    },
-                    {
-                        type: 'number',
-                        message: '必须为数字值',
-                        trigger: 'blur'
-                    }
-                ],
-                birth: [
-                    {
-                        required: true,
-                        message: '请选择日期',
-                        trigger: 'blur'
-                    }
-                ],
-                id_card: [
-                    {
-                        validator: validateIDCard,
-                        trigger: 'blur'
-                    },
-                    {
-                        required: false,
-                        message: '请输入身份证号',
-                        trigger: 'blur'
-                    }
-                ],
-                height: [
-                    {
-                        type: 'number',
-                        message: '必须为数字值',
-                        trigger: 'blur'
-                    }
-                ],
-                contact_phone: [
-                    {
-                        required: true,
-                        message: '请输入联系电话',
-                        trigger: 'blur'
-                    }
-                ],
-                native_place: [
-                    {
-                        required: true,
-                        message: '请输入籍贯',
-                        trigger: 'blur'
-                    }
-                ]
-            }
-        };
-    },
-    computed: {
-        ...mapGetters(['roles']),
-        contentExperienceShortLength() {
-            return this.postForm.working_experience.length;
-        },
-        contentIntroduceShortLength() {
-            return this.postForm.introduce.length;
-        }
-    },
-    created() {
-        if (this.isEdit) {
-            this.fetchData();
-        }
-    },
-    methods: {
-        id_card_change(value) {
-            if (value.length === 18) {
-                const birthStr =
-          value.substring(6, 10) + '-' + value.substring(10, 12) + '-' + value.substring(12, 14);
-                this.postForm.birth = new Date(birthStr);
-                this.postForm.age = parseInt(new Date().getFullYear()) - parseInt(value.substring(6, 10));
-                this.postForm.sex = parseInt(value.substring(16, 17)) % 2 === 0 ? '女' : '男';
-                this.postForm.native_place = city[value.substring(0, 2)];
-                this.postForm.zodiac = getShengXiao(this.postForm.birth);
-            }
-        },
-        is_company() {
-            console.log(this.roles);
-            return this.roles.indexOf('company') !== -1;
-        },
-        handleRemove(file, fileList) {
-            this.postForm.attachment = [];
-            fileList.forEach(item => {
-                this.postForm.attachment.push(item);
-            });
-        },
-        handlePictureCardPreview(file) {
-            this.dialogImageUrl = file.url;
-            this.dialogVisible = true;
-        },
-        handelDetailPicSuccess(res, file, fileList) {
-            if (res.status === 0) {
-                this.postForm.attachment.push({
-                    url: img_url + res.image_path
-                });
-            }
-        },
-        handleAvatarSuccess(res, file) {
-            console.log(res);
-            if (res.status === 0) {
-                this.postForm.avatar = img_url + res.image_path;
-            }
-            // this.postForm.avatar = URL.createObjectURL(file.raw)
-        },
-        beforeAvatarUpload(file) {
-            const isJPG = file.type === 'image/jpeg';
-            const isPNG = file.type === 'image/png';
-            const isLt2M = file.size / 1024 / 1024 < 2;
-            if (!isJPG && !isPNG) {
-                this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
-            }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!');
-            }
-            return (isJPG || isPNG) && isLt2M;
-        },
-        addBlankFamily() {
-            this.postForm.family.push({
-                name: '',
-                sex: '',
-                relationship: '',
-                age: '',
-                company: '',
-                tel: ''
-            });
-        },
-        handleDeleteFamily(row) {
-            this.postForm.family.splice(this.postForm.family.indexOf(row), 1);
-        },
-        fetchData() {
-            const _id = this.$route.query.id;
-            console.log('_id = ', _id);
-            fetchWorker(_id)
-                .then(response => {
-                    this.postForm = response.data.data.worker;
-                    this.postForm.birth = new Date(this.postForm.birth);
-                    this.fetchSuccess = true;
-                })
-                .catch(err => {
-                    this.fetchSuccess = false;
-                    console.log(err);
-                });
-        },
-        submitForm() {
-            // this.postForm.birth = parseInt(this.birth / 1000)
-            this.postForm.nickname = this.postForm.name;
-            console.log(this.postForm);
-            this.$refs['postForm'].validate(valid => {
-                if (valid) {
-                    this.loading = true;
-                    createWorker(this.postForm).then(resp => {
-                        console.log(resp);
-                        if (!resp.data) {
-                            this.$notify({
-                                title: '失败',
-                                message: '创建失败',
-                                type: 'error',
-                                duration: 2000
-                            });
-                        } else if (resp.data.status !== 0) {
-                            this.$notify({
-                                title: '失败',
-                                message: '创建失败: ' + resp.data.message,
-                                type: 'error',
-                                duration: 2000
-                            });
-                        } else {
-                            this.$notify({
-                                title: '成功',
-                                message: '创建成功',
-                                type: 'success',
-                                duration: 2000
-                            });
-                            this.$router.push({
-                                path: 'manage'
-                            });
-                        }
-                    });
-                    this.loading = false;
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-        },
-        updateForm() {
-            this.postForm.nickname = this.postForm.name;
-            console.log(this.postForm);
-            this.$refs['postForm'].validate(valid => {
-                if (valid) {
-                    this.loading = true;
-                    updateWorker(this.postForm._id, this.postForm).then(resp => {
-                        console.log(resp);
-                        if (!resp.data) {
-                            this.$notify({
-                                title: '失败',
-                                message: '更新失败',
-                                type: 'error',
-                                duration: 2000
-                            });
-                        } else if (resp.data.status !== 0) {
-                            this.$notify({
-                                title: '失败',
-                                message: '更新失败: ' + resp.data.message,
-                                type: 'error',
-                                duration: 2000
-                            });
-                        } else {
-                            this.$notify({
-                                title: '成功',
-                                message: '更新成功',
-                                type: 'success',
-                                duration: 2000
-                            });
-                            this.$router.push({
-                                path: 'manage'
-                            });
-                        }
-                    });
-                    this.loading = false;
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-        }
+  name: 'WorkerDetail',
+  components: {
+    insurancePane,
+    CommunicationPane
+  },
+  props: {
+    isEdit: {
+      type: Boolean,
+      default: false
     }
+  },
+  data() {
+    var validateIDCard = (rule, value, callback) => {
+      if (value === '') {
+        callback();
+      } else if (value.length < 18) {
+        callback(new Error('请输入正确的身份证号'));
+      } else if (!value || !/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/i.test(value)) {
+        callback(new Error('请输入正确的身份证号'));
+      } else {
+        callback();
+      }
+    };
+    return {
+      activeTab: 'worker',
+      dialogImageUrl: '',
+      dialogVisible: false,
+      img_upload_api,
+      img_url,
+      city: city,
+      postForm: {
+        status: 0,
+        // 是否受雇为员工，默认false
+        is_employed: false,
+        // 昵称
+        nickname: '',
+        // 头像
+        avatar: '',
+        // 姓名
+        name: '',
+        // 性别
+        sex: '女',
+        // 籍贯
+        native_place: '',
+        // 民族
+        nation: '',
+        // 属相
+        zodiac: '',
+        // 户籍地址
+        address: '',
+        // 年龄
+        age: undefined,
+        // 婚姻状况
+        marriaged: true,
+        // 生日
+        birth: undefined,
+        // 身份证号
+        id_card: '',
+        // 身份证图片
+        id_card_images: [],
+        // 学历
+        academic: '',
+        // 身高
+        height: undefined,
+        // 老家电话
+        town_phone: '',
+        // 紧急电话
+        urgent_phone: '',
+        // 联系电话 本人电话
+        contact_phone: '',
+        // 身体状况
+        healthy: '',
+        // 电子邮箱
+        email: '',
+        // 其他证件
+        other_credentials: '',
+        // 语言能力
+        languages: [],
+        // 证件
+        credentials: [],
+        // 工作类型
+        work_type: [],
+        // 其他工作类型
+        other_work_type: '',
+        // 介绍人或担保人
+        recommend_person: '',
+        // 介绍人联系电话
+        recommend_phone: '',
+        // 家庭成员
+        family: [],
+        // 工作经验
+        working_experience: '',
+        // 自我介绍
+        introduce: '',
+        // 附件
+        attachment: [],
+        // 后台标记
+        remark: '',
+        // 角色
+        roles: ['worker'],
+        // 保险记录
+        insurance: []
+      },
+      fetchSuccess: true,
+      loading: false,
+      statusOptions: [
+        {
+          value: 0,
+          label: '未分配'
+        },
+        {
+          value: 1,
+          label: '已分配'
+        },
+        {
+          value: 2,
+          label: '离职'
+        },
+        {
+          value: 3,
+          label: '黑名单'
+        }
+      ],
+      nationOptions,
+      academicOptions: [
+        {
+          value: '小学',
+          label: '小学'
+        },
+        {
+          value: '初中',
+          label: '初中'
+        },
+        {
+          value: '高中',
+          label: '高中'
+        },
+        {
+          value: '中专',
+          label: '中专'
+        },
+        {
+          value: '大专',
+          label: '大专'
+        },
+        {
+          value: '大学',
+          label: '大学'
+        }
+      ],
+      rules: {
+        name: [
+          {
+            required: true,
+            message: '请输入姓名',
+            trigger: 'blur'
+          }
+        ],
+        age: [
+          {
+            required: true,
+            message: '请输入年龄',
+            trigger: 'blur'
+          },
+          {
+            type: 'number',
+            message: '必须为数字值',
+            trigger: 'blur'
+          }
+        ],
+        birth: [
+          {
+            required: true,
+            message: '请选择日期',
+            trigger: 'blur'
+          }
+        ],
+        id_card: [
+          {
+            validator: validateIDCard,
+            trigger: 'blur'
+          },
+          {
+            required: false,
+            message: '请输入身份证号',
+            trigger: 'blur'
+          }
+        ],
+        height: [
+          {
+            type: 'number',
+            message: '必须为数字值',
+            trigger: 'blur'
+          }
+        ],
+        contact_phone: [
+          {
+            required: true,
+            message: '请输入联系电话',
+            trigger: 'blur'
+          }
+        ],
+        native_place: [
+          {
+            required: true,
+            message: '请输入籍贯',
+            trigger: 'blur'
+          }
+        ]
+      }
+    };
+  },
+  computed: {
+    ...mapGetters(['roles']),
+    contentExperienceShortLength() {
+      return this.postForm.working_experience.length;
+    },
+    contentIntroduceShortLength() {
+      return this.postForm.introduce.length;
+    }
+  },
+  created() {
+    if (this.isEdit) {
+      this.fetchData();
+    }
+  },
+  methods: {
+    id_card_change(value) {
+      if (value.length === 18) {
+        const birthStr =
+          value.substring(6, 10) + '-' + value.substring(10, 12) + '-' + value.substring(12, 14);
+        this.postForm.birth = new Date(birthStr);
+        this.postForm.age = parseInt(new Date().getFullYear()) - parseInt(value.substring(6, 10));
+        this.postForm.sex = parseInt(value.substring(16, 17)) % 2 === 0 ? '女' : '男';
+        this.postForm.native_place = city[value.substring(0, 2)];
+        this.postForm.zodiac = getShengXiao(this.postForm.birth);
+      }
+    },
+    is_company() {
+      console.log(this.roles);
+      return this.roles.indexOf('company') !== -1;
+    },
+    handleRemove(file, fileList) {
+      this.postForm.attachment = [];
+      fileList.forEach(item => {
+        this.postForm.attachment.push(item);
+      });
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handelDetailPicSuccess(res, file, fileList) {
+      if (res.status === 0) {
+        this.postForm.attachment.push({
+          url: img_url + res.image_path
+        });
+      }
+    },
+    handleAvatarSuccess(res, file) {
+      console.log(res);
+      if (res.status === 0) {
+        this.postForm.avatar = img_url + res.image_path;
+      }
+      // this.postForm.avatar = URL.createObjectURL(file.raw)
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg';
+      const isPNG = file.type === 'image/png';
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isJPG && !isPNG) {
+        this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!');
+      }
+      return (isJPG || isPNG) && isLt2M;
+    },
+    addBlankFamily() {
+      this.postForm.family.push({
+        name: '',
+        sex: '',
+        relationship: '',
+        age: '',
+        company: '',
+        tel: ''
+      });
+    },
+    handleDeleteFamily(row) {
+      this.postForm.family.splice(this.postForm.family.indexOf(row), 1);
+    },
+    fetchData() {
+      const _id = this.$route.query.id;
+      console.log('_id = ', _id);
+      fetchWorker(_id)
+        .then(response => {
+          this.postForm = response.data.data.worker;
+          this.postForm.birth = new Date(this.postForm.birth);
+          this.fetchSuccess = true;
+        })
+        .catch(err => {
+          this.fetchSuccess = false;
+          console.log(err);
+        });
+    },
+    submitForm() {
+      // this.postForm.birth = parseInt(this.birth / 1000)
+      this.postForm.nickname = this.postForm.name;
+      console.log(this.postForm);
+      this.$refs['postForm'].validate(valid => {
+        if (valid) {
+          this.loading = true;
+          createWorker(this.postForm).then(resp => {
+            console.log(resp);
+            if (!resp.data) {
+              this.$notify({
+                title: '失败',
+                message: '创建失败',
+                type: 'error',
+                duration: 2000
+              });
+            } else if (resp.data.status !== 0) {
+              this.$notify({
+                title: '失败',
+                message: '创建失败: ' + resp.data.message,
+                type: 'error',
+                duration: 2000
+              });
+            } else {
+              this.$notify({
+                title: '成功',
+                message: '创建成功',
+                type: 'success',
+                duration: 2000
+              });
+              this.$router.push({
+                path: 'manage'
+              });
+            }
+          });
+          this.loading = false;
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+    updateForm() {
+      this.postForm.nickname = this.postForm.name;
+      console.log(this.postForm);
+      this.$refs['postForm'].validate(valid => {
+        if (valid) {
+          this.loading = true;
+          updateWorker(this.postForm._id, this.postForm).then(resp => {
+            console.log(resp);
+            if (!resp.data) {
+              this.$notify({
+                title: '失败',
+                message: '更新失败',
+                type: 'error',
+                duration: 2000
+              });
+            } else if (resp.data.status !== 0) {
+              this.$notify({
+                title: '失败',
+                message: '更新失败: ' + resp.data.message,
+                type: 'error',
+                duration: 2000
+              });
+            } else {
+              this.$notify({
+                title: '成功',
+                message: '更新成功',
+                type: 'success',
+                duration: 2000
+              });
+              this.$router.push({
+                path: 'manage'
+              });
+            }
+          });
+          this.loading = false;
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    }
+  }
 };
 </script>
 
