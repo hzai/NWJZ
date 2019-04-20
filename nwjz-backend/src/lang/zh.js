@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2019-04-02 21:53:07
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-20 20:37:45
+ * @Last Modified time: 2019-04-20 20:59:16
  */
 export default {
     common: {
@@ -120,7 +120,7 @@ export default {
         size: '布局大小'
     },
     login: {
-        title: '鸟窝家政服务管理平台',
+        title: '鸟窝家政管理系统',
         logIn: '登录',
         username: '账号',
         password: '密码',
