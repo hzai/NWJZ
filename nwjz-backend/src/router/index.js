@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2019-04-19 20:34:39
- * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-20 20:38:32
+ * @Last Modified by: Arnie Carter
+ * @Last Modified time: 2019-04-21 00:46:31
  */
 import Vue from 'vue';
 import Router from 'vue-router';
@@ -129,6 +129,12 @@ export const asyncRoutes = [
                 component: () => import('@/views/worker/manage'),
                 name: 'worker-manage',
                 meta: { title: 'workerManage', icon: 'people' }
+            },
+            {
+                path: 'communicate',
+                component: () => import('@/views/worker/communicate'),
+                name: 'worker-communicate',
+                meta: { title: 'workerCommunicate', icon: 'people' }
             }
         ]
     },

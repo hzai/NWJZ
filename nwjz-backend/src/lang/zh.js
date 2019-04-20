@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2019-04-02 21:53:07
- * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-20 20:59:16
+ * @Last Modified by: Arnie Carter
+ * @Last Modified time: 2019-04-21 00:46:26
  */
 export default {
     common: {
@@ -95,6 +95,7 @@ export default {
         workerManage: '阿姨筛选',
         createWorker: '新增阿姨',
         editWorker: '编辑阿姨',
+        workerCommunicate: '沟通记录',
         member: '会员管理',
         memberList: '会员列表',
         memberLevel: '会员等级',

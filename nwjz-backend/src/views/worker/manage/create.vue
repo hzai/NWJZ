@@ -1,13 +1,13 @@
 <template>
-  <worker-detail :is-edit="false" />
+  <new-worker :is-edit="false" />
 </template>
 
 <script>
-import WorkerDetail from './components/WorkerDetail';
+import NewWorker from './components/newWorker';
 
 export default {
     name: 'CreateWorker',
-    components: { WorkerDetail }
+    components: { NewWorker }
 };
 </script>
 

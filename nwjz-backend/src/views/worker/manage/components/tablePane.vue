@@ -3,17 +3,17 @@
     <div class="filter-container">
       <el-input v-model="listQuery.name" style="width: 150px;" class="filter-item" placeholder="搜索姓名" @keyup.enter.native="handleFilter" />
       <el-input v-model="listQuery.contact_phone" style="width: 150px;" class="filter-item" placeholder="搜索电话" @keyup.enter.native="handleFilter" />
-      <el-input v-model="listQuery.id_card" style="width: 200px;" class="filter-item" placeholder="搜索身份证号码" @keyup.enter.native="handleFilter" />
+      <!-- <el-input v-model="listQuery.id_card" style="width: 200px;" class="filter-item" placeholder="搜索身份证号码" @keyup.enter.native="handleFilter" /> -->
       <!-- <el-select class="filter-item" style="width: 130px" v-model="listQuery.is_employed" placeholder="正式员工" @change="handleFilter">
         <el-option v-for="item in employedOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select> -->
-      <el-select v-model="listQuery.native_place" class="filter-item" style="width: 130px" filterable multiple placeholder="籍贯" @change="handleFilter">
+      <!-- <el-select v-model="listQuery.native_place" class="filter-item" style="width: 130px" filterable multiple placeholder="籍贯" @change="handleFilter">
         <el-option v-for="item in nativePlaceOptions" :key="item.value" :label="item.label" :value="item.value" />
-      </el-select>
-      <el-select v-model="listQuery.nation" class="filter-item" style="width: 130px" placeholder="民族" @change="handleFilter">
+      </el-select> -->
+      <!-- <el-select v-model="listQuery.nation" class="filter-item" style="width: 130px" placeholder="民族" @change="handleFilter">
         <el-option v-for="item in nationOptions" :key="item.value" :label="item.label" :value="item.value" />
-      </el-select>
+      </el-select> -->
       <el-select v-model="listQuery.zodiac" class="filter-item" style="width: 130px" placeholder="属相" @change="handleFilter">
         <el-option v-for="item in zodiacOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
