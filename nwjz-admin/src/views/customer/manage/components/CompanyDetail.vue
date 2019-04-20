@@ -36,7 +36,7 @@
         </el-form>
       </el-tab-pane>
       <el-tab-pane v-if="isEdit" label="账号列表" name="account">
-
+        <user-pane :company-id="this.$route.query.id" />
       </el-tab-pane>
       <!-- <el-tab-pane label="沟通记录" name="communication">
         <communication-pane type="worker" :worker-id="this.$route.query.id" />
@@ -58,6 +58,7 @@ import city from '@/data/city';
 import nationData from '@/data/nation';
 import { getShengXiao } from '@/utils';
 import CommunicationPane from '@/components/Communication';
+import UserPane from './userPane';
 
 const img_upload_api = process.env.BASE_API + '/upload/addimg';
 const img_url = process.env.IMG_URL;
@@ -65,7 +66,8 @@ const nationOptions = Object.assign([], nationData);
 export default {
   name: 'CompanyDetail',
   components: {
-    CommunicationPane
+    CommunicationPane,
+    UserPane
   },
   props: {
     isEdit: {

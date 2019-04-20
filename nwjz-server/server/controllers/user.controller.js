@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:36:55
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2018-12-17 18:55:20
+ * @Last Modified time: 2019-04-20 16:53:18
  */
 import User from '../models/user.model';
 import UserEvent from '../models/user.event.model';
@@ -115,14 +115,18 @@ function getInviteInfo(req, res, next) {
                             let userList = [];
                             let avatarList = [];
                             if (userEvent) {
-                                userEvent.assist_users.forEach((item, index) => {
-                                    userList.push({
-                                        name: item.user.nickname,
-                                        avatar: item.user.avatar,
-                                        created_time: item.created_time
-                                    });
-                                    avatarList.push({ avatar: item.user.avatar });
-                                });
+                                userEvent.assist_users.forEach(
+                                    (item, index) => {
+                                        userList.push({
+                                            name: item.user.nickname,
+                                            avatar: item.user.avatar,
+                                            created_time: item.created_time
+                                        });
+                                        avatarList.push({
+                                            avatar: item.user.avatar
+                                        });
+                                    }
+                                );
                             }
                             console.log(
                                 ' avatarList.length avatarList.length == ',
@@ -367,7 +371,12 @@ function update(req, res, next) {
  * @param {*} next
  */
 async function getMembers(req, res, next) {
-    const { status = 'ALL', nickname = '', contact_phone = '', start_end = undefined } = req.query;
+    const {
+        status = 'ALL',
+        nickname = '',
+        contact_phone = '',
+        start_end = undefined
+    } = req.query;
     let _filter = {
         $and: [
             {
@@ -500,13 +509,16 @@ function list(req, res, next) {
  * @param {*} next
  */
 async function getCompanyUsers(req, res, next) {
+    const { companyId = undefined } = req.query;
     let total = await Auth.count({
-        identity_type: config.identity_type.company
+        identity_type: config.identity_type.company,
+        company: companyId
     });
     const query = Utils.handleQuery(req, total);
     Auth.find(
         {
-            identity_type: config.identity_type.company
+            identity_type: config.identity_type.company,
+            company: companyId
         },
         '_id identifier user'
     )
@@ -525,11 +537,12 @@ async function getCompanyUsers(req, res, next) {
                 const user = {
                     _id: item.user._id,
                     identifier: item.identifier,
-                    company_name: item.user.company_name,
-                    company_address: item.user.company_address,
-                    company_tel: item.user.company_tel,
-                    company_email: item.user.company_email,
-                    company_business_license: item.user.company_business_license,
+                    name: item.user.name,
+                    nickname: item.user.nickname,
+                    contact_phone: item.user.contact_phone,
+                    email: item.user.email,
+                    sex: item.user.sex,
+                    birth: item.user.birth,
                     roles: item.user.roles,
                     status: item.user.status,
                     created_by: item.user.created_by,

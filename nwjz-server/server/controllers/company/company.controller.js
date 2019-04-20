@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2019-04-01 21:07:26
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-20 15:03:01
+ * @Last Modified time: 2019-04-20 15:42:53
  */
 
 import Company from '../../models/company/company.model';
@@ -85,6 +85,7 @@ function update(req, res, next) {
  * @param {*} next
  */
 async function getCompanys(req, res, next) {
+    console.log('payload = ', req.payload);
     const { status = 'ALL', name = '', telephone = '' } = req.query;
     let _filter = {
         $and: [
