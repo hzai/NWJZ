@@ -35,7 +35,7 @@
               <el-col>
                 <el-button v-if="!isEdit" v-loading="loading" size="medium" type="success" @click="submitForm()">保存</el-button>
                 <el-button v-if="isEdit" v-loading="loading" size="medium" type="success" @click="updateForm()">更新</el-button>
-                <router-link style="padding-left:10px;" :to="{ path:'manage'}">
+                <router-link style="padding-left:10px;" :to="{ path:'list'}">
                   <el-button size="medium" type="info">取消</el-button>
                 </router-link>
               </el-col>

@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-12 23:54:27
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-20 16:20:02
+ * @Last Modified time: 2019-04-21 13:28:20
  */
 
 import Promise from 'bluebird';
@@ -156,11 +156,6 @@ const UserSchema = new mongoose.Schema(
         // 保姆编码
         worker_code: {
             type: String
-        },
-        /* ** 隶属于的公司 */
-        employed_to: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
         },
         /* ** 隶属于的公司 */
         company: {

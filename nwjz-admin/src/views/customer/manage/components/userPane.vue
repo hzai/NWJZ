@@ -1,14 +1,24 @@
 <template>
   <div class="app-container">
-    <el-button type="primary" icon="el-icon-plus" @click="handleCreate">
-      {{ $t('user.addUser') }}
+    <el-button v-if="list!==null && list.length<1" type="primary" icon="el-icon-plus" @click="handleCreate(true)">
+      新增管理员账号
+    </el-button>
+    <el-button v-if="list!==null && list.length>0" type="primary" icon="el-icon-plus" @click="handleCreate(false)">
+      新增子账号
     </el-button>
 
     <el-table :key="tableKey" v-loading="listLoading" :data="list" :default-sort="{prop: 'status', order: 'descending'}" element-loading-text="给我一点时间" stripe fit highlight-current-row style="width: 100%;margin-top:30px;">
       <el-table-column align="center" type="index" width="50" />
-      <el-table-column align="center" :label="$t('user.identifier')" width="65">
+      <el-table-column align="center" :label="$t('user.identifier')" width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.identifier }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column class-name="status-col" align="center" :label="$t('common.status')" width="100" sortable prop="status">
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.status | statusTypeFilter">
+            {{ scope.row.status | statusFilter }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('user.role')" width="200">
@@ -33,13 +43,6 @@
       <el-table-column min-width="140px" align="center" :label="$t('common.created_time')">
         <template slot-scope="scope">
           <span>{{ new Date(scope.row.created_time) | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" align="center" :label="$t('common.status')" width="100" sortable prop="status">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusTypeFilter">
-            {{ scope.row.status | statusFilter }}
-          </el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('common.operations')" min-width="180" class-name="small-padding" fixed="right">
@@ -76,7 +79,7 @@
         </el-form-item>
         <el-form-item label="角色" prop="roles">
           <el-checkbox-group v-model="temp.roles">
-            <el-checkbox v-for="(item, key) in roleOptions" :key="key" :label="item.value">{{ item.label }}</el-checkbox>
+            <el-checkbox v-for="(item, key) in roleOptions" :key="key" :label="item.value" disabled>{{ item.label }}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="状态" prop="status">
@@ -97,7 +100,7 @@
 <script>
 import path from 'path';
 import { getRoles } from '@/api/role';
-import { fetchUserList, fetchCompanyUserList, createUser, updateUser } from '@/api/user';
+import { fetchCompanyUserList, createCompanyUser, updateCompanyUser } from '@/api/user';
 
 export default {
   name: 'CustomerUser',
@@ -243,6 +246,7 @@ export default {
     },
     resetTemp() {
       this.temp = {
+        company: this.companyId,
         identifier: '',
         name: '',
         sex: 0,
@@ -253,18 +257,25 @@ export default {
         status: 0
       };
     },
-    handleCreate() {
+    handleCreate(isAdmin) {
       this.resetTemp();
+      if (isAdmin) {
+        this.temp.roles.push('company_admin');
+        this.temp.roles.push('company');
+      } else {
+        this.temp.roles.push('company');
+      }
       this.dialogType = 'new';
       this.dialogFormVisible = true;
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate();
       });
+      console.log(this.temp);
     },
     createData() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          createUser(this.temp).then(resp => {
+          createCompanyUser(this.temp).then(resp => {
             if (!resp.data) {
               this.$notify({
                 title: '失败',
@@ -314,7 +325,7 @@ export default {
       });
     },
     updateData(data) {
-      updateUser(data).then(resp => {
+      updateCompanyUser(data).then(resp => {
         if (!resp.data) {
           this.$notify({
             title: '失败',

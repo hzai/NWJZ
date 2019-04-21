@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2019-04-01 21:07:26
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-13 21:49:35
+ * @Last Modified time: 2019-04-21 14:04:32
  */
 
 import Role from '../../models/permission/role.model';
@@ -92,7 +92,7 @@ async function getRoles(req, res, next) {
         .limit(query.limit)
         .skip(query.skip)
         .sort({
-            created_time: -1
+            created_time: 1
         })
         .exec()
         .then(roles => {

@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:36:55
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-20 16:53:18
+ * @Last Modified time: 2019-04-21 14:27:13
  */
 import User from '../models/user.model';
 import UserEvent from '../models/user.event.model';
@@ -235,18 +235,6 @@ function create(req, res, next) {
         employed_to: req.body.employed_to,
         // 附件
         attachment: req.body.attachment,
-        // 保姆编码
-        worker_code: req.body.worker_code,
-        // 公司名称
-        company_name: req.body.company_name,
-        // 公司地址
-        company_address: req.body.company_address,
-        // 公司电话
-        company_tel: req.body.company_tel,
-        // 电子邮箱
-        company_email: req.body.company_email,
-        // 公司营业执照
-        company_business_license: req.body.company_business_license,
         // 状态
         status: req.body.status,
         // 角色
@@ -332,20 +320,6 @@ function update(req, res, next) {
     user.introduce = req.body.introduce;
     // 附件
     user.attachment = req.body.attachment;
-    // 保姆编码
-    // user.worker_code = req.body.worker_code;
-    // 受雇于哪个公司
-    user.employed_to = req.body.employed_to;
-    // 公司名称
-    user.company_name = req.body.company_name;
-    // 公司地址
-    user.company_address = req.body.company_address;
-    // 公司电话
-    user.company_tel = req.body.company_tel;
-    // 电子邮箱
-    user.company_email = req.body.company_email;
-    // 公司营业执照
-    user.company_business_license = req.body.company_business_license;
     // 状态
     user.status = req.body.status;
     user.updated_time = Date.now();
@@ -585,13 +559,13 @@ async function createCompanyUser(req, res, next) {
             });
         } else {
             const user = new User({
-                company_name: req.body.company_name,
-                nickname: req.body.company_name,
-                company_address: req.body.company_address,
-                company_tel: req.body.company_tel,
-                company_email: req.body.company_email,
-                company_business_license: req.body.company_business_license,
-                roles: ['company'],
+                company: req.body.company,
+                user_type: 'company',
+                name: req.body.name,
+                nickname: req.body.name,
+                email: req.body.email,
+                contact_phone: req.body.contact_phone,
+                roles: req.body.roles,
                 avatar: 'http://images.llguanjia.com/avatar.png',
                 register_ip: Utils.getClientIp(req)
             });
@@ -599,6 +573,7 @@ async function createCompanyUser(req, res, next) {
             user.save()
                 .then(savedUser => {
                     const auth = new Auth({
+                        company: req.body.company,
                         user: savedUser._id,
                         identity_type: config.identity_type.company,
                         identifier: req.body.identifier
@@ -631,12 +606,10 @@ async function createCompanyUser(req, res, next) {
  */
 async function updateCompanyUser(req, res, next) {
     const user = req.user;
-    user.company_name = req.body.company_name;
-    user.nickname = req.body.company_name;
-    user.company_address = req.body.company_address;
-    user.company_tel = req.body.company_tel;
-    user.company_email = req.body.company_email;
-    user.company_business_license = req.body.company_business_license;
+    user.name = req.body.name;
+    user.nickname = req.body.name;
+    user.email = req.body.email;
+    user.contact_phone = req.body.contact_phone;
     user.status = req.body.status;
     user.updated_time = Date.now();
     user.updated_by = req.payload.user;
