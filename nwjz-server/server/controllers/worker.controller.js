@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:36:55
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-20 22:13:34
+ * @Last Modified time: 2019-04-22 20:32:03
  */
 import mongoose from 'mongoose';
 import Worker from '../models/worker.model';
@@ -47,8 +47,8 @@ async function create(req, res, next) {
     //console.log(req.body)
     const worker = new Worker(req.body);
     worker.company = req.payload.company;
-    worker.belong_to = req.payload.user;
-    worker.create_by = req.payload.user;
+    // worker.belong_to = req.payload.user;
+    worker.created_by = req.payload.user;
     worker
         .save()
         .then(savedWorker => {

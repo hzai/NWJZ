@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-12 23:54:27
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-20 22:20:00
+ * @Last Modified time: 2019-04-22 21:26:34
  */
 
 import Promise from 'bluebird';
@@ -31,71 +31,15 @@ const FamilySchema = new mongoose.Schema({
     }
 });
 
-/**
- * 保险 Schema
- */
-const InsuranceSchema = new mongoose.Schema({
-    // 保险单号
-    insurance_no: {
-        type: String,
-        required: true
+const WorkExpSchema = new mongoose.Schema({
+    start_end: {
+        type: [Date]
     },
-    // 保险类型 single - 个人险 group - 团体险
-    insurance_type: {
-        type: String,
-        required: true
-    },
-    // 是否可以换人 false - 不可换 true - 可以换
-    can_changed: {
-        type: Boolean,
-        default: false
-    },
-    // 关联 worker 一对多
-    worker: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Worker'
-        }
-    ],
-    // 保险开始日期
-    start_date: {
-        type: Date,
-        required: true
-    },
-    // 保险结束日期
-    end_date: {
-        type: Date,
-        required: true
-    },
-    // 备注
-    remark: {
+    content: {
         type: String
-    },
-    // 附件
-    attachment: {
-        type: []
-    },
-    // 状态 0 - 生效 1 - 失效 2 - 过期
-    status: {
-        type: Number,
-        required: true,
-        default: 0
-    },
-    created_time: {
-        type: Date,
-        default: Date.now
-    },
-    updated_time: {
-        type: Date,
-        default: Date.now
-    },
-    created_by: {
-        type: mongoose.Schema.Types.ObjectId
-    },
-    updated_by: {
-        type: mongoose.Schema.Types.ObjectId
     }
 });
+
 /**
  * Worker Schema
  */
@@ -109,16 +53,6 @@ const WorkerSchema = new mongoose.Schema(
         // 保姆编码
         worker_code: {
             type: String
-        },
-        /* 隶属于的公司 */
-        belong_to: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        },
-        // 昵称
-        nickname: {
-            type: String,
-            required: '昵称是必填项'
         },
         // 头像
         avatar: {
@@ -134,7 +68,7 @@ const WorkerSchema = new mongoose.Schema(
         },
         // 籍贯
         native_place: {
-            type: String
+            type: [String]
         },
         // 民族
         nation: {
@@ -144,8 +78,16 @@ const WorkerSchema = new mongoose.Schema(
         zodiac: {
             type: String
         },
-        // 户籍地址
-        address: {
+        // 生肖
+        astro: {
+            type: String
+        },
+        // 现居地址 省市区
+        address_area: {
+            type: []
+        },
+        // 现居详细地址
+        detail_address: {
             type: String
         },
         // 年龄
@@ -154,7 +96,7 @@ const WorkerSchema = new mongoose.Schema(
         },
         // 婚姻状况
         marriaged: {
-            type: Boolean
+            type: String
         },
         // 生日
         birth: {
@@ -167,6 +109,10 @@ const WorkerSchema = new mongoose.Schema(
         // 身份证号图片
         id_card_images: {
             type: []
+        },
+        // 身份证地址
+        id_card_address: {
+            type: String
         },
         // 学历
         academic: {
@@ -200,6 +146,9 @@ const WorkerSchema = new mongoose.Schema(
         other_credentials: {
             type: String
         },
+        mandarin_level: {
+            type: String
+        },
         // 语言能力
         languages: {
             type: [String]
@@ -208,10 +157,25 @@ const WorkerSchema = new mongoose.Schema(
         credentials: {
             type: [String]
         },
+        zuofannengli: {
+            type: String
+        },
+        caixi: {
+            type: [String]
+        },
         // 工作类型
         work_type: {
             type: [String]
         },
+        // 工作时间
+        work_time: {
+            type: [String]
+        },
+        working_age: {
+            type: String
+        },
+        // 工作经历
+        work_exp: [WorkExpSchema],
         // 其他工作类型
         other_work_type: {
             type: String
@@ -236,6 +200,12 @@ const WorkerSchema = new mongoose.Schema(
         },
         // 附件图片
         attachment: {
+            type: []
+        },
+        images: {
+            type: []
+        },
+        videos: {
             type: []
         },
         // 后台标记

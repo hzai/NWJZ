@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2019-04-19 20:34:39
- * @Last Modified by: Arnie Carter
- * @Last Modified time: 2019-04-21 00:46:31
+ * @Last Modified by: Roy Chen
+ * @Last Modified time: 2019-04-22 21:41:12
  */
 import Vue from 'vue';
 import Router from 'vue-router';
@@ -158,7 +158,7 @@ export const asyncRoutes = [
             {
                 path: 'edit',
                 component: () => import('@/views/customer/edit'),
-                name: 'EditWorker',
+                name: 'EditCustomer',
                 meta: {
                     title: 'editCustomer',
                     noCache: true

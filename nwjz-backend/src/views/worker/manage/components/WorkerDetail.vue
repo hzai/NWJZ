@@ -13,33 +13,40 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label-width="85px" label="身份证号" prop="id_card" class="postInfo-container-item">
-                  <el-input v-model="postForm.id_card" placeholder="身份证号码" style="min-width:150px;" :maxlength="18" @change="id_card_change" />
+                  <el-input v-model="postForm.id_card" placeholder="身份证号码" style="width:250px;" :maxlength="18" @change="id_card_change" />
                 </el-form-item>
                 <el-form-item label-width="85px" label="阿姨姓名" prop="name" class="postInfo-container-item">
-                  <el-input v-model="postForm.name" placeholder="姓名" style="min-width:150px;" />
+                  <el-input v-model="postForm.name" placeholder="姓名" style="width:250px;" />
                 </el-form-item>
                 <el-form-item label-width="85px" label="联系电话" prop="contact_phone" class="postInfo-container-item">
-                  <el-input v-model="postForm.contact_phone" placeholder="联系电话" style="min-width:150px;" :maxlength="14" />
+                  <el-input v-model="postForm.contact_phone" placeholder="联系电话" style="width:250px;" :maxlength="14" />
                 </el-form-item>
                 <el-form-item label-width="85px" label="阿姨生日" prop="birth" class="postInfo-container-item">
-                  <el-date-picker v-model="postForm.birth" type="date" format="yyyy-MM-dd" placeholder="选择日期" />
+                  <el-date-picker v-model="postForm.birth" type="date" format="yyyy-MM-dd" placeholder="选择日期" style="width:250px;" />
                 </el-form-item>
                 <el-form-item label-width="85px" label="民族" prop="nation" class="postInfo-container-item">
-                  <el-select v-model="postForm.nation" style="width:160px;" placeholder="请选择">
+                  <el-select v-model="postForm.nation" style="width:250px;" placeholder="请选择">
                     <el-option v-for="(item, key) in staticOptions.nation" :key="key" :label="item.label" :value="item.value" />
                   </el-select>
                 </el-form-item>
-                <el-form-item label-width="85px" label="阿姨属相" prop="zodiac" class="postInfo-container-item">
-                  <el-input v-model="postForm.zodiac" placeholder="属相" style="min-width:150px;" />
+                <el-form-item label-width="85px" label="生肖" prop="zodiac" class="postInfo-container-item">
+                  <el-select v-model="postForm.zodiac" style="width:250px;" placeholder="请选择">
+                    <el-option v-for="(item, key) in staticOptions.zodiac" :key="key" :label="item.label" :value="item.value" />
+                  </el-select>
                 </el-form-item>
-                <el-form-item label-width="85px" label="阿姨星座" prop="zodiac" class="postInfo-container-item">
-                  <el-input v-model="postForm.zodiac" placeholder="属相" style="min-width:150px;" />
+                <el-form-item label-width="85px" label="星座" prop="astro" class="postInfo-container-item">
+                  <el-select v-model="postForm.astro" style="width:250px;" placeholder="请选择">
+                    <el-option v-for="(item, key) in staticOptions.astro" :key="key" :label="item.label" :value="item.value" />
+                  </el-select>
                 </el-form-item>
                 <el-form-item label-width="85px" label="性别" class="postInfo-container-item">
                   <el-radio-group v-model="postForm.sex">
                     <el-radio-button label="女" border>女</el-radio-button>
                     <el-radio-button v-model="postForm.sex" label="男" border>男</el-radio-button>
                   </el-radio-group>
+                </el-form-item>
+                <el-form-item label-width="85px" label="身份证地址" prop="id_card_address" class="postInfo-container-item">
+                  <el-input v-model="postForm.id_card_address" type="textarea" class="article-textarea" :rows="2" placeholder="身份证地址" style="width:250px;" />
                 </el-form-item>
               </el-col>
               <el-col :span="2">&nbsp;</el-col>
@@ -74,19 +81,23 @@
             </div>
             <el-row>
               <el-col :span="24">
-                <el-form-item label-width="85px" label="现居地址" prop="address" class="postInfo-container-item">
-                  <el-cascader :options="options" v-model="selectedOptions" @change="handleChange">
-                  </el-cascader>
-                  <el-input v-model="postForm.address" placeholder="详细地址，如楼层、门牌号等" />
+                <el-form-item label-width="85px" label="现居地址" prop="detail_address" class="postInfo-container-item">
+                  <el-cascader v-model="postForm.address_area" :options="regionDataPlus" @change="handleChange" style="width:350px;">
+                  </el-cascader><br>
+                  <el-input v-model="postForm.detail_address" placeholder="详细地址，如楼层、门牌号等" style="width:350px;" />
                 </el-form-item>
                 <el-form-item label-width="85px" label="阿姨籍贯" prop="native_place" class="postInfo-container-item">
-                  <el-input v-model="postForm.native_place" placeholder="籍贯" />
+                  <el-cascader v-model="postForm.native_place" :options="provinceAndCityData" @change="handleChange">
+                  </el-cascader>
                 </el-form-item>
                 <el-form-item label-width="85px" label="紧急电话" class="postInfo-container-item">
-                  <el-input v-model="postForm.urgent_phone" placeholder="紧急电话" />
+                  <el-input v-model="postForm.urgent_phone" placeholder="紧急电话" style="width:350px;" />
+                </el-form-item>
+                <el-form-item label="年龄" prop="age" class="postInfo-container-item">
+                  <el-input v-model.number="postForm.age" placeholder="年龄" style="width:350px;" :maxlength="2" />
                 </el-form-item>
                 <el-form-item label-width="85px" label="身高" prop="height" class="postInfo-container-item">
-                  <el-input v-model.number="postForm.height" placeholder="身高" :maxlength="3" />
+                  <el-input v-model.number="postForm.height" placeholder="身高" :maxlength="3" style="width:350px;" />
                 </el-form-item>
                 <el-form-item label-width="85px" label="最高学历" prop="academic" class="postInfo-container-item">
                   <el-radio-group v-model="postForm.academic">
@@ -99,7 +110,7 @@
                   </el-radio-group>
                 </el-form-item>
                 <el-form-item label="自我介绍">
-                  <el-input v-model="postForm.introduce" type="textarea" class="article-textarea" :rows="3" placeholder="一句话简单的自我介绍" />
+                  <el-input v-model="postForm.introduce" type="textarea" class="article-textarea" :rows="3" placeholder="一句话简单的自我介绍" style="width:350px;" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -136,21 +147,22 @@
                   </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="工作经历" class="postInfo-container-item">
-                  <el-table ref="multipleTable" :data="postForm.family" tooltip-effect="dark">
-                    <el-table-column align="center" label="在职时间">
-                      <el-input placeholder="在职时间" />
+                  <el-table ref="multipleTable" :data="postForm.work_exp" tooltip-effect="dark">
+                    <el-table-column align="center" label="从业时间" width="400">
+                      <el-date-picker v-model="scope.row.start_end" slot-scope="scope" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期">
+                      </el-date-picker>
                     </el-table-column>
-                    <el-table-column align="center" label="工作内容">
-                      <el-input placeholder="工作内容" />
+                    <el-table-column align="center" label="工作内容" width="300">
+                      <el-input v-model="scope.row.content" slot-scope="scope" placeholder="工作内容" />
                     </el-table-column>
                     <el-table-column align="center" label="操作">
                       <template slot-scope="scope">
-                        <el-button type="info" size="mini" icon="el-icon-delete" @click="handleDeleteFamily(scope.row)" />
+                        <el-button type="info" size="mini" icon="el-icon-delete" @click="handleDeleteWorkExp(scope.row)" />
                       </template>
                     </el-table-column>
                   </el-table>
                   <div style="margin-top: 10px;float:right">
-                    <el-button type="primary" icon="el-icon-plus" round @click="addBlankFamily()" />
+                    <el-button type="primary" icon="el-icon-plus" round @click="addBlankWorkExp()" />
                   </div>
                 </el-form-item>
               </el-col>
@@ -162,14 +174,14 @@
             </div>
             <el-row>
               <el-col :span="24">
-                <el-form-item label-width="85px" label="在职状态" class="postInfo-container-item">
+                <el-form-item label-width="85px" label="状态" class="postInfo-container-item">
                   <el-radio-group v-model="postForm.status">
-                    <el-radio-button border v-for="(item, key) in statusOptions" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
+                    <el-radio-button border v-for="(item, key) in staticOptions.workerStatus" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
                   </el-radio-group>
                 </el-form-item>
-                <el-form-item label="工作经验" class="postInfo-container-item">
-                  <el-radio-group v-model="postForm.workesp">
-                    <el-radio-button border v-for="(item, key) in staticOptions.workesp" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
+                <el-form-item label="行业经验" class="postInfo-container-item">
+                  <el-radio-group v-model="postForm.working_age">
+                    <el-radio-button border v-for="(item, key) in staticOptions.workingAge" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
                   </el-radio-group>
                 </el-form-item>
                 <el-form-item label-width="85px" label="求职意向" class="postInfo-container-item">
@@ -197,7 +209,7 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label-width="85px" label="照片" class="postInfo-container-item">
-                  <el-upload ref="attachment_uploader" :on-success="handelDetailPicSuccess" :file-list="postForm.attachment" :action="img_upload_api" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+                  <el-upload ref="attachment_uploader" :on-success="handleImagesSuccess" :file-list="imageList" :action="img_upload_api" list-type="picture-card" :on-preview="handleImagesPreview" :on-remove="handleRemoveImage">
                     <i class="el-icon-plus" />
                   </el-upload>
                   <el-dialog :visible.sync="dialogVisible" size="tiny">
@@ -205,10 +217,10 @@
                   </el-dialog>
                 </el-form-item>
                 <el-form-item label-width="85px" label="视频" class="postInfo-container-item">
-                  <el-upload ref="attachment_uploader" :on-success="handelDetailPicSuccess" :file-list="postForm.attachment" :action="img_upload_api" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+                  <el-upload ref="attachment_uploader" :on-success="handleVideosSuccess" :file-list="videoList" :action="img_upload_api" list-type="picture-card" :on-preview="handleVideosPreview" :on-remove="handleRemoveVideo">
                     <i class="el-icon-plus" />
                   </el-upload>
-                  <el-dialog :visible.sync="dialogVisible" size="tiny">
+                  <el-dialog :visible.sync="dialogVideoVisible" size="tiny">
                     <img width="100%" :src="dialogImageUrl" alt="">
                   </el-dialog>
                 </el-form-item>
@@ -250,13 +262,12 @@ import { mapGetters } from 'vuex';
 import staticOptions from '@/data/options';
 import city from '@/data/city';
 import nationData from '@/data/nation';
-import { getShengXiao } from '@/utils';
+import { getShengXiao, getAstro } from '@/utils';
 import insurancePane from './insurancePane';
 import CommunicationPane from '@/components/Communication';
 
 const img_upload_api = process.env.VUE_APP_BASE_API + '/upload/addimg';
 const img_url = process.env.VUE_APP_IMG_URL;
-const nationOptions = Object.assign([], nationData);
 export default {
   name: 'WorkerDetail',
   components: {
@@ -284,11 +295,15 @@ export default {
     return {
       staticOptions,
       CodeToText,
-      options: regionDataPlus,
+      regionDataPlus,
+      provinceAndCityData,
       selectedOptions: [],
       activeTab: 'worker',
       dialogImageUrl: '',
       dialogVisible: false,
+      dialogVideoVisible: false,
+      imageList: [],
+      videoList: [],
       img_upload_api,
       img_url,
       city: city,
@@ -297,7 +312,7 @@ export default {
         // 是否受雇为员工，默认false
         is_employed: false,
         // 昵称
-        nickname: '',
+        // nickname: '',
         // 头像
         avatar: '',
         // 姓名
@@ -305,13 +320,16 @@ export default {
         // 性别
         sex: '女',
         // 籍贯
-        native_place: '',
+        native_place: [],
         // 民族
         nation: '',
         // 属相
         zodiac: '',
+        // 星座
+        astro: '',
         // 户籍地址
-        address: '',
+        address_area: [],
+        detail_address: '',
         // 年龄
         age: undefined,
         // 婚姻状况
@@ -322,6 +340,7 @@ export default {
         id_card: '',
         // 身份证图片
         id_card_images: [],
+        id_card_address: '',
         // 学历
         academic: '',
         // 身高
@@ -338,6 +357,7 @@ export default {
         email: '',
         // 其他证件
         other_credentials: '',
+        mandarin_level: '',
         // 语言能力
         languages: [],
         // 证件
@@ -355,16 +375,20 @@ export default {
         recommend_phone: '',
         // 家庭成员
         family: [],
+        work_exp: [],
+        working_age: '',
         // 工作经验
         working_experience: '',
         // 自我介绍
         introduce: '',
         // 附件
         attachment: [],
+        images: [],
+        videos: [],
         // 后台标记
-        remark: '',
+        remark: ''
         // 角色
-        roles: ['worker']
+        // roles: ['worker']
       },
       fetchSuccess: true,
       loading: false,
@@ -386,33 +410,6 @@ export default {
           label: '黑名单'
         }
       ],
-      nationOptions,
-      academicOptions: [
-        {
-          value: '小学',
-          label: '小学'
-        },
-        {
-          value: '初中',
-          label: '初中'
-        },
-        {
-          value: '高中',
-          label: '高中'
-        },
-        {
-          value: '中专',
-          label: '中专'
-        },
-        {
-          value: '大专',
-          label: '大专'
-        },
-        {
-          value: '大学',
-          label: '大学'
-        }
-      ],
       rules: {
         name: [
           {
@@ -423,20 +420,8 @@ export default {
         ],
         age: [
           {
-            required: true,
-            message: '请输入年龄',
-            trigger: 'blur'
-          },
-          {
             type: 'number',
             message: '必须为数字值',
-            trigger: 'blur'
-          }
-        ],
-        birth: [
-          {
-            required: true,
-            message: '请选择日期',
             trigger: 'blur'
           }
         ],
@@ -462,13 +447,6 @@ export default {
           {
             required: true,
             message: '请输入联系电话',
-            trigger: 'blur'
-          }
-        ],
-        native_place: [
-          {
-            required: true,
-            message: '请输入籍贯',
             trigger: 'blur'
           }
         ]
@@ -501,27 +479,50 @@ export default {
         this.postForm.birth = new Date(birthStr);
         this.postForm.age = parseInt(new Date().getFullYear()) - parseInt(value.substring(6, 10));
         this.postForm.sex = parseInt(value.substring(16, 17)) % 2 === 0 ? '女' : '男';
-        this.postForm.native_place = city[value.substring(0, 2)];
+        // this.postForm.native_place = city[value.substring(0, 2)];
         this.postForm.zodiac = getShengXiao(this.postForm.birth);
+        this.postForm.astro = getAstro(
+          parseInt(value.substring(10, 12)),
+          parseInt(value.substring(12, 14))
+        );
       }
     },
-    is_company() {
-      console.log(this.roles);
-      return this.roles.indexOf('company') !== -1;
+    // is_company() {
+    //   console.log(this.roles);
+    //   return this.roles.indexOf('company') !== -1;
+    // },
+    handleRemoveImage(file, fileList) {
+      //   this.postForm.images = [];
+      //   fileList.forEach(item => {
+      //     this.postForm.images.push(item);
+      //   });
+      this.postForm.images.splice(this.postForm.images.indexOf(file), 1);
     },
-    handleRemove(file, fileList) {
-      this.postForm.attachment = [];
-      fileList.forEach(item => {
-        this.postForm.attachment.push(item);
-      });
-    },
-    handlePictureCardPreview(file) {
+    handleImagesPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-    handelDetailPicSuccess(res, file, fileList) {
+    handleImagesSuccess(res, file, fileList) {
       if (res.status === 0) {
-        this.postForm.attachment.push({
+        this.postForm.images.push({
+          url: img_url + res.image_path
+        });
+      }
+    },
+    handleRemoveVideo(file, fileList) {
+      //   this.postForm.videos = [];
+      //   fileList.forEach(item => {
+      //     this.postForm.videos.push(item);
+      //   });
+      this.postForm.videos.splice(this.postForm.videos.indexOf(file), 1);
+    },
+    handleVideosPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVideoVisible = true;
+    },
+    handleVideosSuccess(res, file, fileList) {
+      if (res.status === 0) {
+        this.postForm.videos.push({
           url: img_url + res.image_path
         });
       }
@@ -546,6 +547,15 @@ export default {
       }
       return (isJPG || isPNG) && isLt2M;
     },
+    addBlankWorkExp() {
+      this.postForm.work_exp.push({
+        start_end: [],
+        content: ''
+      });
+    },
+    handleDeleteWorkExp(row) {
+      this.postForm.work_exp.splice(this.postForm.work_exp.indexOf(row), 1);
+    },
     addBlankFamily() {
       this.postForm.family.push({
         name: '',
@@ -565,6 +575,8 @@ export default {
         .then(response => {
           this.postForm = response.data.data.worker;
           this.postForm.birth = new Date(this.postForm.birth);
+          this.imageList = Object.assign([], this.postForm.images);
+          this.videoList = Object.assign([], this.postForm.videos);
           this.fetchSuccess = true;
         })
         .catch(err => {

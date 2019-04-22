@@ -1,4 +1,40 @@
 export default {
+    workerStatus: [
+        { value: 0, label: '待岗' },
+        { value: 1, label: '上户中' },
+        { value: 2, label: '培训中' },
+        { value: 3, label: '休假' },
+        { value: 4, label: '转行' },
+        { value: 5, label: '黑名单' }
+    ],
+    zodiac: [
+        { value: '猴', label: '猴' },
+        { value: '鸡', label: '鸡' },
+        { value: '狗', label: '狗' },
+        { value: '猪', label: '猪' },
+        { value: '鼠', label: '鼠' },
+        { value: '牛', label: '牛' },
+        { value: '虎', label: '虎' },
+        { value: '兔', label: '兔' },
+        { value: '龙', label: '龙' },
+        { value: '蛇', label: '蛇' },
+        { value: '马', label: '马' },
+        { value: '羊', label: '羊' }
+    ],
+    astro: [
+        { value: '魔羯', label: '魔羯座' },
+        { value: '水瓶', label: '水瓶座' },
+        { value: '双鱼', label: '双鱼座' },
+        { value: '牡羊', label: '牡羊座' },
+        { value: '金牛', label: '金牛座' },
+        { value: '双子', label: '双子座' },
+        { value: '巨蟹', label: '巨蟹座' },
+        { value: '狮子', label: '狮子座' },
+        { value: '处女', label: '处女座' },
+        { value: '天秤', label: '天秤座' },
+        { value: '天蝎', label: '天蝎座' },
+        { value: '射手', label: '射手座' }
+    ],
     nation: [
         { value: '汉族', label: '汉族' },
         { value: '蒙古族', label: '蒙古族' },
@@ -127,7 +163,7 @@ export default {
         { value: '老人陪护', label: '老人陪护' },
         { value: '病人陪护', label: '病人陪护' }
     ],
-    workesp: [
+    workingAge: [
         { value: '1年', label: '1年' },
         { value: '2年', label: '2年' },
         { value: '3年', label: '3年' },

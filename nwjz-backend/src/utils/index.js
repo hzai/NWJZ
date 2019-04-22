@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2019-04-20 12:44:41
- * @Last Modified by:   Roy Chen
- * @Last Modified time: 2019-04-20 12:44:41
+ * @Last Modified by: Roy Chen
+ * @Last Modified time: 2019-04-22 20:10:20
  */
 
 /**
@@ -354,4 +354,38 @@ export function removeClass(ele, cls) {
         const reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
         ele.className = ele.className.replace(reg, ' ');
     }
+}
+
+export function getShengXiao(birth) {
+    birth += '';
+    var len = birth.length;
+    if (len < 4 && len !== 2) {
+        return '';
+    }
+    if (len === 2) {
+        birth - 0 > 30 ? (birth = '19' + birth) : (birth = '20' + birth);
+    }
+    var year = new Date(birth).getFullYear();
+    var arr = [
+        '猴',
+        '鸡',
+        '狗',
+        '猪',
+        '鼠',
+        '牛',
+        '虎',
+        '兔',
+        '龙',
+        '蛇',
+        '马',
+        '羊'
+    ];
+    return /^\d{4}$/.test(year) ? arr[year % 12] : '';
+}
+
+export function getAstro(m, d) {
+    return '魔羯水瓶双鱼牡羊金牛双子巨蟹狮子处女天秤天蝎射手魔羯'.substr(
+        m * 2 - (d < '102223444433'.charAt(m - 1) - -19) * 2,
+        2
+    );
 }
