@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2019-04-22 21:12:49
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-22 21:14:34
+ * @Last Modified time: 2019-04-23 14:07:35
  */
 // import parseTime, formatTime and set to filter
 
@@ -79,5 +79,28 @@ export function codeToTextFilter(value) {
     if (value[0]) result = CodeToText[value[0]];
     if (value[1]) result += CodeToText[value[1]];
     if (value[2]) result += CodeToText[value[2]];
+    return result;
+}
+
+export function ellipsis(value) {
+    if (!value) return '';
+    if (value.length > 10) {
+        return value.slice(0, 10) + '...';
+    }
+    return value;
+}
+
+export function arrayToText(arr) {
+    var result = '';
+    for (var i = 0; i < arr.length; i++) {
+        result += arr[i] + ',';
+    }
+    // 去掉最后一个逗号(如果不需要去掉，就不用写)
+    if (result.length > 0) {
+        result = result.substr(0, result.length - 1);
+    }
+    // if (result.length > 10) {
+    //     result = result.slice(0, 10) + '...';
+    // }
     return result;
 }

@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2019-04-20 12:44:41
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-22 20:10:20
+ * @Last Modified time: 2019-04-23 13:56:38
  */
 
 /**
@@ -388,4 +388,16 @@ export function getAstro(m, d) {
         m * 2 - (d < '102223444433'.charAt(m - 1) - -19) * 2,
         2
     );
+}
+
+export function arrayToText(arr) {
+    var result = '';
+    for (var i = 0; i < arr.length; i++) {
+        result += arr[i] + ',';
+    }
+    // 去掉最后一个逗号(如果不需要去掉，就不用写)
+    if (result.length > 0) {
+        result = result.substr(0, result.length - 1);
+    }
+    return result;
 }

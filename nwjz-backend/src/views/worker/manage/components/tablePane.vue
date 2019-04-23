@@ -37,9 +37,14 @@
       </router-link>
     </div>
     <el-table :key="tableKey" v-loading="listLoading" :data="list" element-loading-text="给我一点时间" stripe fit highlight-current-row style="width: 100%">
-      <el-table-column align="center" prop="name" label="编号" min-width="70">
+      <!-- <el-table-column align="center" prop="name" label="编号" min-width="70">
         <template slot-scope="scope">
           <span>{{ scope.row.worker_code }}</span>
+        </template>
+      </el-table-column> -->
+      <el-table-column align="center" label="头像" width="65">
+        <template slot-scope="scope">
+          <router-link :to="'/worker/edit?id='+scope.row._id"><img :src="scope.row.avatar?scope.row.avatar:'http://images.llguanjia.com/avatar.png'" class="user-avatar"></router-link>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="name" label="姓名" min-width="80">
@@ -47,9 +52,9 @@
           <span class="link-type" @click="handleUpdate(scope.row)">{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="头像" width="65">
+      <el-table-column align="center" min-width="100" label="联系电话">
         <template slot-scope="scope">
-          <router-link :to="'/worker/edit?id='+scope.row._id"><img :src="scope.row.avatar?scope.row.avatar:'http://images.llguanjia.com/avatar.png'" class="user-avatar"></router-link>
+          <span>{{ scope.row.contact_phone }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="性别" width="50">
@@ -62,11 +67,11 @@
           <span>{{ scope.row.age }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="籍贯" width="70">
+      <!-- <el-table-column align="center" label="籍贯" width="70">
         <template slot-scope="scope">
           <span>{{ scope.row.native_place | codeToTextFilter}}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column align="center" label="民族" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.nation }}</span>
@@ -77,17 +82,17 @@
           <span>{{ scope.row.zodiac }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="身份证号码" min-width="150">
+      <!-- <el-table-column align="center" label="身份证号码" min-width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.id_card }}</span>
         </template>
-      </el-table-column>
-      <el-table-column align="center" min-width="100" label="联系电话">
+      </el-table-column> -->
+      <el-table-column class-name="status-col" align="center" label="求职意向" width="150" prop="status">
         <template slot-scope="scope">
-          <span>{{ scope.row.contact_phone }}</span>
+          {{scope.row.work_type | arrayToText | ellipsis}}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" align="center" label="状态" width="80" prop="status">
+      <el-table-column class-name="status-col" align="center" label="在职状态" width="80" prop="status">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusTypeFilter">
             {{ scope.row.status | statusFilter }}
@@ -108,6 +113,7 @@
 
 <script>
 import { fetchWorkerList, updateWorker } from '@/api/worker';
+import staticOptions from '@/data/options';
 import place from '@/data/place';
 import nation from '@/data/nation';
 import zodiac from '@/data/zodiac';

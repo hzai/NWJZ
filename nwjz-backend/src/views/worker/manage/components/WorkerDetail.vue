@@ -174,12 +174,12 @@
             </div>
             <el-row>
               <el-col :span="24">
-                <el-form-item label-width="85px" label="状态" class="postInfo-container-item">
+                <el-form-item label-width="85px" label="在职状态" class="postInfo-container-item">
                   <el-radio-group v-model="postForm.status">
                     <el-radio-button border v-for="(item, key) in staticOptions.workerStatus" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
                   </el-radio-group>
                 </el-form-item>
-                <el-form-item label="行业经验" class="postInfo-container-item">
+                <el-form-item label="从业经验" class="postInfo-container-item">
                   <el-radio-group v-model="postForm.working_age">
                     <el-radio-button border v-for="(item, key) in staticOptions.workingAge" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
                   </el-radio-group>
