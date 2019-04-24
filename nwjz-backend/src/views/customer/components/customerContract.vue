@@ -2,8 +2,9 @@
   <div class="createPost-container">
     <div style="margin-top: 20px">
       <router-link style="margin-right:15px;" :to="{ path:'createContract?employerId='+postForm._id}">
-        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit">新建合同</el-button>
+        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit">创建合同</el-button>
       </router-link>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit">创建临时钟点订单</el-button>
     </div>
     <el-table :key="tableKey" v-loading="listLoading" :data="list" element-loading-text="给我一点时间" stripe fit highlight-current-row style="width: 100%">
       <el-table-column type="index" width="50" />

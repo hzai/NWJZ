@@ -11,10 +11,10 @@
           </div>
           <el-row style="padding-left:30px;">
             <el-col :span="10">
-              <el-form-item label="年龄要求" class="postInfo-container-item">
-                <el-input placeholder="最低" style="max-width:100px;margin-right:10px;" :maxlength="2" />
-                <span> - </span>
-                <el-input placeholder="最高" style="max-width:100px;margin-left:10px;" :maxlength="2" />
+              <el-form-item label="客户需求" prop="requirements">
+                <el-select style="width:180px;" placeholder="请选择">
+                  <el-option v-for="(item, key) in requirementsOption" :key="key" :label="item.label" :value="item.value" />
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="10">
@@ -28,15 +28,15 @@
 
           <el-row style="padding-left:30px;">
             <el-col :span="10">
-              <el-form-item label="籍贯要求" class="postInfo-container-item">
-                <el-input placeholder="籍贯要求" style="width:180px;" />
+              <el-form-item label="年龄要求" class="postInfo-container-item">
+                <el-input placeholder="最低" style="max-width:100px;margin-right:10px;" :maxlength="2" />
+                <span> - </span>
+                <el-input placeholder="最高" style="max-width:100px;margin-left:10px;" :maxlength="2" />
               </el-form-item>
             </el-col>
             <el-col :span="10">
-              <el-form-item label="从业经验" class="postInfo-container-item">
-                <el-select style="width:180px;" placeholder="请选择">
-                  <el-option v-for="(item, key) in workEspOptions" :key="key" :label="item.label" :value="item.value" />
-                </el-select>
+              <el-form-item label="籍贯要求" class="postInfo-container-item">
+                <el-input v-model="postForm.name" placeholder="籍贯要求" style="width:180px;" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -49,6 +49,15 @@
                 <el-input placeholder="最高薪资" style="max-width:100px;margin-left:10px;" :maxlength="5" />
               </el-form-item>
             </el-col>
+            <el-col :span="10">
+              <el-form-item label="从业经验" class="postInfo-container-item">
+                <el-select style="width:180px;" placeholder="请选择">
+                  <el-option v-for="(item, key) in workEspOptions" :key="key" :label="item.label" :value="item.value" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row style="padding-left:30px;">
             <el-col :span="10">
               <el-form-item label="吃饭口味" prop="taste" class="postInfo-container-item">
                 <el-input v-model="postForm.taste" placeholder="吃饭口味" style="min-width:150px;" />
@@ -98,15 +107,15 @@
             </el-col>
           </el-row>
 
-          <!-- <el-row style="padding:30px;">
+          <el-row style="padding:30px;">
             <el-col :span="18" style="text-align:center;">
-              <el-button v-if="!isEdit" v-loading="loading" size="medium" type="success" @click="submitForm()">保存</el-button>
+              <!-- <el-button v-if="!isEdit" v-loading="loading" size="medium" type="success" @click="submitForm()">保存</el-button> -->
               <el-button v-if="isEdit" v-loading="loading" size="medium" type="success" @click="updateForm()">更新</el-button>
               <router-link style="padding-left:10px;" :to="{ path:'client'}">
                 <el-button size="medium" type="info">取消</el-button>
               </router-link>
             </el-col>
-          </el-row> -->
+          </el-row>
 
         </div>
       </div>

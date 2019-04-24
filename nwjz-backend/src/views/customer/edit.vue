@@ -32,6 +32,7 @@
       <el-tab-pane key="detail" label="需求情况" name="detail">
         <requirements-detail :is-edit="true" />
       </el-tab-pane>
+      <el-tab-pane key="workersearch" label="阿姨筛选" name="workersearch" />
       <el-tab-pane key="contract" label="合同管理" name="contract">
         <customer-contract :is-edit="true" />
       </el-tab-pane>
