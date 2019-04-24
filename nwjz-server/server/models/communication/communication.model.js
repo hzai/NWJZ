@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2019-4-1 20:17:23
- * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-13 22:26:06
+ * @Last Modified by: Arnie Carter
+ * @Last Modified time: 2019-04-24 20:48:12
  */
 import Promise from 'bluebird';
 import mongoose from 'mongoose';
@@ -28,6 +28,10 @@ const CommunicationSchema = new mongoose.Schema(
         employer: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Employer'
+        },
+        //状态
+        status: {
+            type: String
         },
         // 内容
         content: {

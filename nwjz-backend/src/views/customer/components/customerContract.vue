@@ -1,5 +1,10 @@
 <template>
   <div class="createPost-container">
+    <div style="margin-top: 20px">
+      <router-link style="margin-right:15px;" :to="{ path:'createContract?employerId='+postForm._id}">
+        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit">新建合同</el-button>
+      </router-link>
+    </div>
     <el-table :key="tableKey" v-loading="listLoading" :data="list" element-loading-text="给我一点时间" stripe fit highlight-current-row style="width: 100%">
       <el-table-column type="index" width="50" />
       <el-table-column align="center" prop="name" label="合同编号" min-width="100">
@@ -47,11 +52,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div style="margin-top: 20px">
-      <router-link style="margin-right:15px;" :to="{ path:'createContract?employerId='+postForm._id}">
-        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit">新建合同</el-button>
-      </router-link>
-    </div>
+
   </div>
 </template>
 

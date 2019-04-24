@@ -3,57 +3,7 @@
     <!-- <back-corner class="github-corner" /> -->
     <el-form ref="postForm" :model="postForm" :rules="rules" label-width="78px" label-position="left" size="medium">
       <div class="createPost-main-container">
-        <!-- <el-row>
-          <el-col :span="21"> -->
         <div class="postInfo-container">
-          <div class="tip">
-            <span>
-              基础信息
-            </span>
-          </div>
-          <el-row style="padding-left:30px;">
-            <el-col :span="10">
-              <el-form-item label="姓名" prop="name" class="postInfo-container-item">
-                <el-input v-model="postForm.name" placeholder="姓名" style="width:180px;" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="10">
-              <el-form-item label="联系电话" prop="contact_phone" class="postInfo-container-item">
-                <el-input v-model="postForm.contact_phone" placeholder="联系电话" style="width:180px;" :maxlength="14" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <el-row style="padding-left:30px;">
-            <el-col :span="10">
-              <el-form-item label="客户需求" prop="requirements">
-                <el-select style="width:180px;" placeholder="请选择">
-                  <el-option v-for="(item, key) in requirementsOption" :key="key" :label="item.label" :value="item.value" />
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="10">
-              <el-form-item label="客户来源" class="postInfo-container-item">
-                <el-select style="width:180px;" placeholder="请选择">
-                  <el-option v-for="(item, key) in sourceOption" :key="key" :label="item.label" :value="item.value" />
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row style="padding-left:30px;">
-            <el-col :span="20">
-              <el-form-item label="地址" prop="address" class="postInfo-container-item">
-                <el-input v-model="postForm.address" placeholder="地址" style="min-width:580px;" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row style="padding-left:30px;">
-            <el-col :span="20">
-              <el-form-item label="备注">
-                <el-input v-model="postForm.remark" type="textarea" :rows="3" placeholder="请输入备注内容" style="width:580px;" />
-              </el-form-item>
-            </el-col>
-          </el-row>
           <div class="tip">
             <span>
               用工需求
@@ -79,7 +29,7 @@
           <el-row style="padding-left:30px;">
             <el-col :span="10">
               <el-form-item label="籍贯要求" class="postInfo-container-item">
-                <el-input v-model="postForm.name" placeholder="籍贯要求" style="width:180px;" />
+                <el-input placeholder="籍贯要求" style="width:180px;" />
               </el-form-item>
             </el-col>
             <el-col :span="10">
@@ -129,11 +79,6 @@
                 <el-input v-model.number="postForm.childrens" placeholder="幼童数量" style="min-width:150px;" :maxlength="10" />
               </el-form-item>
             </el-col>
-            <!-- <el-col :span="10">
-              <el-form-item label="紧急联系方式" class="postInfo-container-item" prop="pets">
-                <el-input v-model.number="postForm.pets" placeholder="宠物数量" style="min-width:150px;" :maxlength="10" />
-              </el-form-item>
-            </el-col> -->
           </el-row>
 
           <div class="tip">
@@ -153,7 +98,7 @@
             </el-col>
           </el-row>
 
-          <el-row style="padding:30px;">
+          <!-- <el-row style="padding:30px;">
             <el-col :span="18" style="text-align:center;">
               <el-button v-if="!isEdit" v-loading="loading" size="medium" type="success" @click="submitForm()">保存</el-button>
               <el-button v-if="isEdit" v-loading="loading" size="medium" type="success" @click="updateForm()">更新</el-button>
@@ -161,11 +106,9 @@
                 <el-button size="medium" type="info">取消</el-button>
               </router-link>
             </el-col>
-          </el-row>
+          </el-row> -->
 
         </div>
-        <!-- </el-col>
-        </el-row> -->
       </div>
     </el-form>
   </div>
@@ -174,14 +117,14 @@
 <script>
 // import Upload from '@/components/Upload/singleImage3';
 // import BackCorner from '@/components/BackCorner';
-import { createEmployer, fetchEmployer, updateEmployer } from '@/api/employer';
+import { fetchEmployer, updateEmployer } from '@/api/employer';
 import requirementsData from '@/data/requirements';
 import { mapGetters } from 'vuex';
-import city from '@/data/city';
+// import city from '@/data/city';
 const img_upload_api = process.env.BASE_API + '/upload/addimg';
 const img_url = process.env.IMG_URL;
 export default {
-    name: 'CustomerDetail',
+    name: 'RequirementsDetail',
     components: {
     // Upload,
     // BackCorner
@@ -211,20 +154,6 @@ export default {
         }
     },
     data() {
-        var validateIDCard = (rule, value, callback) => {
-            if (value === '') {
-                callback();
-            } else if (value.length < 18) {
-                callback(new Error('请输入正确的身份证号'));
-            } else if (
-                !value ||
-        !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(value)
-            ) {
-                callback(new Error('请输入正确的身份证号'));
-            } else {
-                callback();
-            }
-        };
         return {
             dialogImageUrl: '',
             dialogVisible: false,
@@ -283,7 +212,7 @@ export default {
             statusOptions: [
                 {
                     value: 0,
-                    label: '新建'
+                    label: '待跟进'
                 },
                 {
                     value: 1,
@@ -291,30 +220,18 @@ export default {
                 },
                 {
                     value: 2,
-                    label: '匹配中'
+                    label: '已面试'
                 },
                 {
                     value: 3,
-                    label: '待面试'
+                    label: '已签约'
                 },
                 {
                     value: 4,
-                    label: '待签单'
+                    label: '已失效'
                 },
                 {
                     value: 5,
-                    label: '已服务'
-                },
-                {
-                    value: 6,
-                    label: '已放弃'
-                },
-                {
-                    value: 7,
-                    label: '已私签'
-                },
-                {
-                    value: 8,
                     label: '黑名单'
                 }
             ],
@@ -455,71 +372,7 @@ export default {
                     value: '3',
                     label: '特殊'
                 }
-            ],
-            rules: {
-                name: [
-                    {
-                        required: true,
-                        message: '请输入姓名',
-                        trigger: 'blur'
-                    }
-                ],
-                age: [
-                    {
-                        type: 'number',
-                        message: '必须为数字值',
-                        trigger: 'blur'
-                    }
-                ],
-                area: [
-                    {
-                        type: 'number',
-                        message: '必须为数字值',
-                        trigger: 'blur'
-                    }
-                ],
-                family: [
-                    {
-                        type: 'number',
-                        message: '必须为数字值',
-                        trigger: 'blur'
-                    }
-                ],
-                childrens: [
-                    {
-                        type: 'number',
-                        message: '必须为数字值',
-                        trigger: 'blur'
-                    }
-                ],
-                pets: [
-                    {
-                        type: 'number',
-                        message: '必须为数字值',
-                        trigger: 'blur'
-                    }
-                ],
-                id_card: [
-                    {
-                        validator: validateIDCard,
-                        trigger: 'blur'
-                    }
-                ],
-                contact_phone: [
-                    {
-                        required: true,
-                        message: '请输入联系电话',
-                        trigger: 'blur'
-                    }
-                ],
-                requirements: [
-                    {
-                        required: true,
-                        message: '请选择需求',
-                        trigger: 'blur'
-                    }
-                ]
-            }
+            ]
         };
     },
     computed: {
@@ -534,13 +387,6 @@ export default {
         }
     },
     methods: {
-        id_card_change(value) {
-            if (value.length === 18) {
-                this.postForm.age = parseInt(new Date().getFullYear()) - parseInt(value.substring(6, 10));
-                this.postForm.sex = parseInt(value.substring(16, 17)) % 2 === 0 ? '女' : '男';
-                this.postForm.native_place = city[value.substring(0, 2)];
-            }
-        },
         handleRemove(file, fileList) {
             this.postForm.attachment = [];
             fileList.forEach(item => {
@@ -597,46 +443,7 @@ export default {
                     console.log(err);
                 });
         },
-        submitForm() {
-            console.log(this.postForm);
-            this.$refs['postForm'].validate(valid => {
-                if (valid) {
-                    this.loading = true;
-                    createEmployer(this.postForm).then(resp => {
-                        console.log(resp);
-                        if (!resp.data) {
-                            this.$notify({
-                                title: '失败',
-                                message: '创建失败',
-                                type: 'error',
-                                duration: 2000
-                            });
-                        } else if (resp.data.status !== 0) {
-                            this.$notify({
-                                title: '失败',
-                                message: '创建失败: ' + resp.data.message,
-                                type: 'error',
-                                duration: 2000
-                            });
-                        } else {
-                            this.$notify({
-                                title: '成功',
-                                message: '创建成功',
-                                type: 'success',
-                                duration: 2000
-                            });
-                            this.$router.push({
-                                path: 'client'
-                            });
-                        }
-                    });
-                    this.loading = false;
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-        },
+
         updateForm() {
             console.log(this.postForm);
             this.$refs['postForm'].validate(valid => {

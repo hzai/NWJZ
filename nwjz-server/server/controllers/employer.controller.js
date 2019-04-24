@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:36:55
- * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-12 00:32:09
+ * @Last Modified by: Arnie Carter
+ * @Last Modified time: 2019-04-24 19:22:25
  */
 import Employer from '../models/employer.model';
 import Utils from '../helpers/Utils';
@@ -87,7 +87,6 @@ function update(req, res, next) {
 async function list(req, res, next) {
     const {
         status = 'ALL',
-        type = undefined,
         name = '',
         contact_phone = '',
         requirements = undefined
@@ -121,11 +120,6 @@ async function list(req, res, next) {
                 $regex: contact_phone,
                 $options: '$i'
             }
-        });
-    }
-    if (type !== undefined) {
-        _filter.$and.push({
-            type: type
         });
     }
     if (requirements !== undefined) {
@@ -169,7 +163,7 @@ async function list(req, res, next) {
  * @param {*} next
  */
 async function statProspectStatus(req, res, next) {
-    let _filter = { type: 'prospect' };
+    let _filter = {};
     let total = await Employer.count(_filter);
     Employer.aggregate([
         { $match: _filter },
