@@ -1,13 +1,13 @@
 <template>
-  <worker-detail :is-edit="true" />
+  <worker-info2 :is-edit="true" />
 </template>
 
 <script>
-import WorkerDetail from './components/WorkerDetail';
+import WorkerInfo2 from './components/workerInfo';
 
 export default {
-    name: 'EditWorker',
-    components: { WorkerDetail }
+  name: 'WorkerInfo',
+  components: { WorkerInfo2 }
 };
 </script>
 

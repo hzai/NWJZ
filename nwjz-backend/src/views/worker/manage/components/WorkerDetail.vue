@@ -1,250 +1,240 @@
 <template>
   <div class="createPost-container">
-    <el-alert v-if="postForm.remark" title="温馨提示" type="warning" :description="'备注: ' + postForm.remark" show-icon />
-    <el-tabs v-model="activeTab" style="margin-top:15px;">
-      <el-tab-pane label="基本信息" name="worker">
-        <el-form ref="postForm" :model="postForm" :rules="rules" label-width="85px" label-position="right" style="padding-top:10px;">
-          <div class="createPost-main-container">
-            <div class="tip">
-              <span>
-                请录入阿姨的身份信息
-              </span>
-            </div>
+    <!-- <el-alert v-if="postForm.remark" title="温馨提示" type="warning" :description="'备注: ' + postForm.remark" show-icon /> -->
+    <el-form ref="postForm" :model="postForm" :rules="rules" label-width="85px" label-position="right" style="padding-top:10px;">
+      <div class="createPost-main-container">
+        <div class="tip">
+          <span>
+            请录入阿姨的身份信息
+          </span>
+        </div>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label-width="85px" label="身份证号" prop="id_card" class="postInfo-container-item">
+              <el-input v-model="postForm.id_card" placeholder="身份证号码" style="width:250px;" :maxlength="18" @change="id_card_change" />
+            </el-form-item>
+            <el-form-item label-width="85px" label="阿姨姓名" prop="name" class="postInfo-container-item">
+              <el-input v-model="postForm.name" placeholder="姓名" style="width:250px;" />
+            </el-form-item>
+            <el-form-item label-width="85px" label="联系电话" prop="contact_phone" class="postInfo-container-item">
+              <el-input v-model="postForm.contact_phone" placeholder="联系电话" style="width:250px;" :maxlength="14" />
+            </el-form-item>
+            <el-form-item label-width="85px" label="阿姨生日" prop="birth" class="postInfo-container-item">
+              <el-date-picker v-model="postForm.birth" type="date" format="yyyy-MM-dd" placeholder="选择日期" style="width:250px;" />
+            </el-form-item>
+            <el-form-item label-width="85px" label="民族" prop="nation" class="postInfo-container-item">
+              <el-select v-model="postForm.nation" style="width:250px;" placeholder="请选择">
+                <el-option v-for="(item, key) in staticOptions.nation" :key="key" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label-width="85px" label="生肖" prop="zodiac" class="postInfo-container-item">
+              <el-select v-model="postForm.zodiac" style="width:250px;" placeholder="请选择">
+                <el-option v-for="(item, key) in staticOptions.zodiac" :key="key" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label-width="85px" label="星座" prop="astro" class="postInfo-container-item">
+              <el-select v-model="postForm.astro" style="width:250px;" placeholder="请选择">
+                <el-option v-for="(item, key) in staticOptions.astro" :key="key" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label-width="85px" label="性别" class="postInfo-container-item">
+              <el-radio-group v-model="postForm.sex">
+                <el-radio-button label="女" border>女</el-radio-button>
+                <el-radio-button v-model="postForm.sex" label="男" border>男</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label-width="85px" label="身份证地址" prop="id_card_address" class="postInfo-container-item">
+              <el-input v-model="postForm.id_card_address" type="textarea" class="article-textarea" :rows="2" placeholder="身份证地址" style="width:250px;" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="2">&nbsp;</el-col>
+          <el-col :span="8">
             <el-row>
-              <el-col :span="8">
-                <el-form-item label-width="85px" label="身份证号" prop="id_card" class="postInfo-container-item">
-                  <el-input v-model="postForm.id_card" placeholder="身份证号码" style="width:250px;" :maxlength="18" @change="id_card_change" />
-                </el-form-item>
-                <el-form-item label-width="85px" label="阿姨姓名" prop="name" class="postInfo-container-item">
-                  <el-input v-model="postForm.name" placeholder="姓名" style="width:250px;" />
-                </el-form-item>
-                <el-form-item label-width="85px" label="联系电话" prop="contact_phone" class="postInfo-container-item">
-                  <el-input v-model="postForm.contact_phone" placeholder="联系电话" style="width:250px;" :maxlength="14" />
-                </el-form-item>
-                <el-form-item label-width="85px" label="阿姨生日" prop="birth" class="postInfo-container-item">
-                  <el-date-picker v-model="postForm.birth" type="date" format="yyyy-MM-dd" placeholder="选择日期" style="width:250px;" />
-                </el-form-item>
-                <el-form-item label-width="85px" label="民族" prop="nation" class="postInfo-container-item">
-                  <el-select v-model="postForm.nation" style="width:250px;" placeholder="请选择">
-                    <el-option v-for="(item, key) in staticOptions.nation" :key="key" :label="item.label" :value="item.value" />
-                  </el-select>
-                </el-form-item>
-                <el-form-item label-width="85px" label="生肖" prop="zodiac" class="postInfo-container-item">
-                  <el-select v-model="postForm.zodiac" style="width:250px;" placeholder="请选择">
-                    <el-option v-for="(item, key) in staticOptions.zodiac" :key="key" :label="item.label" :value="item.value" />
-                  </el-select>
-                </el-form-item>
-                <el-form-item label-width="85px" label="星座" prop="astro" class="postInfo-container-item">
-                  <el-select v-model="postForm.astro" style="width:250px;" placeholder="请选择">
-                    <el-option v-for="(item, key) in staticOptions.astro" :key="key" :label="item.label" :value="item.value" />
-                  </el-select>
-                </el-form-item>
-                <el-form-item label-width="85px" label="性别" class="postInfo-container-item">
-                  <el-radio-group v-model="postForm.sex">
-                    <el-radio-button label="女" border>女</el-radio-button>
-                    <el-radio-button v-model="postForm.sex" label="男" border>男</el-radio-button>
-                  </el-radio-group>
-                </el-form-item>
-                <el-form-item label-width="85px" label="身份证地址" prop="id_card_address" class="postInfo-container-item">
-                  <el-input v-model="postForm.id_card_address" type="textarea" class="article-textarea" :rows="2" placeholder="身份证地址" style="width:250px;" />
-                </el-form-item>
-              </el-col>
-              <el-col :span="2">&nbsp;</el-col>
-              <el-col :span="8">
-                <el-row>
-                  <el-col>
-                    <el-form-item label-width="85px" label="扫描身份证" class="postInfo-container-item">
-                      <el-upload class="upload-demo" drag :action="img_upload_api" multiple>
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">将身份证图片文件拖到此处，或<em>点击上传</em>进行扫描</div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-                      </el-upload>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col>
-                    <el-form-item label-width="85px" label="头像" class="postInfo-container-item">
-                      <el-upload class="avatar-uploader" :action="img_upload_api" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-                        <img v-if="postForm.avatar" :src="postForm.avatar" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon" />
-                      </el-upload>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-            <div class="tip">
-              <span>
-                请录入阿姨的个人信息
-              </span>
-            </div>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label-width="85px" label="现居地址" prop="detail_address" class="postInfo-container-item">
-                  <el-cascader v-model="postForm.address_area" :options="regionDataPlus" @change="handleChange" style="width:350px;">
-                  </el-cascader><br>
-                  <el-input v-model="postForm.detail_address" placeholder="详细地址，如楼层、门牌号等" style="width:350px;" />
-                </el-form-item>
-                <el-form-item label-width="85px" label="阿姨籍贯" prop="native_place" class="postInfo-container-item">
-                  <el-cascader v-model="postForm.native_place" :options="provinceAndCityData" @change="handleChange">
-                  </el-cascader>
-                </el-form-item>
-                <el-form-item label-width="85px" label="紧急电话" class="postInfo-container-item">
-                  <el-input v-model="postForm.urgent_phone" placeholder="紧急电话" style="width:350px;" />
-                </el-form-item>
-                <el-form-item label="年龄" prop="age" class="postInfo-container-item">
-                  <el-input v-model.number="postForm.age" placeholder="年龄" style="width:350px;" :maxlength="2" />
-                </el-form-item>
-                <el-form-item label-width="85px" label="身高" prop="height" class="postInfo-container-item">
-                  <el-input v-model.number="postForm.height" placeholder="身高" :maxlength="3" style="width:350px;" />
-                </el-form-item>
-                <el-form-item label-width="85px" label="最高学历" prop="academic" class="postInfo-container-item">
-                  <el-radio-group v-model="postForm.academic">
-                    <el-radio-button border v-for="(item, key) in staticOptions.academic" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
-                  </el-radio-group>
-                </el-form-item>
-                <el-form-item label-width="85px" label="婚姻状况" class="postInfo-container-item">
-                  <el-radio-group v-model="postForm.marriaged">
-                    <el-radio-button border v-for="(item, key) in staticOptions.marriaged" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
-                  </el-radio-group>
-                </el-form-item>
-                <el-form-item label="自我介绍">
-                  <el-input v-model="postForm.introduce" type="textarea" class="article-textarea" :rows="3" placeholder="一句话简单的自我介绍" style="width:350px;" />
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <div class="tip">
-              <span>
-                请录入阿姨的资质与技能信息
-              </span>
-            </div>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label-width="85px" label="普通话水平" class="postInfo-container-item">
-                  <el-radio-group v-model="postForm.mandarin_level">
-                    <el-radio-button border v-for="(item, key) in staticOptions.mandarin_level" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
-                  </el-radio-group>
-                </el-form-item>
-                <el-form-item label-width="85px" label="语言能力" class="postInfo-container-item">
-                  <el-checkbox-group v-model="postForm.languages">
-                    <el-checkbox-button border v-for="(item, key) in staticOptions.languages" :key="key" :label="item.value">{{ item.label }}</el-checkbox-button>
-                  </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label-width="85px" label="做饭能力" class="postInfo-container-item">
-                  <el-radio-group v-model="postForm.zuofannengli">
-                    <el-radio-button border v-for="(item, key) in staticOptions.zuofannengli" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
-                  </el-radio-group>
-                </el-form-item>
-                <el-form-item label-width="85px" label="掌握菜系" class="postInfo-container-item">
-                  <el-checkbox-group v-model="postForm.caixi">
-                    <el-checkbox-button border v-for="(item, key) in staticOptions.caixi" :key="key" :label="item.value">{{ item.label }}</el-checkbox-button>
-                  </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label-width="85px" label="资格证书" class="postInfo-container-item">
-                  <el-checkbox-group v-model="postForm.credentials">
-                    <el-checkbox-button border v-for="(item, key) in staticOptions.credentials" :key="key" :label="item.value">{{ item.label }}</el-checkbox-button>
-                  </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="工作经历" class="postInfo-container-item">
-                  <el-table ref="multipleTable" :data="postForm.work_exp" tooltip-effect="dark">
-                    <el-table-column align="center" label="从业时间" width="400">
-                      <el-date-picker v-model="scope.row.start_end" slot-scope="scope" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期">
-                      </el-date-picker>
-                    </el-table-column>
-                    <el-table-column align="center" label="工作内容" width="300">
-                      <el-input v-model="scope.row.content" slot-scope="scope" placeholder="工作内容" />
-                    </el-table-column>
-                    <el-table-column align="center" label="操作">
-                      <template slot-scope="scope">
-                        <el-button type="info" size="mini" icon="el-icon-delete" @click="handleDeleteWorkExp(scope.row)" />
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                  <div style="margin-top: 10px;float:right">
-                    <el-button type="primary" icon="el-icon-plus" round @click="addBlankWorkExp()" />
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <div class="tip">
-              <span>
-                请录入阿姨的求职信息
-              </span>
-            </div>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label-width="85px" label="在职状态" class="postInfo-container-item">
-                  <el-radio-group v-model="postForm.status">
-                    <el-radio-button border v-for="(item, key) in staticOptions.workerStatus" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
-                  </el-radio-group>
-                </el-form-item>
-                <el-form-item label="从业经验" class="postInfo-container-item">
-                  <el-radio-group v-model="postForm.working_age">
-                    <el-radio-button border v-for="(item, key) in staticOptions.workingAge" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
-                  </el-radio-group>
-                </el-form-item>
-                <el-form-item label-width="85px" label="求职意向" class="postInfo-container-item">
-                  <el-checkbox-group class="checkbox" v-model="postForm.work_type">
-                    <el-checkbox-button border v-for="(item, key) in staticOptions.job" :key="key" :label="item.value">{{ item.label }}</el-checkbox-button>
-                  </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="工作时间" class="postInfo-container-item">
-                  <el-checkbox-group v-model="postForm.work_time">
-                    <el-checkbox-button border v-for="(item, key) in staticOptions.worktime" :key="key" :label="item.value">{{ item.label }}</el-checkbox-button>
-                  </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="薪资要求" class="postInfo-container-item">
-                  <el-input placeholder="最低薪资" style="max-width:180px;margin-right:10px;" :maxlength="5" />
-                  <span> - </span>
-                  <el-input placeholder="最高薪资" style="max-width:180px;margin-left:10px;" :maxlength="5" />
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <div class="tip">
-              <span>
-                照片及视频
-              </span>
-            </div>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label-width="85px" label="照片" class="postInfo-container-item">
-                  <el-upload ref="attachment_uploader" :on-success="handleImagesSuccess" :file-list="imageList" :action="img_upload_api" list-type="picture-card" :on-preview="handleImagesPreview" :on-remove="handleRemoveImage">
-                    <i class="el-icon-plus" />
-                  </el-upload>
-                  <el-dialog :visible.sync="dialogVisible" size="tiny">
-                    <img width="100%" :src="dialogImageUrl" alt="">
-                  </el-dialog>
-                </el-form-item>
-                <el-form-item label-width="85px" label="视频" class="postInfo-container-item">
-                  <el-upload ref="attachment_uploader" :on-success="handleVideosSuccess" :file-list="videoList" :action="img_upload_api" list-type="picture-card" :on-preview="handleVideosPreview" :on-remove="handleRemoveVideo">
-                    <i class="el-icon-plus" />
-                  </el-upload>
-                  <el-dialog :visible.sync="dialogVideoVisible" size="tiny">
-                    <img width="100%" :src="dialogImageUrl" alt="">
-                  </el-dialog>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="10" style="margin-top:20px;margin-left:85px">
               <el-col>
-                <el-button v-if="!isEdit" v-loading="loading" size="medium" type="success" @click="submitForm()">保存</el-button>
-                <el-button v-if="isEdit" v-loading="loading" size="medium" type="success" @click="updateForm()">更新</el-button>
-                <router-link style="padding-left:10px;" :to="{ path:'manage'}">
-                  <el-button size="medium" type="info">取消</el-button>
-                </router-link>
+                <el-form-item label-width="85px" label="扫描身份证" class="postInfo-container-item">
+                  <el-upload class="upload-demo" drag :action="img_upload_api" multiple>
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将身份证图片文件拖到此处，或<em>点击上传</em>进行扫描</div>
+                    <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                  </el-upload>
+                </el-form-item>
               </el-col>
             </el-row>
-          </div>
-        </el-form>
-      </el-tab-pane>
-      <el-tab-pane v-if="isEdit" label="保险购买记录" name="insurance">
-        <insurance-pane :worker-id="this.$route.query.id" />
-      </el-tab-pane>
-      <el-tab-pane v-if="isEdit" label="沟通记录" name="communication">
-        <communication-pane type="worker" :worker-id="this.$route.query.id" />
-      </el-tab-pane>
-    </el-tabs>
+            <el-row>
+              <el-col>
+                <el-form-item label-width="85px" label="头像" class="postInfo-container-item">
+                  <el-upload class="avatar-uploader" :action="img_upload_api" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                    <img v-if="postForm.avatar" :src="postForm.avatar" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon" />
+                  </el-upload>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+        <div class="tip">
+          <span>
+            请录入阿姨的个人信息
+          </span>
+        </div>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label-width="85px" label="现居地址" prop="detail_address" class="postInfo-container-item">
+              <el-cascader v-model="postForm.address_area" :options="regionDataPlus" @change="handleChange" style="width:350px;">
+              </el-cascader><br>
+              <el-input v-model="postForm.detail_address" placeholder="详细地址，如楼层、门牌号等" style="width:350px;" />
+            </el-form-item>
+            <el-form-item label-width="85px" label="阿姨籍贯" prop="native_place" class="postInfo-container-item">
+              <el-cascader v-model="postForm.native_place" :options="provinceAndCityData" @change="handleChange">
+              </el-cascader>
+            </el-form-item>
+            <el-form-item label-width="85px" label="紧急电话" class="postInfo-container-item">
+              <el-input v-model="postForm.urgent_phone" placeholder="紧急电话" style="width:350px;" />
+            </el-form-item>
+            <el-form-item label="年龄" prop="age" class="postInfo-container-item">
+              <el-input v-model.number="postForm.age" placeholder="年龄" style="width:350px;" :maxlength="2" />
+            </el-form-item>
+            <el-form-item label-width="85px" label="身高" prop="height" class="postInfo-container-item">
+              <el-input v-model.number="postForm.height" placeholder="身高" :maxlength="3" style="width:350px;" />
+            </el-form-item>
+            <el-form-item label-width="85px" label="最高学历" prop="academic" class="postInfo-container-item">
+              <el-radio-group v-model="postForm.academic">
+                <el-radio-button border v-for="(item, key) in staticOptions.academic" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label-width="85px" label="婚姻状况" class="postInfo-container-item">
+              <el-radio-group v-model="postForm.marriaged">
+                <el-radio-button border v-for="(item, key) in staticOptions.marriaged" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="自我介绍">
+              <el-input v-model="postForm.introduce" type="textarea" class="article-textarea" :rows="3" placeholder="一句话简单的自我介绍" style="width:350px;" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <div class="tip">
+          <span>
+            请录入阿姨的资质与技能信息
+          </span>
+        </div>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label-width="85px" label="普通话水平" class="postInfo-container-item">
+              <el-radio-group v-model="postForm.mandarin_level">
+                <el-radio-button border v-for="(item, key) in staticOptions.mandarin_level" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label-width="85px" label="语言能力" class="postInfo-container-item">
+              <el-checkbox-group v-model="postForm.languages">
+                <el-checkbox-button border v-for="(item, key) in staticOptions.languages" :key="key" :label="item.value">{{ item.label }}</el-checkbox-button>
+              </el-checkbox-group>
+            </el-form-item>
+            <el-form-item label-width="85px" label="做饭能力" class="postInfo-container-item">
+              <el-radio-group v-model="postForm.zuofannengli">
+                <el-radio-button border v-for="(item, key) in staticOptions.zuofannengli" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label-width="85px" label="掌握菜系" class="postInfo-container-item">
+              <el-checkbox-group v-model="postForm.caixi">
+                <el-checkbox-button border v-for="(item, key) in staticOptions.caixi" :key="key" :label="item.value">{{ item.label }}</el-checkbox-button>
+              </el-checkbox-group>
+            </el-form-item>
+            <el-form-item label-width="85px" label="资格证书" class="postInfo-container-item">
+              <el-checkbox-group v-model="postForm.credentials">
+                <el-checkbox-button border v-for="(item, key) in staticOptions.credentials" :key="key" :label="item.value">{{ item.label }}</el-checkbox-button>
+              </el-checkbox-group>
+            </el-form-item>
+            <el-form-item label="工作经历" class="postInfo-container-item">
+              <el-table ref="multipleTable" :data="postForm.work_exp" tooltip-effect="dark">
+                <el-table-column align="center" label="从业时间" width="400">
+                  <el-date-picker v-model="scope.row.start_end" slot-scope="scope" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期">
+                  </el-date-picker>
+                </el-table-column>
+                <el-table-column align="center" label="工作内容" width="300">
+                  <el-input v-model="scope.row.content" slot-scope="scope" placeholder="工作内容" />
+                </el-table-column>
+                <el-table-column align="center" label="操作">
+                  <template slot-scope="scope">
+                    <el-button type="info" size="mini" icon="el-icon-delete" @click="handleDeleteWorkExp(scope.row)" />
+                  </template>
+                </el-table-column>
+              </el-table>
+              <div style="margin-top: 10px;float:right">
+                <el-button type="primary" icon="el-icon-plus" round @click="addBlankWorkExp()" />
+              </div>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <div class="tip">
+          <span>
+            请录入阿姨的求职信息
+          </span>
+        </div>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label-width="85px" label="在职状态" class="postInfo-container-item">
+              <el-radio-group v-model="postForm.status">
+                <el-radio-button border v-for="(item, key) in staticOptions.workerStatus" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="从业经验" class="postInfo-container-item">
+              <el-radio-group v-model="postForm.working_age">
+                <el-radio-button border v-for="(item, key) in staticOptions.workingAge" :key="key" :label="item.value">{{ item.label }}</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label-width="85px" label="求职意向" class="postInfo-container-item">
+              <el-checkbox-group class="checkbox" v-model="postForm.work_type">
+                <el-checkbox-button border v-for="(item, key) in staticOptions.job" :key="key" :label="item.value">{{ item.label }}</el-checkbox-button>
+              </el-checkbox-group>
+            </el-form-item>
+            <el-form-item label="工作时间" class="postInfo-container-item">
+              <el-checkbox-group v-model="postForm.work_time">
+                <el-checkbox-button border v-for="(item, key) in staticOptions.worktime" :key="key" :label="item.value">{{ item.label }}</el-checkbox-button>
+              </el-checkbox-group>
+            </el-form-item>
+            <el-form-item label="薪资要求" class="postInfo-container-item">
+              <el-input placeholder="最低薪资" style="max-width:180px;margin-right:10px;" :maxlength="5" />
+              <span> - </span>
+              <el-input placeholder="最高薪资" style="max-width:180px;margin-left:10px;" :maxlength="5" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <div class="tip">
+          <span>
+            照片及视频
+          </span>
+        </div>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label-width="85px" label="照片" class="postInfo-container-item">
+              <el-upload ref="attachment_uploader" :on-success="handleImagesSuccess" :file-list="imageList" :action="img_upload_api" list-type="picture-card" :on-preview="handleImagesPreview" :on-remove="handleRemoveImage">
+                <i class="el-icon-plus" />
+              </el-upload>
+              <el-dialog :visible.sync="dialogVisible" size="tiny">
+                <img width="100%" :src="dialogImageUrl" alt="">
+              </el-dialog>
+            </el-form-item>
+            <el-form-item label-width="85px" label="视频" class="postInfo-container-item">
+              <el-upload ref="attachment_uploader" :on-success="handleVideosSuccess" :file-list="videoList" :action="img_upload_api" list-type="picture-card" :on-preview="handleVideosPreview" :on-remove="handleRemoveVideo">
+                <i class="el-icon-plus" />
+              </el-upload>
+              <el-dialog :visible.sync="dialogVideoVisible" size="tiny">
+                <img width="100%" :src="dialogImageUrl" alt="">
+              </el-dialog>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10" style="margin-top:20px;margin-left:85px">
+          <el-col>
+            <el-button v-if="!isEdit" v-loading="loading" size="medium" type="success" @click="submitForm()">保存</el-button>
+            <el-button v-if="isEdit" v-loading="loading" size="medium" type="success" @click="updateForm()">更新</el-button>
+            <router-link style="padding-left:10px;" :to="{ path:'list'}">
+              <el-button size="medium" type="info">取消</el-button>
+            </router-link>
+          </el-col>
+        </el-row>
+      </div>
+    </el-form>
   </div>
 </template>
 
@@ -263,17 +253,12 @@ import staticOptions from '@/data/options';
 import city from '@/data/city';
 import nationData from '@/data/nation';
 import { getShengXiao, getAstro } from '@/utils';
-import insurancePane from './insurancePane';
-import CommunicationPane from '@/components/Communication';
 
 const img_upload_api = process.env.VUE_APP_BASE_API + '/upload/addimg';
 const img_url = process.env.VUE_APP_IMG_URL;
 export default {
-  name: 'WorkerDetail',
-  components: {
-    insurancePane,
-    CommunicationPane
-  },
+  name: 'worker-detail',
+  components: {},
   props: {
     isEdit: {
       type: Boolean,
@@ -615,7 +600,7 @@ export default {
                 duration: 2000
               });
               this.$router.push({
-                path: 'manage'
+                path: 'list'
               });
             }
           });
@@ -656,7 +641,7 @@ export default {
                 duration: 2000
               });
               this.$router.push({
-                path: 'manage'
+                path: 'list'
               });
             }
           });

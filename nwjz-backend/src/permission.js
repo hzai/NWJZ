@@ -8,7 +8,7 @@ import getPageTitle from '@/utils/get-page-title';
 
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
-const whiteList = ['/login', '/auth-redirect']; // no redirect whitelist
+const whiteList = ['/login', '/auth-redirect', '/resume']; // no redirect whitelist
 
 // eslint-disable-next-line space-before-function-paren
 router.beforeEach(async (to, from, next) => {

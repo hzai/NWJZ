@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2019-04-19 20:34:39
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-22 21:41:12
+ * @Last Modified time: 2019-04-24 21:49:29
  */
 import Vue from 'vue';
 import Router from 'vue-router';
@@ -89,6 +89,11 @@ export const constantRoutes = [
                 }
             }
         ]
+    },
+    {
+        path: '/resume',
+        component: () => import('@/views/resume/index'),
+        hidden: true
     }
 ];
 
@@ -117,7 +122,17 @@ export const asyncRoutes = [
             {
                 path: 'edit',
                 component: () => import('@/views/worker/manage/edit'),
-                name: 'EditWorker',
+                name: 'worker-info',
+                meta: {
+                    title: 'workerInfo',
+                    noCache: true
+                },
+                hidden: true
+            },
+            {
+                path: 'detail',
+                component: () => import('@/views/worker/manage/detail'),
+                name: 'worker-detail',
                 meta: {
                     title: 'editWorker',
                     noCache: true
@@ -125,16 +140,10 @@ export const asyncRoutes = [
                 hidden: true
             },
             {
-                path: 'manage',
+                path: 'list',
                 component: () => import('@/views/worker/manage'),
                 name: 'worker-manage',
                 meta: { title: 'workerManage', icon: 'people' }
-            },
-            {
-                path: 'communicate',
-                component: () => import('@/views/worker/communicate'),
-                name: 'worker-communicate',
-                meta: { title: 'workerCommunicate', icon: 'people' }
             }
         ]
     },
