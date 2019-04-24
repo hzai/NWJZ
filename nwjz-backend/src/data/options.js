@@ -129,12 +129,7 @@ export default {
         { value: '很好', label: '很好' }
     ],
     caixi: [
-        { value: '粤菜', label: '粤菜' },
-        { value: '湘菜', label: '湘菜' },
-        { value: '川菜', label: '川菜' },
-        { value: '上海菜', label: '上海菜' },
-        { value: '东北菜', label: '东北菜' },
-        { value: '潮州菜', label: '潮州菜' },
+        { value: '家常菜', label: '家常菜' },
         { value: '面食', label: '面食' },
         { value: '中餐', label: '中餐' },
         { value: '西餐', label: '西餐' },

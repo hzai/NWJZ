@@ -12,12 +12,12 @@
             </span>
           </div>
           <el-row style="padding-left:30px;">
-            <el-col :span="10">
+            <el-col :span="8">
               <el-form-item label="姓名" prop="name" class="postInfo-container-item">
                 <el-input v-model="postForm.name" placeholder="姓名" style="width:180px;" />
               </el-form-item>
             </el-col>
-            <el-col :span="10">
+            <el-col :span="8">
               <el-form-item label="联系电话" prop="contact_phone" class="postInfo-container-item">
                 <el-input v-model="postForm.contact_phone" placeholder="联系电话" style="width:180px;" :maxlength="14" />
               </el-form-item>
@@ -26,7 +26,7 @@
 
           <el-row style="padding-left:30px;">
 
-            <el-col :span="10">
+            <el-col :span="8">
               <el-form-item label="客户来源" class="postInfo-container-item">
                 <el-select style="width:180px;" placeholder="请选择">
                   <el-option v-for="(item, key) in sourceOption" :key="key" :label="item.label" :value="item.value" />
@@ -35,16 +35,16 @@
             </el-col>
           </el-row>
           <el-row style="padding-left:30px;">
-            <el-col :span="20">
+            <el-col :span="16">
               <el-form-item label="地址" prop="address" class="postInfo-container-item">
-                <el-input v-model="postForm.address" placeholder="地址" style="min-width:580px;" />
+                <el-input v-model="postForm.address" placeholder="地址" style="min-width:500px;" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row style="padding-left:30px;">
-            <el-col :span="20">
+            <el-col :span="16">
               <el-form-item label="备注">
-                <el-input v-model="postForm.remark" type="textarea" :rows="3" placeholder="请输入备注内容" style="width:580px;" />
+                <el-input v-model="postForm.remark" type="textarea" :rows="3" placeholder="请输入备注内容" style="width:500px;" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -54,14 +54,14 @@
             </span>
           </div>
           <el-row style="padding-left:30px;">
-            <el-col :span="10">
+            <el-col :span="8">
               <el-form-item label="客户需求" prop="requirements">
                 <el-select style="width:180px;" placeholder="请选择">
                   <el-option v-for="(item, key) in requirementsOption" :key="key" :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="10">
+            <el-col :span="8">
               <el-form-item label="服务时段" class="postInfo-container-item">
                 <el-select style="width:180px;" placeholder="请选择">
                   <el-option v-for="(item, key) in serverTimeOption" :key="key" :label="item.label" :value="item.value" />
@@ -71,14 +71,14 @@
           </el-row>
 
           <el-row style="padding-left:30px;">
-            <el-col :span="10">
+            <el-col :span="8">
               <el-form-item label="年龄要求" class="postInfo-container-item">
                 <el-input placeholder="最低" style="max-width:100px;margin-right:10px;" :maxlength="2" />
                 <span> - </span>
                 <el-input placeholder="最高" style="max-width:100px;margin-left:10px;" :maxlength="2" />
               </el-form-item>
             </el-col>
-            <el-col :span="10">
+            <el-col :span="8">
               <el-form-item label="籍贯要求" class="postInfo-container-item">
                 <el-input v-model="postForm.name" placeholder="籍贯要求" style="width:180px;" />
               </el-form-item>
@@ -86,14 +86,14 @@
           </el-row>
 
           <el-row style="padding-left:30px;">
-            <el-col :span="10">
+            <el-col :span="8">
               <el-form-item label="薪资范围" class="postInfo-container-item">
                 <el-input placeholder="最低薪资" style="max-width:100px;margin-right:10px;" :maxlength="5" />
                 <span> - </span>
                 <el-input placeholder="最高薪资" style="max-width:100px;margin-left:10px;" :maxlength="5" />
               </el-form-item>
             </el-col>
-            <el-col :span="10">
+            <el-col :span="8">
               <el-form-item label="从业经验" class="postInfo-container-item">
                 <el-select style="width:180px;" placeholder="请选择">
                   <el-option v-for="(item, key) in workEspOptions" :key="key" :label="item.label" :value="item.value" />
@@ -102,9 +102,12 @@
             </el-col>
           </el-row>
           <el-row style="padding-left:30px;">
-            <el-col :span="10">
+            <el-col :span="16">
               <el-form-item label="吃饭口味" prop="taste" class="postInfo-container-item">
-                <el-input v-model="postForm.taste" placeholder="吃饭口味" style="min-width:150px;" />
+                <!-- <el-input v-model="postForm.taste" placeholder="吃饭口味" style="min-width:150px;" /> -->
+                <el-checkbox-group v-model="postForm.taste">
+                  <el-checkbox-button v-for="(item, key) in staticOptions.caixi" :key="key" border :label="item.value">{{ item.label }}</el-checkbox-button>
+                </el-checkbox-group>
               </el-form-item>
             </el-col>
           </el-row>
@@ -115,19 +118,19 @@
             </span>
           </div>
           <el-row style="padding-left:30px;">
-            <el-col :span="10">
+            <el-col :span="8">
               <el-form-item label="家庭人口" prop="family" class="postInfo-container-item">
                 <el-input v-model.number="postForm.family" placeholder="家庭人口" style="min-width:150px;" :maxlength="2" />
               </el-form-item>
             </el-col>
-            <el-col :span="10">
+            <el-col :span="8">
               <el-form-item label="面积" prop="area" class="postInfo-container-item">
                 <el-input v-model.number="postForm.area" placeholder="面积" style="min-width:150px;" :maxlength="5" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row style="padding-left:30px;">
-            <el-col :span="10">
+            <el-col :span="8">
               <el-form-item label="预产期" class="postInfo-container-item" prop="childrens">
                 <el-input v-model.number="postForm.childrens" placeholder="幼童数量" style="min-width:150px;" :maxlength="10" />
               </el-form-item>
@@ -180,6 +183,7 @@
 import { createEmployer, fetchEmployer, updateEmployer } from '@/api/employer';
 import requirementsData from '@/data/requirements';
 import { mapGetters } from 'vuex';
+import staticOptions from '@/data/options';
 import city from '@/data/city';
 const img_upload_api = process.env.BASE_API + '/upload/addimg';
 const img_url = process.env.IMG_URL;
@@ -229,6 +233,7 @@ export default {
             }
         };
         return {
+            staticOptions,
             dialogImageUrl: '',
             dialogVisible: false,
             requirementsData,
