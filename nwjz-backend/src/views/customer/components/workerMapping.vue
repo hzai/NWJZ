@@ -3,22 +3,6 @@
     <div class="filter-container">
       <el-input v-model="listQuery.name" style="width: 150px;" class="filter-item" placeholder="搜索姓名" @keyup.enter.native="handleFilter" />
       <el-input v-model="listQuery.contact_phone" style="width: 150px;" class="filter-item" placeholder="搜索电话" @keyup.enter.native="handleFilter" />
-      <!-- <el-input v-model="listQuery.id_card" style="width: 200px;" class="filter-item" placeholder="搜索身份证号码" @keyup.enter.native="handleFilter" /> -->
-      <!-- <el-select class="filter-item" style="width: 130px" v-model="listQuery.is_employed" placeholder="正式员工" @change="handleFilter">
-        <el-option v-for="item in employedOptions" :key="item.value" :label="item.label" :value="item.value">
-        </el-option>
-      </el-select> -->
-
-      <!-- <el-select v-model="listQuery.nation" class="filter-item" style="width: 130px" placeholder="民族" @change="handleFilter">
-        <el-option v-for="item in nationOptions" :key="item.value" :label="item.label" :value="item.value" />
-      </el-select> -->
-      <!-- <el-input v-model="listQuery.working_experience" style="width: 455px;" class="filter-item" placeholder="输入工作经验关键字" @keyup.enter.native="handleFilter" />
-      <el-input v-model="listQuery.introduce" style="width: 455px;" class="filter-item" placeholder="输入自我介绍关键字" @keyup.enter.native="handleFilter" />
-      <br> -->
-      <!-- <el-select v-model="listQuery.languages" class="filter-item" style="width: 130px" multiple placeholder="语言" @change="handleFilter">
-        <el-option v-for="item in languageOptions" :key="item.value" :label="item.label" :value="item.value" />
-      </el-select>
-       -->
       <el-select v-model="listQuery.work_type" class="filter-item" style="width: 130px" multiple placeholder="工作意向" @change="handleFilter">
         <el-option v-for="item in workTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
@@ -124,7 +108,7 @@
       </el-table-column>
       <el-table-column align="center" label="操作" width="80" class-name="small-padding" fixed="right">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" icon="el-icon-edit" @click="handleUpdate(scope.row)" />
+          <el-button type="primary" size="mini" icon="el-icon-edit" @click="handleUpdate(scope.row)">分享</el-button>
         </template>
       </el-table-column>
     </el-table>

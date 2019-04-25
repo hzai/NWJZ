@@ -1,299 +1,97 @@
 <template>
   <div class="createPost-container">
     <div style="margin-top:-15px;margin-bottom:10px;">
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="dialogHTVisible = true">创建合同</el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="dialogZDDDVisible = true">创建钟点订单</el-button>
+      <!-- <router-link style="margin-right:15px;" :to="{ path:'createContract?employerId='+postForm._id}"> -->
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="dialogFormVisible = true">添加收支</el-button>
+      <!-- </router-link> -->
+      <span style="padding-left:30px;">累计结余：4600元&nbsp;&nbsp;&nbsp;&nbsp;收入：6000元&nbsp;&nbsp;&nbsp;&nbsp;支出：1400元</span>
     </div>
     <el-table :key="tableKey" v-loading="listLoading" border :data="list" element-loading-text="给我一点时间" stripe fit highlight-current-row style="width: 100%">
       <el-table-column type="index" width="50" />
-      <el-table-column align="center" prop="name" label="合同编号" min-width="100">
-        <template slot-scope="scope">
-          <span class="link-type" @click="handleUpdate(scope.row)">{{ scope.row.contract_no }}</span>
-          <!-- <span>{{scope.row.worker.name}}</span> -->
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="name" label="家政服务员" min-width="100">
+      <el-table-column align="center" prop="name" label="收支" min-width="100">
         <template slot-scope="scope">
           <span class="link-type" @click="gotoWorker(scope.row.worker._id)">{{ scope.row.worker.name }}</span>
           <!-- <span>{{scope.row.worker.name}}</span> -->
         </template>
       </el-table-column>
-      <el-table-column align="center" min-width="120px" label="电话">
-        <template slot-scope="scope">
-          <span>{{ scope.row.worker.contact_phone }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="地址" min-width="200px">
+      <el-table-column align="center" label="收支方式" min-width="120px">
         <template slot-scope="scope">
           <span>{{ scope.row.address }}</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="100px" align="center" label="开始时间">
+      <el-table-column align="center" label="收支明细" min-width="120px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.address }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" min-width="120px" label="金额">
+        <template slot-scope="scope">
+          <span>{{ scope.row.worker.contact_phone }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column min-width="150px" align="center" label="收支时间">
         <template slot-scope="scope">
           <span>{{ new Date(scope.row.contract_start_date) | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="100px" align="center" label="结束时间">
+      <el-table-column min-width="120px" align="center" label="收支人">
         <template slot-scope="scope">
           <span>{{ new Date(scope.row.contract_end_date) | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" align="center" label="状态" width="100" sortable prop="status">
+      <el-table-column align="center" prop="name" label="备注" min-width="150">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusTypeFilter">
-            {{ scope.row.status | statusFilter }}
-          </el-tag>
+          <span class="link-type" @click="handleUpdate(scope.row)">{{ scope.row.contract_no }}</span>
+          <!-- <span>{{scope.row.worker.name}}</span> -->
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" min-width="80" class-name="small-padding" fixed="right">
+      <!-- <el-table-column align="center" label="操作" min-width="80" class-name="small-padding" fixed="right">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
-    <div style="border-bottom:2px solid #CCCCCC;margin:15px 0;" />
-    <el-tabs tab-position="left">
-      <el-tab-pane label="更换阿姨">
-        <div style="margin-top:5px;margin-bottom:10px;">
-          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="dialogGHAYVisible = true">更换阿姨</el-button>
-        </div>
-        <el-table :key="tableKey" v-loading="listLoading" border :data="list" element-loading-text="给我一点时间" stripe fit highlight-current-row style="width: 100%">
-          <el-table-column type="index" width="50" />
-          <el-table-column align="center" prop="name" label="家政服务员" min-width="100">
-            <template slot-scope="scope">
-              <span class="link-type" @click="handleUpdate(scope.row)">{{ scope.row.contract_no }}</span>
-              <!-- <span>{{scope.row.worker.name}}</span> -->
-            </template>
-          </el-table-column>
-          <el-table-column min-width="120px" align="center" label="上户时间">
-            <template slot-scope="scope">
-              <span>{{ new Date(scope.row.contract_start_date) | parseTime('{y}-{m}-{d}') }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column min-width="120px" align="center" label="下户时间">
-            <template slot-scope="scope">
-              <span>{{ new Date(scope.row.contract_end_date) | parseTime('{y}-{m}-{d}') }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" min-width="100px" label="工资/月">
-            <template slot-scope="scope">
-              <span>{{ scope.row.worker.contact_phone }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" min-width="100px" label="上户费">
-            <template slot-scope="scope">
-              <span>{{ scope.row.worker.contact_phone }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" min-width="200px" label="备注">
-            <template slot-scope="scope">
-              <span>{{ scope.row.worker.contact_phone }}</span>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-      <el-tab-pane label="回访记录">
-        <div style="margin-top:5px;margin-bottom:10px;">
-          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="dialogHFJLVisible = true">添加回访记录</el-button>
-        </div>
-        <el-table :key="tableKey" v-loading="listLoading" border :data="list" element-loading-text="给我一点时间" stripe fit highlight-current-row style="width: 100%">
-          <el-table-column type="index" width="50" />
-          <el-table-column align="center" prop="name" label="回访方式" min-width="80px">
-            <template slot-scope="scope">
-              <span class="link-type" @click="handleUpdate(scope.row)">{{ scope.row.contract_no }}</span>
-              <!-- <span>{{scope.row.worker.name}}</span> -->
-            </template>
-          </el-table-column>
-          <el-table-column min-width="80px" align="center" label="满意度">
-            <template slot-scope="scope">
-              <span>{{ new Date(scope.row.contract_start_date) | parseTime('{y}-{m}-{d}') }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column min-width="200px" align="center" label="回访记录">
-            <template slot-scope="scope">
-              <span>{{ new Date(scope.row.contract_end_date) | parseTime('{y}-{m}-{d}') }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" min-width="100px" label="回访时间">
-            <template slot-scope="scope">
-              <span>{{ scope.row.worker.contact_phone }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" min-width="80px" label="回访人">
-            <template slot-scope="scope">
-              <span>{{ scope.row.worker.contact_phone }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" min-width="100px" label="备注">
-            <template slot-scope="scope">
-              <span>{{ scope.row.worker.contact_phone }}</span>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-    </el-tabs>
-
-    <!-- 合同dialog -->
-    <el-dialog title="添加合同" top="5vh" center :visible.sync="dialogHTVisible">
+    <el-dialog title="添加收支" center :visible.sync="dialogFormVisible">
       <div style="margin:0 auto;">
         <el-form :model="form" label-width="130px" :label-position="right">
-          <el-form-item label="类型">
-            <el-select v-model="form.region" style="width:300px;" placeholder="请选择类型">
-              <el-option label="住家保姆" value="shanghai" />
-              <el-option label="走家保姆" value="shanghai" />
-              <el-option label="月嫂" value="beijing" />
-              <el-option label="育婴师" value="beijing" />
-              <el-option label="老人陪护" value="beijing" />
-              <el-option label="病人陪护" value="beijing" />
-            </el-select>
+          <el-form-item label="收支">
+            <el-radio v-model="form.iotype" label="1" border>收入</el-radio>
+            <el-radio v-model="form.iotype" label="2" border>支出</el-radio>
           </el-form-item>
-          <el-form-item label="服务人员">
-            <el-input v-model="form.name" style="width:300px;" placeholder="请输入姓名或电话查询" />
-          </el-form-item>
-          <el-form-item label="阿姨工资(元/月)">
-            <el-input v-model="form.name" style="width:300px;" />
-          </el-form-item>
-          <el-form-item label="每月休息天数">
-            <el-input v-model="form.name" style="width:300px;" />
-          </el-form-item>
-          <el-form-item label="加班费用(元/天)">
-            <el-input v-model="form.name" style="width:300px;" />
-          </el-form-item>
-          <el-form-item label="客户服务费">
-            <el-input v-model="form.name" style="width:300px;" />
-          </el-form-item>
-          <el-form-item label="阿姨服务费">
-            <el-input v-model="form.name" style="width:300px;" />
-          </el-form-item>
-          <el-form-item label="合同期限">
-            <el-date-picker v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" />
-          </el-form-item>
-          <el-form-item label="备注">
-            <el-input v-model="form.remark" style="width:300px;" placeholder="增加合同备注，如客户特殊情况，走家费用或其他约定等。" />
-          </el-form-item>
-        </el-form>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogHTVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogHTVisible = false">确 定</el-button>
-      </div>
-    </el-dialog>
-
-    <!-- 钟点订单dialog -->
-    <el-dialog title="添加钟点订单" top="5vh" center :visible.sync="dialogZDDDVisible">
-      <div style="margin:0 auto;">
-        <el-form :model="form2" label-width="130px" :label-position="right">
-          <el-form-item label="类型">
-            <el-select v-model="form2.region" style="width:300px;" placeholder="请选择类型">
-              <el-option label="临时钟点" value="shanghai" />
-              <el-option label="长期中餐" value="shanghai" />
-              <el-option label="长期晚餐" value="beijing" />
-              <el-option label="长期保洁" value="beijing" />
-              <el-option label="开荒保洁" value="beijing" />
-              <el-option label="玻璃清洗" value="beijing" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="服务人员">
-            <el-input v-model="form2.name" style="width:300px;" placeholder="请输入姓名或电话查询" />
-          </el-form-item>
-          <el-form-item label="订单应收费用">
-            <el-input v-model="form2.name" style="width:300px;" />
-          </el-form-item>
-          <el-form-item label="结算阿姨工资">
-            <el-input v-model="form2.name" style="width:300px;" placeholder="(元/月或次)" />
-          </el-form-item>
-          <el-form-item label="客户服务费">
-            <el-input v-model="form2.name" style="width:300px;" />
-          </el-form-item>
-          <el-form-item label="阿姨服务费">
-            <el-input v-model="form2.name" style="width:300px;" />
-          </el-form-item>
-          <el-form-item label="服务时间">
-            <el-date-picker v-model="form2.time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" />
-          </el-form-item>
-          <el-form-item label="备注">
-            <el-input v-model="form2.remark" style="width:300px;" placeholder="增加合同备注，如客户特殊情况，走家费用或其他约定等。" />
-          </el-form-item>
-        </el-form>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogZDDDVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogZDDDVisible = false">确 定</el-button>
-      </div>
-    </el-dialog>
-
-    <!-- 更换阿姨dialog -->
-    <el-dialog title="更换阿姨" top="5vh" center :visible.sync="dialogGHAYVisible">
-      <div style="margin:0 auto;">
-        <el-form :model="form3" label-width="130px" :label-position="right">
-          <el-form-item label="服务人员">
-            <el-input v-model="form3.name" style="width:300px;" placeholder="请输入姓名或电话查询" />
-          </el-form-item>
-          <el-form-item label="阿姨工资(元/月)">
-            <el-input v-model="form3.name" style="width:300px;" />
-          </el-form-item>
-          <el-form-item label="每月休息天数">
-            <el-input v-model="form3.name" style="width:300px;" />
-          </el-form-item>
-          <el-form-item label="加班费用(元/天)">
-            <el-input v-model="form3.name" style="width:300px;" />
-          </el-form-item>
-          <el-form-item label="阿姨服务费">
-            <el-input v-model="form3.name" style="width:300px;" />
-          </el-form-item>
-          <el-form-item label="合同期限">
-            <el-date-picker v-model="form3.limit" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" />
-          </el-form-item>
-          <el-form-item label="备注">
-            <el-input v-model="form3.remark" style="width:300px;" placeholder="增加合同备注，如客户特殊情况，走家费用或其他约定等。" />
-          </el-form-item>
-        </el-form>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogGHAYVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogGHAYVisible = false">确 定</el-button>
-      </div>
-    </el-dialog>
-
-    <!-- 回访记录dialog -->
-    <el-dialog title="回访记录" top="5vh" center :visible.sync="dialogHFJLVisible">
-      <div style="margin:0 auto;">
-        <el-form :model="form3" label-width="130px" :label-position="right">
-          <el-form-item label="回访方式">
-            <el-select v-model="form4.region" style="width:300px;" placeholder="请选择回访方式">
-              <el-option label="电话" value="shanghai" />
+          <el-form-item label="收支方式">
+            <el-select v-model="form.region" style="width:300px;" placeholder="请选择账号">
               <el-option label="微信" value="shanghai" />
-              <el-option label="QQ" value="beijing" />
-              <el-option label="上门" value="beijing" />
-              <el-option label="客户到店" value="beijing" />
+              <el-option label="支付宝" value="beijing" />
+              <el-option label="现金" value="beijing" />
+              <el-option label="银行卡" value="beijing" />
             </el-select>
           </el-form-item>
-          <el-form-item label="满意度">
-            <el-select v-model="form4.myd" style="width:300px;" placeholder="请选择满意度">
-              <el-option label="很满意" value="shanghai" />
-              <el-option label="满意" value="shanghai" />
-              <el-option label="一般" value="beijing" />
-              <el-option label="不满意" value="beijing" />
-              <el-option label="非常不满" value="beijing" />
+          <el-form-item label="收支明细">
+            <el-select v-model="form.iodetail" style="width:300px;" placeholder="请选择收支明细">
+              <el-option label="中介费" value="shanghai" />
+              <el-option label="阿姨上户费" value="beijing" />
+              <el-option label="保险费" value="beijing" />
+              <el-option label="押金" value="beijing" />
+              <el-option label="定金" value="beijing" />
+              <el-option label="尾款" value="beijing" />
             </el-select>
           </el-form-item>
-          <el-form-item label="回访记录">
-            <el-input v-model="form4.name" style="width:300px;" placeholder="" />
+          <el-form-item label="输入金额">
+            <el-input v-model="form.name" style="width:300px;" />
           </el-form-item>
-          <el-form-item label="回访时间">
-            <el-date-picker v-model="form4.hfsj" type="datetime" placeholder="选择日期时间" />
+          <el-form-item label="收支时间">
+            <el-date-picker v-model="form.value1" style="width:300px;" type="datetime" placeholder="选择日期时间" />
           </el-form-item>
           <el-form-item label="备注">
-            <el-input v-model="form4.remark" style="width:300px;" placeholder="增加合同备注，如客户特殊情况，走家费用或其他约定等。" />
+            <el-input v-model="form.remark" style="width:300px;" />
           </el-form-item>
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogHFJLVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogHFJLVisible = false">确 定</el-button>
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
       </div>
     </el-dialog>
-
   </div>
 </template>
 
@@ -306,7 +104,7 @@ import city from '@/data/city';
 const img_upload_api = process.env.BASE_API + '/upload/addimg';
 const img_url = process.env.IMG_URL;
 export default {
-    name: 'CustomerDetail',
+    name: 'FaManage',
     components: {
     // Upload
     },
@@ -358,14 +156,8 @@ export default {
             list: null,
             total: null,
             listLoading: false,
-            dialogHTVisible: false,
-            dialogZDDDVisible: false,
-            dialogGHAYVisible: false,
-            dialogHFJLVisible: false,
+            dialogFormVisible: false,
             form: {},
-            form2: {},
-            form3: {},
-            form4: {},
             listQuery: {
                 page: 1,
                 limit: 10

@@ -1,7 +1,7 @@
 <template>
   <div class="tab-container">
     <!-- <el-alert title="温馨提示" type="warning" description="'备注: ' + postForm.remark" show-icon /> -->
-    <div style="border:1px solid #fff;padding:15px;">
+    <div style="border:1px solid #fff;padding:5px 15px;">
       <el-row>
         <el-col :span="8">
           <span>{{ postForm.name }}&nbsp;&nbsp;&nbsp;&nbsp;{{ postForm.contact_phone }}</span>
@@ -13,16 +13,19 @@
           <el-tag>{{ postForm.status }}</el-tag>
         </el-col>
       </el-row>
-      <el-row style="padding-top:8px;">
-        <el-col :span="15">
+      <el-row style="padding-top:3px;">
+        <el-col :span="12">
           <span>地址:&nbsp;&nbsp;{{ postForm.native_place + postForm.address }}</span>
         </el-col>
-      </el-row>
-      <el-row style="padding-top:8px;">
-        <el-col :span="15">
+        <el-col :span="12">
           <span>备注:&nbsp;&nbsp;{{ postForm.remark }}</span>
         </el-col>
       </el-row>
+      <!-- <el-row style="padding-top:8px;">
+        <el-col :span="15">
+          <span>备注:&nbsp;&nbsp;{{ postForm.remark }}</span>
+        </el-col>
+      </el-row> -->
     </div>
 
     <el-tabs v-model="activeName">
@@ -32,11 +35,15 @@
       <el-tab-pane key="detail" label="需求情况" name="detail">
         <requirements-detail :is-edit="true" />
       </el-tab-pane>
-      <el-tab-pane key="workersearch" label="阿姨筛选" name="workersearch" />
+      <el-tab-pane key="workersearch" label="阿姨筛选" name="workersearch">
+        <worker-mapping :is-edit="true" />
+      </el-tab-pane>
       <el-tab-pane key="contract" label="合同管理" name="contract">
         <customer-contract :is-edit="true" />
       </el-tab-pane>
-      <el-tab-pane key="moneyio" label="收支记录" name="moneyio" />
+      <el-tab-pane key="moneyio" label="收支记录" name="moneyio">
+        <fa-manage :is-edit="true" />
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -47,12 +54,16 @@ import CommunicationPane from '@/views/customer/components/communicationDetail';
 // import CustomerDetail from '@/views/customer/components/customerDetail';
 import RequirementsDetail from '@/views/customer/components/requirementsDetail';
 import CustomerContract from '@/views/customer/components/customerContract';
+import FaManage from '@/views/customer/components/faManage';
+import WorkerMapping from '@/views/customer/components/workerMapping';
 export default {
     name: 'CustomerEdit',
     components: {
         CommunicationPane,
         RequirementsDetail,
-        CustomerContract
+        CustomerContract,
+        FaManage,
+        WorkerMapping
     },
     filters: {},
     data() {

@@ -5,20 +5,20 @@
       <el-tab-pane label="阿姨简历" name="resume">
         <worker-resume :worker-id="this.$route.query.id" />
       </el-tab-pane>
-      <el-tab-pane v-if="isEdit" label="资金记录" name="money">
-        <insurance-pane :worker-id="this.$route.query.id" />
+      <el-tab-pane v-if="isEdit" label="沟通记录" name="communication">
+        <communication-pane :worker-id="this.$route.query.id" />
       </el-tab-pane>
       <el-tab-pane v-if="isEdit" label="合同管理" name="contract">
-        <insurance-pane :worker-id="this.$route.query.id" />
-      </el-tab-pane>
-      <el-tab-pane v-if="isEdit" label="评价备注" name="comment">
         <insurance-pane :worker-id="this.$route.query.id" />
       </el-tab-pane>
       <el-tab-pane v-if="isEdit" label="保险记录" name="insurance">
         <insurance-pane :worker-id="this.$route.query.id" />
       </el-tab-pane>
-      <el-tab-pane v-if="isEdit" label="沟通记录" name="communication">
-        <communication-pane type="worker" :worker-id="this.$route.query.id" />
+      <el-tab-pane v-if="isEdit" label="评价备注" name="comment">
+        <insurance-pane :worker-id="this.$route.query.id" />
+      </el-tab-pane>
+      <el-tab-pane v-if="isEdit" label="资金记录" name="money">
+        <insurance-pane :worker-id="this.$route.query.id" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -27,25 +27,25 @@
 <script>
 import WorkerResume from './workerResume';
 import insurancePane from './insurancePane';
-import CommunicationPane from '@/components/Communication';
+import CommunicationPane from './communication';
 
 export default {
-  name: 'worker-info',
-  components: { WorkerResume, insurancePane, CommunicationPane },
-  props: {
-    isEdit: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
-    return {
-      activeTab: 'resume'
-    };
-  },
-  created() {},
-  mounted() {},
-  methods: {}
+    name: 'WorkerInfo',
+    components: { WorkerResume, insurancePane, CommunicationPane },
+    props: {
+        isEdit: {
+            type: Boolean,
+            default: false
+        }
+    },
+    data() {
+        return {
+            activeTab: 'resume'
+        };
+    },
+    created() {},
+    mounted() {},
+    methods: {}
 };
 </script>
 
