@@ -177,5 +177,6 @@ export default {
         { value: '上午白班', label: '上午白班' },
         { value: '下午白班', label: '下午白班' },
         { value: '均可', label: '均可' }
-    ]
+    ],
+    txType: [{ value: '收入', label: '收入' }, { value: '支出', label: '支出' }]
 };

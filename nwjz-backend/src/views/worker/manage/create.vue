@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import WorkerDetail from './components/workerDetail';
+import WorkerDetail from './components/WorkerDetail';
 
 export default {
   name: 'CreateWorker',
