@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:44:25
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2018-03-10 11:43:38
+ * @Last Modified time: 2019-04-27 10:55:12
  */
 import express from 'express';
 import validate from 'express-validation';
@@ -22,24 +22,36 @@ const authRequired = expressJwt({
 router
     .route('/')
     .get(authRequired, contractCtrl.list)
-    .post(authRequired, roles(['admin', 'editor']), contractCtrl.create);
+    .post(authRequired, roles(['admin', 'company']), contractCtrl.create);
 
 router
     .route('/employer/:employerId')
-    .get(authRequired, roles(['admin', 'editor']), contractCtrl.getContractListByEmployer);
+    .get(
+        authRequired,
+        roles(['admin', 'company']),
+        contractCtrl.getContractListByEmployer
+    );
 
 router
     .route('/:contractId')
     .get(authRequired, contractCtrl.get)
-    .put(authRequired, roles(['admin', 'editor']), contractCtrl.update);
+    .put(authRequired, roles(['admin', 'company']), contractCtrl.update);
 
 router
     .route('/:contractId/wr')
-    .put(authRequired, roles(['admin', 'editor']), contractCtrl.updateWorkerRecord);
+    .put(
+        authRequired,
+        roles(['admin', 'company']),
+        contractCtrl.updateWorkerRecord
+    );
 
 router
     .route('/:contractId/rr')
-    .put(authRequired, roles(['admin', 'editor']), contractCtrl.updateReviewRecord);
+    .put(
+        authRequired,
+        roles(['admin', 'company']),
+        contractCtrl.updateReviewRecord
+    );
 
 router.param('employerId', (req, res, next, employerId) => {
     req.employerId = employerId;
