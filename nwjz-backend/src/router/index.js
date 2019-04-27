@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2019-04-19 20:34:39
- * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-24 21:49:29
+ * @Last Modified by: Arnie Carter
+ * @Last Modified time: 2019-04-28 04:55:14
  */
 import Vue from 'vue';
 import Router from 'vue-router';
@@ -103,6 +103,24 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
     {
+        path: '/alert',
+        component: Layout,
+        redirect: '/alert/index',
+        name: 'alert',
+        meta: {
+            title: 'alert',
+            icon: 'peoples'
+        },
+        children: [
+            {
+                path: 'list',
+                component: () => import('@/views/alert/list'),
+                name: 'alertList',
+                meta: { title: 'alertList', icon: 'edit' }
+            }
+        ]
+    },
+    {
         path: '/worker',
         component: Layout,
         redirect: '/worker/index',
@@ -194,10 +212,44 @@ export const asyncRoutes = [
         },
         children: [
             {
-                path: 'create',
-                component: () => import('@/views/order/create'),
+                path: 'manage',
+                component: () => import('@/views/order/manage'),
                 name: 'order-create',
-                meta: { title: 'createOrder', icon: 'edit' }
+                meta: { title: 'orderManage', icon: 'edit' }
+            },
+            {
+                path: 'view',
+                component: () => import('@/views/order/view'),
+                name: 'ViewOrder',
+                meta: {
+                    title: 'viewOrder',
+                    noCache: true
+                },
+                hidden: true
+            }
+            // {
+            //     path: 'create',
+            //     component: () => import('@/views/order/create'),
+            //     name: 'order-create',
+            //     meta: { title: 'createOrder', icon: 'edit' }
+            // }
+        ]
+    },
+    {
+        path: '/insurance',
+        component: Layout,
+        redirect: '/insurance/index',
+        name: 'insurance',
+        meta: {
+            title: 'insurance',
+            icon: 'peoples'
+        },
+        children: [
+            {
+                path: 'list',
+                component: () => import('@/views/insurance/list'),
+                name: 'insuranceList',
+                meta: { title: 'insuranceList', icon: 'edit' }
             }
         ]
     },

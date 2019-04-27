@@ -120,7 +120,7 @@ const defaultModel = {
 };
 
 export default {
-    name: 'WorkerInsurance',
+    name: 'List',
     filters: {
         statusTypeFilter(status) {
             const statusMap = {

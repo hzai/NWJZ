@@ -29,23 +29,23 @@
     </div>
 
     <el-tabs v-model="activeName">
+      <el-tab-pane key="contract" label="合同管理" name="contract">
+        <customer-contract :is-edit="true" />
+      </el-tab-pane>
+      <el-tab-pane key="moneyio" label="保险记录" name="insurance">
+        <insurance-pane :is-edit="true" />
+      </el-tab-pane>
       <el-tab-pane key="communication" label="跟进记录" name="communication">
         <communication-pane :employer-id="this.$route.query.employerId" />
+      </el-tab-pane>
+      <el-tab-pane key="moneyio" label="收支记录" name="moneyio">
+        <fa-manage :is-edit="true" />
       </el-tab-pane>
       <el-tab-pane key="detail" label="需求情况" name="detail">
         <requirements-detail :is-edit="true" />
       </el-tab-pane>
       <el-tab-pane key="workersearch" label="阿姨筛选" name="workersearch">
         <worker-mapping :is-edit="true" />
-      </el-tab-pane>
-      <el-tab-pane key="contract" label="合同管理" name="contract">
-        <customer-contract :is-edit="true" />
-      </el-tab-pane>
-      <el-tab-pane key="insurance" label="保险记录" name="insurance">
-        <insurance-pane :is-edit="true" />
-      </el-tab-pane>
-      <el-tab-pane key="moneyio" label="收支记录" name="moneyio">
-        <fa-manage :is-edit="true" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -61,7 +61,7 @@ import FaManage from '@/views/customer/components/faManage';
 import WorkerMapping from '@/views/customer/components/workerMapping';
 import InsurancePane from '@/views/customer/components/insurancePane';
 export default {
-    name: 'CustomerEdit',
+    name: 'OrderView',
     components: {
         CommunicationPane,
         RequirementsDetail,
@@ -73,7 +73,7 @@ export default {
     filters: {},
     data() {
         return {
-            activeName: 'communication',
+            activeName: 'contract',
             postForm: {}
         };
     },

@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import WorkerDetail from './components/WorkerDetail';
+import WorkerDetail from './components/workerDetail';
 
 export default {
-  name: 'CreateWorker',
-  components: { WorkerDetail }
+    name: 'CreateWorker',
+    components: { WorkerDetail }
 };
 </script>
 

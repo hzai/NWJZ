@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2019-04-02 21:53:07
- * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-24 19:53:11
+ * @Last Modified by: Arnie Carter
+ * @Last Modified time: 2019-04-28 04:55:12
  */
 export default {
     common: {
@@ -107,12 +107,18 @@ export default {
         customerClient: '客户状态',
         createCustomer: '新建客户',
         editCustomer: '编辑客户',
-        order: '订单管理',
+        order: '合同管理',
+        viewOrder: '查看合同详情',
         createOrder: '新增订单',
         createContract: '新增合同',
+        orderManage: '合同管理',
         statistic: '统计分析',
         statisticShop: '门店统计分析',
-        statisticSale: '销售统计分析'
+        statisticSale: '销售统计分析',
+        alert: '消息提醒',
+        alertList: '消息提醒',
+        insurance: '保险管理',
+        insuranceList: '保险管理'
     },
     navbar: {
         logOut: '退出登录',

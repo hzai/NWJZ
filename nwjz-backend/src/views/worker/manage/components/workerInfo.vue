@@ -9,13 +9,13 @@
         <communication-pane :worker-id="this.$route.query.id" />
       </el-tab-pane>
       <el-tab-pane v-if="isEdit" label="合同管理" name="contract">
-        <insurance-pane :worker-id="this.$route.query.id" />
+        <worker-contact :worker-id="this.$route.query.id" />
       </el-tab-pane>
       <el-tab-pane v-if="isEdit" label="保险记录" name="insurance">
         <insurance-pane :worker-id="this.$route.query.id" />
       </el-tab-pane>
       <el-tab-pane v-if="isEdit" label="评价备注" name="comment">
-        <insurance-pane :worker-id="this.$route.query.id" />
+        <worker-reviews :worker-id="this.$route.query.id" />
       </el-tab-pane>
       <el-tab-pane v-if="isEdit" label="资金记录" name="money">
         <finance-record :worker-id="this.$route.query.id" />
@@ -29,24 +29,26 @@ import WorkerResume from './workerResume';
 import insurancePane from './insurancePane';
 import CommunicationPane from './communication';
 import FinanceRecord from './financeRecord';
+import WorkerContact from './workerContact';
+import WorkerReviews from './workerReviews';
 
 export default {
-  name: 'WorkerInfo',
-  components: { WorkerResume, insurancePane, CommunicationPane, FinanceRecord },
-  props: {
-    isEdit: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
-    return {
-      activeTab: 'resume'
-    };
-  },
-  created() {},
-  mounted() {},
-  methods: {}
+    name: 'WorkerInfo',
+    components: { WorkerResume, insurancePane, CommunicationPane, FinanceRecord, WorkerContact, WorkerReviews },
+    props: {
+        isEdit: {
+            type: Boolean,
+            default: false
+        }
+    },
+    data() {
+        return {
+            activeTab: 'resume'
+        };
+    },
+    created() {},
+    mounted() {},
+    methods: {}
 };
 </script>
 

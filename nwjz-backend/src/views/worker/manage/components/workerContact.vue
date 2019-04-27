@@ -12,25 +12,20 @@
           <!-- <span>{{scope.row.worker.name}}</span> -->
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="name" label="家政服务员" min-width="100">
+      <el-table-column align="center" prop="name" label="客户名称" min-width="100">
         <template slot-scope="scope">
           <span class="link-type" @click="gotoWorker(scope.row.worker._id)">{{ scope.row.worker.name }}</span>
           <!-- <span>{{scope.row.worker.name}}</span> -->
         </template>
       </el-table-column>
-      <el-table-column align="center" min-width="120px" label="电话">
+      <el-table-column align="center" min-width="120px" label="客户电话">
         <template slot-scope="scope">
           <span>{{ scope.row.worker.contact_phone }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="阿姨工资" min-width="100px">
-        <template>
-          <span>5000元</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="每月休息" min-width="100px">
-        <template>
-          <span>4天</span>
+      <el-table-column align="center" label="客户地址" min-width="200px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.address }}</span>
         </template>
       </el-table-column>
       <el-table-column min-width="100px" align="center" label="开始时间">
@@ -59,9 +54,6 @@
     <div style="border-bottom:2px solid #CCCCCC;margin:15px 0;" />
     <el-tabs tab-position="left">
       <el-tab-pane label="更换阿姨">
-        <div style="margin-top:5px;margin-bottom:10px;">
-          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="dialogGHAYVisible = true">更换阿姨</el-button>
-        </div>
         <el-table :key="tableKey" v-loading="listLoading" border :data="list" element-loading-text="给我一点时间" stripe fit highlight-current-row style="width: 100%">
           <el-table-column type="index" width="50" />
           <el-table-column align="center" prop="name" label="家政服务员" min-width="100">
@@ -152,7 +144,7 @@
               <el-option label="病人陪护" value="beijing" />
             </el-select>
           </el-form-item>
-          <el-form-item label="服务人员">
+          <el-form-item label="客户">
             <el-input v-model="form.name" style="width:300px;" placeholder="请输入姓名或电话查询" />
           </el-form-item>
           <el-form-item label="阿姨工资(元/月)">
@@ -198,7 +190,7 @@
               <el-option label="玻璃清洗" value="beijing" />
             </el-select>
           </el-form-item>
-          <el-form-item label="服务人员">
+          <el-form-item label="客户">
             <el-input v-model="form2.name" style="width:300px;" placeholder="请输入姓名或电话查询" />
           </el-form-item>
           <el-form-item label="订单应收费用">
@@ -224,39 +216,6 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogZDDDVisible = false">取 消</el-button>
         <el-button type="primary" @click="dialogZDDDVisible = false">确 定</el-button>
-      </div>
-    </el-dialog>
-
-    <!-- 更换阿姨dialog -->
-    <el-dialog title="更换阿姨" top="5vh" center :visible.sync="dialogGHAYVisible">
-      <div style="margin:0 auto;">
-        <el-form :model="form3" label-width="130px" :label-position="right">
-          <el-form-item label="服务人员">
-            <el-input v-model="form3.name" style="width:300px;" placeholder="请输入姓名或电话查询" />
-          </el-form-item>
-          <el-form-item label="阿姨工资(元/月)">
-            <el-input v-model="form3.name" style="width:300px;" />
-          </el-form-item>
-          <el-form-item label="每月休息天数">
-            <el-input v-model="form3.name" style="width:300px;" />
-          </el-form-item>
-          <el-form-item label="加班费用(元/天)">
-            <el-input v-model="form3.name" style="width:300px;" />
-          </el-form-item>
-          <el-form-item label="阿姨服务费">
-            <el-input v-model="form3.name" style="width:300px;" />
-          </el-form-item>
-          <el-form-item label="合同期限">
-            <el-date-picker v-model="form3.limit" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" />
-          </el-form-item>
-          <el-form-item label="备注">
-            <el-input v-model="form3.remark" style="width:300px;" placeholder="增加合同备注，如客户特殊情况，走家费用或其他约定等。" />
-          </el-form-item>
-        </el-form>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogGHAYVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogGHAYVisible = false">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -311,7 +270,7 @@ import city from '@/data/city';
 const img_upload_api = process.env.BASE_API + '/upload/addimg';
 const img_url = process.env.IMG_URL;
 export default {
-    name: 'CustomerContract',
+    name: 'WorkerContact',
     components: {
     // Upload
     },
