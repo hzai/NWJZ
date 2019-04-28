@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2019-04-19 20:34:39
- * @Last Modified by: Arnie Carter
- * @Last Modified time: 2019-04-28 04:55:14
+ * @Last Modified by: Roy Chen
+ * @Last Modified time: 2019-04-28 12:45:59
  */
 import Vue from 'vue';
 import Router from 'vue-router';
@@ -299,6 +299,12 @@ export const asyncRoutes = [
                 component: () => import('@/views/system/user'),
                 name: 'system-user',
                 meta: { title: 'user', icon: 'user' }
+            },
+            {
+                path: 'dict',
+                component: () => import('@/views/system/dictionary'),
+                name: 'system-dict',
+                meta: { title: 'dictionary', icon: 'user' }
             }
         ]
     },

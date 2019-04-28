@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:45:05
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-25 18:05:21
+ * @Last Modified time: 2019-04-27 22:40:51
  */
 import express from 'express';
 import userRoutes from './user.route';
@@ -34,7 +34,7 @@ import menuRoute from './permission/menu.route';
 import commRoute from './communication/communication.route';
 import companyRoute from './company/company.route';
 import financeRoute from './finance/finance.route';
-
+import dictRoute from './dictionary/dictionary.route';
 const router = express.Router(); // eslint-disable-line new-cap
 
 /** GET /health-check - Check service health */
@@ -105,5 +105,7 @@ router.use('/comms', commRoute);
 router.use('/companys', companyRoute);
 
 router.use('/fin', financeRoute);
+
+router.use('/dict', dictRoute);
 
 export default router;

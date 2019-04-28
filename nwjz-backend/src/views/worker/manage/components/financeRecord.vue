@@ -3,9 +3,9 @@
     <el-button type="primary" icon="el-icon-plus" @click="handleAdd">
       新增财务记录
     </el-button>
-    <el-button type="primary" icon="el-icon-edit" @click="handleFinType">
+    <!-- <el-button type="primary" icon="el-icon-edit" @click="handleFinType">
       设置财务类型
-    </el-button>
+    </el-button> -->
     <el-table :data="List" style="width: 100%;margin-top:30px;" border>
       <el-table-column align="center" type="index" width="50" />
       <el-table-column align="center" label="发生时间" width="130">
@@ -20,10 +20,11 @@
       </el-table-column>
       <el-table-column align="center" label="金额" width="80">
         <template slot-scope="scope">
-          {{ scope.row.amount }}
+          <span v-if="'收入' === scope.row.tx_type" style="color:green">{{ scope.row.amount }}</span>
+          <span v-if="'支出' === scope.row.tx_type" style="color:red">-{{ scope.row.amount }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="备注" width="150">
+      <el-table-column align="center" label="备注" width="250">
         <template slot-scope="scope">
           {{ scope.row.remark | ellipsis}}
         </template>
@@ -39,12 +40,15 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'编辑保险记录':'新增保险记录'">
+    <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'编辑财务记录':'新增财务记录'" @open="openDialog">
       <el-form ref="postForm" :model="model" label-width="80px" label-position="right" :rules="rules">
         <el-form-item label="收支类型" prop="tx_type">
-          <el-select v-model="model.tx_type" placeholder="请选择" @change="handleChange">
+          <!-- <el-select v-model="model.tx_type" placeholder="请选择" @change="handleChange">
             <el-option v-for="(item, key) in staticOptions.txType" :key="key" :label="item.label" :value="item.value" />
-          </el-select>
+          </el-select> -->
+          <el-radio-group v-model="model.tx_type" @change="handleChange">
+            <el-radio v-for="(item, key) in staticOptions.txType" :key="key" :label="item.value" border>{{item.value}}</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="财务类型" prop="finance_type">
           <el-select v-model="model.finance_type" placeholder="请选择">
@@ -57,7 +61,7 @@
         <el-form-item label="发生时间" prop="tx_time">
           <el-date-picker v-model="model.tx_time" type="datetime" default-time="00:00:00" placeholder="选择时间" />
         </el-form-item>
-        <el-form-item label="发生时间" prop="remark">
+        <el-form-item label="备注" prop="remark">
           <el-input type="textarea" v-model="model.remark" />
         </el-form-item>
       </el-form>
@@ -70,7 +74,7 @@
         </el-button>
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="dialogFinTypeVisible" title="设置财务类型" @close='closeDialog'>
+    <!-- <el-dialog :visible.sync="dialogFinTypeVisible" title="设置财务类型" @close='closeDialog'>
       <el-button type="success" icon="el-icon-plus" @click="handleAddType">
         新增财务类型
       </el-button>
@@ -111,7 +115,7 @@
           返回
         </el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -128,6 +132,7 @@ import {
   fetchFinanceRecords,
   fetchWorkerFinanceRecords
 } from '@/api/finance';
+import { fetchDictsByCat, addDict, updateDict, deleteDict } from '@/api/dictionary';
 import staticOptions from '@/data/options';
 const defaultModel = {
   worker: '',
@@ -171,6 +176,8 @@ export default {
     return {
       staticOptions,
       finTypeOptions: [],
+      incomeOptions: [],
+      expensesOptions: [],
       List: [],
       typeList: [],
       model: Object.assign({}, defaultModel),
@@ -238,12 +245,31 @@ export default {
   created() {
     // Mock: get all routes and roles list from server
     this.getList();
+    this.getOptions();
     this.getTypeList();
   },
   methods: {
     async getList() {
       const res = await fetchWorkerFinanceRecords(this.workerId);
       this.List = res.data.data.finances;
+    },
+    async getOptions() {
+      let res = await fetchDictsByCat('income');
+      let items = res.data.data.dictionary;
+      items.forEach(item => {
+        this.incomeOptions.push({
+          value: item.value,
+          label: item.label
+        });
+      });
+      res = await fetchDictsByCat('expenses');
+      items = res.data.data.dictionary;
+      items.forEach(item => {
+        this.expensesOptions.push({
+          value: item.value,
+          label: item.label
+        });
+      });
     },
     async getTypeList() {
       this.listLoading = true;
@@ -366,14 +392,18 @@ export default {
     },
     handleChange(val) {
       this.finTypeOptions = [];
-      this.typeList.forEach(item => {
-        if (val === item.tx_type) {
-          this.finTypeOptions.push({
-            value: item.finance_type,
-            label: item.finance_type
-          });
-        }
-      });
+      if ('收入' === val) {
+        this.finTypeOptions = this.incomeOptions;
+      } else if ('支出' === val) {
+        this.finTypeOptions = this.expensesOptions;
+      }
+    },
+    openDialog() {
+      if ('收入' === this.model.tx_type) {
+        this.finTypeOptions = this.incomeOptions;
+      } else if ('支出' === this.model.tx_type) {
+        this.finTypeOptions = this.expensesOptions;
+      }
     },
     handleEdit(scope) {
       this.dialogType = 'edit';

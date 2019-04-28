@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2019-04-02 21:53:07
- * @Last Modified by: Arnie Carter
- * @Last Modified time: 2019-04-28 04:55:12
+ * @Last Modified by: Roy Chen
+ * @Last Modified time: 2019-04-28 12:45:44
  */
 export default {
     common: {
@@ -86,6 +86,8 @@ export default {
         externalLink: '外链',
         system: '系统管理',
         privilege: '权限管理',
+        setting: '系统设置',
+        dictionary: '字典管理',
         user: '账户管理',
         company: '客户管理',
         companyManage: '客户列表',
