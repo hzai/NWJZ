@@ -5,6 +5,7 @@ import router, { resetRouter } from '@/router';
 const state = {
     token: getToken(),
     name: '',
+    company_name: '',
     avatar: '',
     introduction: '',
     roles: []
@@ -25,6 +26,9 @@ const mutations = {
     },
     SET_ROLES: (state, roles) => {
         state.roles = roles;
+    },
+    SET_COMMPANY_NAME: (state, company_name) => {
+        state.company_name = company_name;
     }
 };
 
@@ -67,6 +71,7 @@ const actions = {
                     commit('SET_NAME', name);
                     commit('SET_AVATAR', avatar);
                     commit('SET_INTRODUCTION', 'introduction');
+                    commit('SET_COMMPANY_NAME', data.user.company.name);
                     resolve(data.user);
                 })
                 .catch(error => {
@@ -82,6 +87,7 @@ const actions = {
                 .then(() => {
                     commit('SET_TOKEN', '');
                     commit('SET_ROLES', []);
+                    commit('SET_COMMPANY_NAME', '');
                     removeToken();
                     resetRouter();
                     resolve();

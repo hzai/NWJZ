@@ -7,8 +7,8 @@
       </pan-thumb>
       <github-corner style="position: absolute; top: 0px; border: 0; right: 0;" />
       <div class="info-container">
-        <span class="display_name">{{ name }}</span>
-        <span style="font-size:20px;padding-top:20px;display:inline-block;">Editor's Dashboard</span>
+        <span class="display_name">{{ company_name }}</span>
+        <span style="font-size:20px;padding-top:20px;display:inline-block;">{{ name }}</span>
       </div>
     </div>
     <div>
@@ -31,7 +31,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['name', 'avatar', 'roles'])
+    ...mapGetters(['name', 'avatar', 'roles', 'company_name'])
   }
 };
 </script>

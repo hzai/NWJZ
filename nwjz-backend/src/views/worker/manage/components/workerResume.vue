@@ -53,7 +53,7 @@
       <el-row style="border-bottom:1px dashed #CCCCCC;margin-bottom:15px;" />
       <el-row class="content-info">专业技能:&nbsp;&nbsp;&nbsp;&nbsp;{{ postForm.languages | arrayToText }}, {{ postForm.caixi | arrayToText }}, {{ postForm.credentials | arrayToText }}</el-row>
       <el-row style="border-bottom:1px dashed #CCCCCC;margin-bottom:15px;" />
-      <el-row class="content-info">所属门店:&nbsp;&nbsp;&nbsp;&nbsp;从company里取公司名字</el-row>
+      <el-row class="content-info">所属门店:&nbsp;&nbsp;&nbsp;&nbsp;{{company_name}}</el-row>
       <el-row class="content-info">常住地址:&nbsp;&nbsp;&nbsp;&nbsp;{{ postForm.address_area | codeToTextFilter }}{{ postForm.detail_address }}</el-row>
     </div>
     <!-- -------------------- -->
@@ -202,7 +202,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['roles'])
+    ...mapGetters(['roles', 'company_name'])
   },
   created() {
     this.fetchData();

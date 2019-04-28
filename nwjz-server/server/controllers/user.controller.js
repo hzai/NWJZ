@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:36:55
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-21 14:27:13
+ * @Last Modified time: 2019-04-28 23:54:37
  */
 import User from '../models/user.model';
 import UserEvent from '../models/user.event.model';
@@ -50,6 +50,7 @@ function me(req, res, next) {
     User.get(req.payload.user)
         .then(user => {
             req.user = user;
+            console.log('user = ', user);
             return res.json({
                 status: 0,
                 type: 'SUCCESS',

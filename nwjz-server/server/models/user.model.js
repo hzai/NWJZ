@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-12 23:54:27
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-21 13:28:20
+ * @Last Modified time: 2019-04-28 23:53:02
  */
 
 import Promise from 'bluebird';
@@ -231,6 +231,7 @@ UserSchema.statics = {
      */
     get(id) {
         return this.findById(id)
+            .populate({ path: 'company' })
             .exec()
             .then(user => {
                 if (user) {
