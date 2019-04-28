@@ -42,7 +42,8 @@
         <customer-contract :is-edit="true" />
       </el-tab-pane>
       <el-tab-pane key="insurance" label="保险记录" name="insurance">
-        <insurance-pane :is-edit="true" />
+        <!-- TODO 要fix -->
+        <insurance-pane :is-edit="true" :worker-id="this.$route.query.employerId" />
       </el-tab-pane>
       <el-tab-pane key="moneyio" label="收支记录" name="moneyio">
         <fa-manage :is-edit="true" />
@@ -61,38 +62,38 @@ import FaManage from '@/views/customer/components/faManage';
 import WorkerMapping from '@/views/customer/components/workerMapping';
 import InsurancePane from '@/views/customer/components/insurancePane';
 export default {
-    name: 'CustomerEdit',
-    components: {
-        CommunicationPane,
-        RequirementsDetail,
-        CustomerContract,
-        FaManage,
-        WorkerMapping,
-        InsurancePane
-    },
-    filters: {},
-    data() {
-        return {
-            activeName: 'communication',
-            postForm: {}
-        };
-    },
-    created() {
-        this.fetchData();
-    },
-    methods: {
-        fetchData() {
-            const _id = this.$route.query.employerId;
-            fetchEmployer(_id)
-                .then(response => {
-                    this.postForm = response.data.data.employer;
-                    console.log(this.postForm);
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        }
+  name: 'CustomerEdit',
+  components: {
+    CommunicationPane,
+    RequirementsDetail,
+    CustomerContract,
+    FaManage,
+    WorkerMapping,
+    InsurancePane
+  },
+  filters: {},
+  data() {
+    return {
+      activeName: 'communication',
+      postForm: {}
+    };
+  },
+  created() {
+    this.fetchData();
+  },
+  methods: {
+    fetchData() {
+      const _id = this.$route.query.employerId;
+      fetchEmployer(_id)
+        .then(response => {
+          this.postForm = response.data.data.employer;
+          console.log(this.postForm);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
+  }
 };
 </script>
 

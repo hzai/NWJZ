@@ -28,7 +28,7 @@
 
             <el-col :span="8">
               <el-form-item label="客户来源" class="postInfo-container-item">
-                <el-select style="width:180px;" placeholder="请选择">
+                <el-select v-model="postForm.source" style="width:180px;" placeholder="请选择">
                   <el-option v-for="(item, key) in sourceOption" :key="key" :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
@@ -56,15 +56,15 @@
           <el-row style="padding-left:30px;">
             <el-col :span="8">
               <el-form-item label="客户需求" prop="requirements">
-                <el-select style="width:180px;" placeholder="请选择">
-                  <el-option v-for="(item, key) in requirementsOption" :key="key" :label="item.label" :value="item.value" />
+                <el-select v-model="postForm.requirements" style="width:180px;" placeholder="请选择">
+                  <el-option v-for="(item, key) in staticOptions.requirements" :key="key" :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="服务时段" class="postInfo-container-item">
-                <el-select style="width:180px;" placeholder="请选择">
-                  <el-option v-for="(item, key) in serverTimeOption" :key="key" :label="item.label" :value="item.value" />
+                <el-select v-model="postForm.work_time" style="width:180px;" placeholder="请选择">
+                  <el-option v-for="(item, key) in staticOptions.serverTime" :key="key" :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
             </el-col>
@@ -95,8 +95,8 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="从业经验" class="postInfo-container-item">
-                <el-select style="width:180px;" placeholder="请选择">
-                  <el-option v-for="(item, key) in workEspOptions" :key="key" :label="item.label" :value="item.value" />
+                <el-select v-model="postForm.working_age" style="width:180px;" placeholder="请选择">
+                  <el-option v-for="(item, key) in staticOptions.workingAge" :key="key" :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
             </el-col>
@@ -188,504 +188,506 @@ import city from '@/data/city';
 const img_upload_api = process.env.BASE_API + '/upload/addimg';
 const img_url = process.env.IMG_URL;
 export default {
-    name: 'CustomerDetail',
-    components: {
+  name: 'CustomerDetail',
+  components: {
     // Upload,
     // BackCorner
+  },
+  filters: {
+    statusTypeFilter(status) {
+      const statusMap = {
+        0: 'success',
+        1: 'danger',
+        2: 'info'
+      };
+      return statusMap[status];
     },
-    filters: {
-        statusTypeFilter(status) {
-            const statusMap = {
-                0: 'success',
-                1: 'danger',
-                2: 'info'
-            };
-            return statusMap[status];
-        },
-        statusFilter(status) {
-            const statusMap = {
-                0: '生效',
-                1: '过期',
-                2: '无效'
-            };
-            return statusMap[status];
-        }
-    },
-    props: {
-        isEdit: {
-            type: Boolean,
-            default: false
-        }
-    },
-    data() {
-        var validateIDCard = (rule, value, callback) => {
-            if (value === '') {
-                callback();
-            } else if (value.length < 18) {
-                callback(new Error('请输入正确的身份证号'));
-            } else if (
-                !value ||
-        !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(value)
-            ) {
-                callback(new Error('请输入正确的身份证号'));
-            } else {
-                callback();
-            }
-        };
-        return {
-            staticOptions,
-            dialogImageUrl: '',
-            dialogVisible: false,
-            requirementsData,
-            img_upload_api,
-            img_url,
-            tableKey: 0,
-            list: null,
-            total: null,
-            listLoading: false,
-            listQuery: {
-                page: 1,
-                limit: 10
-            },
-            postForm: {
-                // 状态 0 - 未分配、1 - 已分配、2 -需更换
-                status: 0,
-                // 姓名
-                name: '',
-                // 性别
-                sex: '男',
-                // 籍贯
-                native_place: '',
-                // 年龄
-                age: undefined,
-                // 身份证号
-                id_card: '',
-                // 联系电话
-                contact_phone: '',
-                // 地址
-                address: '',
-                // 吃饭口味
-                taste: '',
-                // 家庭内人口
-                family: undefined,
-                // 面积
-                area: undefined,
-                // 服务类型（买菜、做饭、遛狗、接送孩子、照顾老人、手洗衣物（多选））
-                service_type: [],
-                // 老人类型（健康、患病、瘫痪、特殊（单选）
-                old_man_type: '',
-                // 婴儿或幼童数量
-                childrens: undefined,
-                // 宠物数量
-                pets: undefined,
-                requirements: [],
-                salary_range: '',
-                // 备注（特殊需求
-                remark: '',
-                // 附件
-                attachment: []
-            },
-            contractForm: null,
-            fetchSuccess: true,
-            loading: false,
-            statusOptions: [
-                {
-                    value: 0,
-                    label: '新建'
-                },
-                {
-                    value: 1,
-                    label: '跟进中'
-                },
-                {
-                    value: 2,
-                    label: '匹配中'
-                },
-                {
-                    value: 3,
-                    label: '待面试'
-                },
-                {
-                    value: 4,
-                    label: '待签单'
-                },
-                {
-                    value: 5,
-                    label: '已服务'
-                },
-                {
-                    value: 6,
-                    label: '已放弃'
-                },
-                {
-                    value: 7,
-                    label: '已私签'
-                },
-                {
-                    value: 8,
-                    label: '黑名单'
-                }
-            ],
-            workEspOptions: [
-                {
-                    value: '1年',
-                    label: '1年'
-                },
-                {
-                    value: '2年',
-                    label: '2年'
-                },
-                {
-                    value: '3年',
-                    label: '3年'
-                },
-                {
-                    value: '4年',
-                    label: '4年'
-                },
-                {
-                    value: '5年',
-                    label: '5年'
-                },
-                {
-                    value: '6年',
-                    label: '6年'
-                },
-                {
-                    value: '7年',
-                    label: '7年'
-                },
-                {
-                    value: '8年',
-                    label: '8年'
-                },
-                {
-                    value: '9年',
-                    label: '9年'
-                },
-                {
-                    value: '10年以上',
-                    label: '10年以上'
-                }
-            ],
-            serverTimeOption: [
-                {
-                    value: '0',
-                    label: '住家'
-                },
-                {
-                    value: '1',
-                    label: '走家'
-                },
-                {
-                    value: '2',
-                    label: '上午中餐'
-                },
-                {
-                    value: '3',
-                    label: '下午晚餐'
-                },
-                {
-                    value: '4',
-                    label: '全天白班'
-                },
-                {
-                    value: '5',
-                    label: '晚班'
-                }
-            ],
-            sourceOption: [
-                {
-                    value: '0',
-                    label: '线上'
-                },
-                {
-                    value: '1',
-                    label: '线下'
-                },
-                {
-                    value: '2',
-                    label: '客户转介绍'
-                }
-            ],
-            requirementsOption: [
-                {
-                    value: '0',
-                    label: '月嫂'
-                },
-                {
-                    value: '1',
-                    label: '保姆'
-                },
-                {
-                    value: '2',
-                    label: '育婴师'
-                },
-                {
-                    value: '3',
-                    label: '钟点工'
-                },
-                {
-                    value: '4',
-                    label: '家电保洁'
-                },
-                {
-                    value: '5',
-                    label: '老年护理'
-                },
-                {
-                    value: '6',
-                    label: '病人护理'
-                },
-                {
-                    value: '7',
-                    label: '管家'
-                },
-                {
-                    value: '8',
-                    label: '维修'
-                }
-            ],
-            oldManOptions: [
-                {
-                    value: '0',
-                    label: '健康'
-                },
-                {
-                    value: '1',
-                    label: '患病'
-                },
-                {
-                    value: '2',
-                    label: '瘫痪'
-                },
-                {
-                    value: '3',
-                    label: '特殊'
-                }
-            ],
-            rules: {
-                name: [
-                    {
-                        required: true,
-                        message: '请输入姓名',
-                        trigger: 'blur'
-                    }
-                ],
-                age: [
-                    {
-                        type: 'number',
-                        message: '必须为数字值',
-                        trigger: 'blur'
-                    }
-                ],
-                area: [
-                    {
-                        type: 'number',
-                        message: '必须为数字值',
-                        trigger: 'blur'
-                    }
-                ],
-                family: [
-                    {
-                        type: 'number',
-                        message: '必须为数字值',
-                        trigger: 'blur'
-                    }
-                ],
-                childrens: [
-                    {
-                        type: 'number',
-                        message: '必须为数字值',
-                        trigger: 'blur'
-                    }
-                ],
-                pets: [
-                    {
-                        type: 'number',
-                        message: '必须为数字值',
-                        trigger: 'blur'
-                    }
-                ],
-                id_card: [
-                    {
-                        validator: validateIDCard,
-                        trigger: 'blur'
-                    }
-                ],
-                contact_phone: [
-                    {
-                        required: true,
-                        message: '请输入联系电话',
-                        trigger: 'blur'
-                    }
-                ],
-                requirements: [
-                    {
-                        required: true,
-                        message: '请选择需求',
-                        trigger: 'blur'
-                    }
-                ]
-            }
-        };
-    },
-    computed: {
-        ...mapGetters(['roles']),
-        contentRemarkShortLength() {
-            return this.postForm.remark.length;
-        }
-    },
-    created() {
-        if (this.isEdit) {
-            this.fetchData();
-        }
-    },
-    methods: {
-        id_card_change(value) {
-            if (value.length === 18) {
-                this.postForm.age = parseInt(new Date().getFullYear()) - parseInt(value.substring(6, 10));
-                this.postForm.sex = parseInt(value.substring(16, 17)) % 2 === 0 ? '女' : '男';
-                this.postForm.native_place = city[value.substring(0, 2)];
-            }
-        },
-        handleRemove(file, fileList) {
-            this.postForm.attachment = [];
-            fileList.forEach(item => {
-                this.postForm.attachment.push(item);
-            });
-        },
-        handlePictureCardPreview(file) {
-            this.dialogImageUrl = file.url;
-            this.dialogVisible = true;
-        },
-        handelDetailPicSuccess(res, file, fileList) {
-            if (res.status === 0) {
-                this.postForm.attachment.push({
-                    url: img_url + res.image_path
-                });
-            }
-        },
-        beforeAvatarUpload(file) {
-            const isJPG = file.type === 'image/jpeg';
-            const isLt2M = file.size / 1024 / 1024 < 2;
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!');
-            }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!');
-            }
-            return isJPG && isLt2M;
-        },
-        handleUpdate(row) {
-            this.$router.push({
-                path: 'editContract',
-                query: {
-                    contractId: row._id
-                }
-            });
-        },
-        gotoWorker(_id) {
-            this.$router.push({
-                path: '/worker/edit',
-                query: {
-                    userId: _id
-                }
-            });
-        },
-        fetchData() {
-            const _id = this.$route.query.employerId;
-            fetchEmployer(_id)
-                .then(response => {
-                    this.postForm = response.data.data.employer;
-                    this.fetchSuccess = true;
-                })
-                .catch(err => {
-                    this.fetchSuccess = false;
-                    console.log(err);
-                });
-        },
-        submitForm() {
-            console.log(this.postForm);
-            this.$refs['postForm'].validate(valid => {
-                if (valid) {
-                    this.loading = true;
-                    createEmployer(this.postForm).then(resp => {
-                        console.log(resp);
-                        if (!resp.data) {
-                            this.$notify({
-                                title: '失败',
-                                message: '创建失败',
-                                type: 'error',
-                                duration: 2000
-                            });
-                        } else if (resp.data.status !== 0) {
-                            this.$notify({
-                                title: '失败',
-                                message: '创建失败: ' + resp.data.message,
-                                type: 'error',
-                                duration: 2000
-                            });
-                        } else {
-                            this.$notify({
-                                title: '成功',
-                                message: '创建成功',
-                                type: 'success',
-                                duration: 2000
-                            });
-                            this.$router.push({
-                                path: 'client'
-                            });
-                        }
-                    });
-                    this.loading = false;
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-        },
-        updateForm() {
-            console.log(this.postForm);
-            this.$refs['postForm'].validate(valid => {
-                if (valid) {
-                    this.loading = true;
-                    updateEmployer(this.postForm._id, this.postForm).then(resp => {
-                        console.log(resp);
-                        if (!resp.data) {
-                            this.$notify({
-                                title: '失败',
-                                message: '更新失败',
-                                type: 'error',
-                                duration: 2000
-                            });
-                        } else if (resp.data.status !== 0) {
-                            this.$notify({
-                                title: '失败',
-                                message: '更新失败: ' + resp.data.message,
-                                type: 'error',
-                                duration: 2000
-                            });
-                        } else {
-                            this.$notify({
-                                title: '成功',
-                                message: '更新成功',
-                                type: 'success',
-                                duration: 2000
-                            });
-                            //   this.$router.push({
-                            //     path: 'manage'
-                            //   });
-                        }
-                    });
-                    this.loading = false;
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-        }
+    statusFilter(status) {
+      const statusMap = {
+        0: '生效',
+        1: '过期',
+        2: '无效'
+      };
+      return statusMap[status];
     }
+  },
+  props: {
+    isEdit: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    var validateIDCard = (rule, value, callback) => {
+      if (value === '') {
+        callback();
+      } else if (value.length < 18) {
+        callback(new Error('请输入正确的身份证号'));
+      } else if (
+        !value ||
+        !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(value)
+      ) {
+        callback(new Error('请输入正确的身份证号'));
+      } else {
+        callback();
+      }
+    };
+    return {
+      staticOptions,
+      dialogImageUrl: '',
+      dialogVisible: false,
+      requirementsData,
+      img_upload_api,
+      img_url,
+      tableKey: 0,
+      list: null,
+      total: null,
+      listLoading: false,
+      listQuery: {
+        page: 1,
+        limit: 10
+      },
+      postForm: {
+        // 状态 0 - 未分配、1 - 已分配、2 -需更换
+        status: 0,
+        // 姓名
+        name: '',
+        // 性别
+        sex: '男',
+        // 籍贯
+        native_place: '',
+        // 年龄
+        age: undefined,
+        // 身份证号
+        id_card: '',
+        // 联系电话
+        contact_phone: '',
+        // 地址
+        address: '',
+        // 吃饭口味
+        taste: '',
+        // 家庭内人口
+        family: undefined,
+        // 面积
+        area: undefined,
+        // 服务类型（买菜、做饭、遛狗、接送孩子、照顾老人、手洗衣物（多选））
+        service_type: [],
+        // 老人类型（健康、患病、瘫痪、特殊（单选）
+        old_man_type: '',
+        // 婴儿或幼童数量
+        childrens: undefined,
+        // 宠物数量
+        pets: undefined,
+        requirements: '',
+        work_time: '',
+        working_age: '',
+        salary_range: '',
+        // 备注（特殊需求
+        remark: '',
+        // 附件
+        attachment: []
+      },
+      contractForm: null,
+      fetchSuccess: true,
+      loading: false,
+      statusOptions: [
+        {
+          value: 0,
+          label: '新建'
+        },
+        {
+          value: 1,
+          label: '跟进中'
+        },
+        {
+          value: 2,
+          label: '匹配中'
+        },
+        {
+          value: 3,
+          label: '待面试'
+        },
+        {
+          value: 4,
+          label: '待签单'
+        },
+        {
+          value: 5,
+          label: '已服务'
+        },
+        {
+          value: 6,
+          label: '已放弃'
+        },
+        {
+          value: 7,
+          label: '已私签'
+        },
+        {
+          value: 8,
+          label: '黑名单'
+        }
+      ],
+      workEspOptions: [
+        {
+          value: '1年',
+          label: '1年'
+        },
+        {
+          value: '2年',
+          label: '2年'
+        },
+        {
+          value: '3年',
+          label: '3年'
+        },
+        {
+          value: '4年',
+          label: '4年'
+        },
+        {
+          value: '5年',
+          label: '5年'
+        },
+        {
+          value: '6年',
+          label: '6年'
+        },
+        {
+          value: '7年',
+          label: '7年'
+        },
+        {
+          value: '8年',
+          label: '8年'
+        },
+        {
+          value: '9年',
+          label: '9年'
+        },
+        {
+          value: '10年以上',
+          label: '10年以上'
+        }
+      ],
+      serverTimeOption: [
+        {
+          value: '0',
+          label: '住家'
+        },
+        {
+          value: '1',
+          label: '走家'
+        },
+        {
+          value: '2',
+          label: '上午中餐'
+        },
+        {
+          value: '3',
+          label: '下午晚餐'
+        },
+        {
+          value: '4',
+          label: '全天白班'
+        },
+        {
+          value: '5',
+          label: '晚班'
+        }
+      ],
+      sourceOption: [
+        {
+          value: '0',
+          label: '线上'
+        },
+        {
+          value: '1',
+          label: '线下'
+        },
+        {
+          value: '2',
+          label: '客户转介绍'
+        }
+      ],
+      requirementsOption: [
+        {
+          value: '0',
+          label: '月嫂'
+        },
+        {
+          value: '1',
+          label: '保姆'
+        },
+        {
+          value: '2',
+          label: '育婴师'
+        },
+        {
+          value: '3',
+          label: '钟点工'
+        },
+        {
+          value: '4',
+          label: '家电保洁'
+        },
+        {
+          value: '5',
+          label: '老年护理'
+        },
+        {
+          value: '6',
+          label: '病人护理'
+        },
+        {
+          value: '7',
+          label: '管家'
+        },
+        {
+          value: '8',
+          label: '维修'
+        }
+      ],
+      oldManOptions: [
+        {
+          value: '0',
+          label: '健康'
+        },
+        {
+          value: '1',
+          label: '患病'
+        },
+        {
+          value: '2',
+          label: '瘫痪'
+        },
+        {
+          value: '3',
+          label: '特殊'
+        }
+      ],
+      rules: {
+        name: [
+          {
+            required: true,
+            message: '请输入姓名',
+            trigger: 'blur'
+          }
+        ],
+        age: [
+          {
+            type: 'number',
+            message: '必须为数字值',
+            trigger: 'blur'
+          }
+        ],
+        area: [
+          {
+            type: 'number',
+            message: '必须为数字值',
+            trigger: 'blur'
+          }
+        ],
+        family: [
+          {
+            type: 'number',
+            message: '必须为数字值',
+            trigger: 'blur'
+          }
+        ],
+        childrens: [
+          {
+            type: 'number',
+            message: '必须为数字值',
+            trigger: 'blur'
+          }
+        ],
+        pets: [
+          {
+            type: 'number',
+            message: '必须为数字值',
+            trigger: 'blur'
+          }
+        ],
+        id_card: [
+          {
+            validator: validateIDCard,
+            trigger: 'blur'
+          }
+        ],
+        contact_phone: [
+          {
+            required: true,
+            message: '请输入联系电话',
+            trigger: 'blur'
+          }
+        ],
+        requirements: [
+          {
+            required: true,
+            message: '请选择需求',
+            trigger: 'blur'
+          }
+        ]
+      }
+    };
+  },
+  computed: {
+    ...mapGetters(['roles']),
+    contentRemarkShortLength() {
+      return this.postForm.remark.length;
+    }
+  },
+  created() {
+    if (this.isEdit) {
+      this.fetchData();
+    }
+  },
+  methods: {
+    id_card_change(value) {
+      if (value.length === 18) {
+        this.postForm.age = parseInt(new Date().getFullYear()) - parseInt(value.substring(6, 10));
+        this.postForm.sex = parseInt(value.substring(16, 17)) % 2 === 0 ? '女' : '男';
+        this.postForm.native_place = city[value.substring(0, 2)];
+      }
+    },
+    handleRemove(file, fileList) {
+      this.postForm.attachment = [];
+      fileList.forEach(item => {
+        this.postForm.attachment.push(item);
+      });
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handelDetailPicSuccess(res, file, fileList) {
+      if (res.status === 0) {
+        this.postForm.attachment.push({
+          url: img_url + res.image_path
+        });
+      }
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg';
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!');
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!');
+      }
+      return isJPG && isLt2M;
+    },
+    handleUpdate(row) {
+      this.$router.push({
+        path: 'editContract',
+        query: {
+          contractId: row._id
+        }
+      });
+    },
+    gotoWorker(_id) {
+      this.$router.push({
+        path: '/worker/edit',
+        query: {
+          userId: _id
+        }
+      });
+    },
+    fetchData() {
+      const _id = this.$route.query.employerId;
+      fetchEmployer(_id)
+        .then(response => {
+          this.postForm = response.data.data.employer;
+          this.fetchSuccess = true;
+        })
+        .catch(err => {
+          this.fetchSuccess = false;
+          console.log(err);
+        });
+    },
+    submitForm() {
+      console.log(this.postForm);
+      this.$refs['postForm'].validate(valid => {
+        if (valid) {
+          this.loading = true;
+          createEmployer(this.postForm).then(resp => {
+            console.log(resp);
+            if (!resp.data) {
+              this.$notify({
+                title: '失败',
+                message: '创建失败',
+                type: 'error',
+                duration: 2000
+              });
+            } else if (resp.data.status !== 0) {
+              this.$notify({
+                title: '失败',
+                message: '创建失败: ' + resp.data.message,
+                type: 'error',
+                duration: 2000
+              });
+            } else {
+              this.$notify({
+                title: '成功',
+                message: '创建成功',
+                type: 'success',
+                duration: 2000
+              });
+              this.$router.push({
+                path: 'client'
+              });
+            }
+          });
+          this.loading = false;
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+    updateForm() {
+      console.log(this.postForm);
+      this.$refs['postForm'].validate(valid => {
+        if (valid) {
+          this.loading = true;
+          updateEmployer(this.postForm._id, this.postForm).then(resp => {
+            console.log(resp);
+            if (!resp.data) {
+              this.$notify({
+                title: '失败',
+                message: '更新失败',
+                type: 'error',
+                duration: 2000
+              });
+            } else if (resp.data.status !== 0) {
+              this.$notify({
+                title: '失败',
+                message: '更新失败: ' + resp.data.message,
+                type: 'error',
+                duration: 2000
+              });
+            } else {
+              this.$notify({
+                title: '成功',
+                message: '更新成功',
+                type: 'success',
+                duration: 2000
+              });
+              //   this.$router.push({
+              //     path: 'manage'
+              //   });
+            }
+          });
+          this.loading = false;
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    }
+  }
 };
 </script>
 

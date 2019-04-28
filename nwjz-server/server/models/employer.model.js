@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-12 23:54:27
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-11 23:59:35
+ * @Last Modified time: 2019-04-28 17:58:25
  */
 
 import Promise from 'bluebird';
@@ -83,9 +83,15 @@ const EmployerSchema = new mongoose.Schema(
             type: Number
         },
         requirements: {
-            type: []
+            type: String
         },
         salary_range: {
+            type: String
+        },
+        work_time: {
+            type: String
+        },
+        working_age: {
             type: String
         },
         // 备注（特殊需求

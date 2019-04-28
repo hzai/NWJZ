@@ -178,5 +178,27 @@ export default {
         { value: '下午白班', label: '下午白班' },
         { value: '均可', label: '均可' }
     ],
-    txType: [{ value: '收入', label: '收入' }, { value: '支出', label: '支出' }]
+    txType: [
+        { value: '收入', label: '收入' },
+        { value: '支出', label: '支出' }
+    ],
+    requirements: [
+        { value: '月嫂', label: '月嫂' },
+        { value: '保姆', label: '保姆' },
+        { value: '育婴师', label: '育婴师' },
+        { value: '钟点工', label: '钟点工' },
+        { value: '家电保洁', label: '家电保洁' },
+        { value: '老年护理', label: '老年护理' },
+        { value: '病人护理', label: '病人护理' },
+        { value: '管家', label: '管家' },
+        { value: '维修', label: '维修' }
+    ],
+    serviceTime: [
+        { value: '0', label: '住家' },
+        { value: '1', label: '走家' },
+        { value: '2', label: '上午中餐' },
+        { value: '3', label: '下午晚餐' },
+        { value: '4', label: '全天白班' },
+        { value: '5', label: '晚班' }
+    ]
 };
