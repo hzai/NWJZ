@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2019-04-22 21:12:49
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-28 20:37:37
+ * @Last Modified time: 2019-04-28 22:29:19
  */
 // import parseTime, formatTime and set to filter
 
@@ -111,4 +111,12 @@ export function workerStatusFilter(status) {
         statusMap[item.value] = item.label;
     });
     return statusMap[status];
+}
+
+export function workerStatusColorFilter(status) {
+    const colorMap = [];
+    staticOptions.workerStatus.forEach(item => {
+        colorMap[item.value] = item.color;
+    });
+    return colorMap[status];
 }

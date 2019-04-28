@@ -1,11 +1,12 @@
 export default {
     workerStatus: [
-        { value: 0, label: '待岗' },
-        { value: 1, label: '上户中' },
-        { value: 2, label: '培训中' },
-        { value: 3, label: '休假' },
-        { value: 4, label: '转行' },
-        { value: 5, label: '黑名单' }
+        { value: 0, label: '待岗', color: '' },
+        { value: 1, label: '上户中', color: 'success' },
+        { value: 2, label: '培训中', color: 'warning' },
+        { value: 3, label: '休假', color: 'warning' },
+        { value: 4, label: '离职', color: 'info' },
+        { value: 5, label: '转行', color: 'info' },
+        { value: 6, label: '黑名单', color: 'danger' }
     ],
     zodiac: [
         { value: '猴', label: '猴' },

@@ -156,7 +156,7 @@ export default {
       fetchWorkerCommentList(this.workerId)
         .then(response => {
           this.list = response.data.data.workerComments;
-          console.log(this.list);
+          //   console.log(this.list);
           this.fetchSuccess = true;
           this.listLoading = false;
         })

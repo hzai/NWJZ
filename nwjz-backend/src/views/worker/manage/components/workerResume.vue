@@ -208,6 +208,10 @@ export default {
     this.fetchData();
   },
   methods: {
+    parentHandleclick(workerFromParent) {
+      console.log(workerFromParent);
+      this.fetchData();
+    },
     fetchData() {
       fetchWorker(this.workerId)
         .then(response => {

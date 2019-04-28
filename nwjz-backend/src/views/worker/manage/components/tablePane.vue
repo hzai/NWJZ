@@ -115,10 +115,10 @@
           {{ scope.row.introduce | ellipsis }}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" align="center" label="状态" width="70" prop="status">
+      <el-table-column class-name="status-col" align="center" label="状态" width="80" prop="status">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusTypeFilter">
-            {{ scope.row.status | statusFilter }}
+          <el-tag :type="scope.row.status | workerStatusColorFilter">
+            {{ scope.row.status | workerStatusFilter }}
           </el-tag>
         </template>
       </el-table-column>
@@ -141,255 +141,255 @@ import place from '@/data/place';
 import nation from '@/data/nation';
 import zodiac from '@/data/zodiac';
 export default {
-    name: 'WorkerManageTable',
-    filters: {
-        statusTypeFilter(status) {
-            const statusMap = {
-                0: 'warning',
-                1: 'success',
-                2: 'info',
-                3: 'danger'
-            };
-            return statusMap[status];
-        },
-        statusFilter(status) {
-            const statusMap = {
-                0: '待岗',
-                1: '在岗',
-                2: '离职',
-                3: '黑名单'
-            };
-            return statusMap[status];
-        }
+  name: 'WorkerManageTable',
+  filters: {
+    statusTypeFilter(status) {
+      const statusMap = {
+        0: 'warning',
+        1: 'success',
+        2: 'info',
+        3: 'danger'
+      };
+      return statusMap[status];
     },
-    props: {
-        status: {
-            type: String,
-            default: 'ALL'
-        }
-    },
-    data() {
-        return {
-            tableKey: 0,
-            list: null,
-            total: null,
-            listLoading: true,
-            listQuery: {
-                page: 1,
-                limit: 10,
-                status: this.status,
-                name: undefined,
-                contact_phone: undefined,
-                id_card: undefined,
-                languages: [],
-                credentials: [],
-                work_type: [],
-                native_place: [],
-                nation: '',
-                zodiac: '',
-                working_experience: undefined,
-                introduce: undefined
-            },
-            resetQuery: {
-                page: 1,
-                limit: 10,
-                name: undefined,
-                contact_phone: undefined,
-                id_card: undefined,
-                nation: '',
-                languages: [],
-                credentials: [],
-                work_type: [],
-                native_place: [],
-                zodiac: '',
-                working_experience: undefined,
-                introduce: undefined
-            },
-            statusOptions: [
-                {
-                    value: 'ALL',
-                    label: '所有状态'
-                },
-                {
-                    value: 0,
-                    label: '待岗'
-                },
-                {
-                    value: 1,
-                    label: '在岗'
-                },
-                {
-                    value: 2,
-                    label: '离职'
-                },
-                {
-                    value: 3,
-                    label: '黑名单'
-                }
-            ],
-            employedOptions: [
-                {
-                    value: 'ALL',
-                    label: '所有'
-                },
-                {
-                    value: true,
-                    label: '是'
-                },
-                {
-                    value: false,
-                    label: '否'
-                }
-            ],
-            languageOptions: [
-                {
-                    value: '普通话',
-                    lable: '普通话'
-                },
-                {
-                    value: '广东话',
-                    lable: '广东话'
-                },
-                {
-                    value: '客家话',
-                    lable: '客家话'
-                },
-                {
-                    value: '潮州话',
-                    lable: '潮州话'
-                }
-            ],
-            credentialOptions: [
-                {
-                    value: '月嫂证',
-                    lable: '月嫂证'
-                },
-                {
-                    value: '育婴师证',
-                    lable: '育婴师证'
-                },
-                {
-                    value: '护理证',
-                    lable: '护理证'
-                },
-                {
-                    value: '等级上岗证',
-                    lable: '等级上岗证'
-                },
-                {
-                    value: '其他证',
-                    lable: '其他证'
-                }
-            ],
-            workTypeOptions: [
-                {
-                    value: '钟点工',
-                    lable: '钟点工'
-                },
-                {
-                    value: '日常保洁',
-                    lable: '日常保洁'
-                },
-                {
-                    value: '做饭阿姨',
-                    lable: '做饭阿姨'
-                },
-                {
-                    value: '住家保姆',
-                    lable: '住家保姆'
-                },
-                {
-                    value: '不住家保姆',
-                    lable: '不住家保姆'
-                },
-                {
-                    value: '专业月嫂',
-                    lable: '专业月嫂'
-                },
-                {
-                    value: '育婴师',
-                    lable: '育婴师'
-                },
-                {
-                    value: '养老服务',
-                    lable: '养老服务'
-                },
-                {
-                    value: '专项保洁',
-                    lable: '专项保洁'
-                }
-            ],
-            nativePlaceOptions: place,
-            nationOptions: nation,
-            zodiacOptions: zodiac
-        };
-    },
-    created() {
-        this.getList();
-    },
-    mounted() {},
-    methods: {
-        handleFilter() {
-            this.listQuery.page = 1;
-            //   this.$store.dispatch('saveListQuery', { worker_list: this.listQuery });
-            this.getList();
-        },
-        handleReset() {
-            const tempStatus = this.listQuery.status;
-            this.listQuery = {};
-            this.listQuery = Object.assign({}, this.resetQuery);
-            this.listQuery.status = tempStatus;
-            this.getList();
-        },
-        handleSizeChange(val) {
-            this.listQuery.limit = val;
-            //   this.$store.dispatch('saveListQuery', { worker_list: this.listQuery });
-            this.getList();
-        },
-        handleCurrentChange(val) {
-            this.listQuery.page = val;
-            //   this.$store.dispatch('saveListQuery', { worker_list: this.listQuery });
-            this.getList();
-        },
-        async handleModifyStatus(row, status) {
-            this.listLoading = true;
-            row.status = status;
-            await updateWorker(row._id, row).then(resp => {
-                if (resp.data.status === 0) {
-                    this.$message({
-                        message: '操作成功',
-                        type: 'success'
-                    });
-                    this.listLoading = false;
-                }
-            });
-        },
-        getList() {
-            //   if (
-            //     this.$store.state.user.listQuery !== null &&
-            //     this.$store.state.user.listQuery !== undefined &&
-            //     this.$store.state.user.listQuery.worker_list !== undefined
-            //   ) {
-            //     this.listQuery = this.$store.state.user.listQuery.worker_list;
-            //   }
-            //   this.$store.dispatch('saveListQuery', { worker_list: this.listQuery });
-            this.listLoading = true;
-            fetchWorkerList(this.listQuery).then(response => {
-                // console.log(response.data.data.workers)
-                this.list = response.data.data.workers;
-                this.total = response.data.data.total;
-                this.listLoading = false;
-            });
-        },
-        handleUpdate(row) {
-            this.$router.push({
-                path: 'edit',
-                query: {
-                    id: row._id
-                }
-            });
-        }
+    statusFilter(status) {
+      const statusMap = {
+        0: '待岗',
+        1: '在岗',
+        2: '离职',
+        3: '黑名单'
+      };
+      return statusMap[status];
     }
+  },
+  props: {
+    status: {
+      type: String,
+      default: 'ALL'
+    }
+  },
+  data() {
+    return {
+      tableKey: 0,
+      list: null,
+      total: null,
+      listLoading: true,
+      listQuery: {
+        page: 1,
+        limit: 10,
+        status: this.status,
+        name: undefined,
+        contact_phone: undefined,
+        id_card: undefined,
+        languages: [],
+        credentials: [],
+        work_type: [],
+        native_place: [],
+        nation: '',
+        zodiac: '',
+        working_experience: undefined,
+        introduce: undefined
+      },
+      resetQuery: {
+        page: 1,
+        limit: 10,
+        name: undefined,
+        contact_phone: undefined,
+        id_card: undefined,
+        nation: '',
+        languages: [],
+        credentials: [],
+        work_type: [],
+        native_place: [],
+        zodiac: '',
+        working_experience: undefined,
+        introduce: undefined
+      },
+      statusOptions: [
+        {
+          value: 'ALL',
+          label: '所有状态'
+        },
+        {
+          value: 0,
+          label: '待岗'
+        },
+        {
+          value: 1,
+          label: '在岗'
+        },
+        {
+          value: 2,
+          label: '离职'
+        },
+        {
+          value: 3,
+          label: '黑名单'
+        }
+      ],
+      employedOptions: [
+        {
+          value: 'ALL',
+          label: '所有'
+        },
+        {
+          value: true,
+          label: '是'
+        },
+        {
+          value: false,
+          label: '否'
+        }
+      ],
+      languageOptions: [
+        {
+          value: '普通话',
+          lable: '普通话'
+        },
+        {
+          value: '广东话',
+          lable: '广东话'
+        },
+        {
+          value: '客家话',
+          lable: '客家话'
+        },
+        {
+          value: '潮州话',
+          lable: '潮州话'
+        }
+      ],
+      credentialOptions: [
+        {
+          value: '月嫂证',
+          lable: '月嫂证'
+        },
+        {
+          value: '育婴师证',
+          lable: '育婴师证'
+        },
+        {
+          value: '护理证',
+          lable: '护理证'
+        },
+        {
+          value: '等级上岗证',
+          lable: '等级上岗证'
+        },
+        {
+          value: '其他证',
+          lable: '其他证'
+        }
+      ],
+      workTypeOptions: [
+        {
+          value: '钟点工',
+          lable: '钟点工'
+        },
+        {
+          value: '日常保洁',
+          lable: '日常保洁'
+        },
+        {
+          value: '做饭阿姨',
+          lable: '做饭阿姨'
+        },
+        {
+          value: '住家保姆',
+          lable: '住家保姆'
+        },
+        {
+          value: '不住家保姆',
+          lable: '不住家保姆'
+        },
+        {
+          value: '专业月嫂',
+          lable: '专业月嫂'
+        },
+        {
+          value: '育婴师',
+          lable: '育婴师'
+        },
+        {
+          value: '养老服务',
+          lable: '养老服务'
+        },
+        {
+          value: '专项保洁',
+          lable: '专项保洁'
+        }
+      ],
+      nativePlaceOptions: place,
+      nationOptions: nation,
+      zodiacOptions: zodiac
+    };
+  },
+  created() {
+    this.getList();
+  },
+  mounted() {},
+  methods: {
+    handleFilter() {
+      this.listQuery.page = 1;
+      //   this.$store.dispatch('saveListQuery', { worker_list: this.listQuery });
+      this.getList();
+    },
+    handleReset() {
+      const tempStatus = this.listQuery.status;
+      this.listQuery = {};
+      this.listQuery = Object.assign({}, this.resetQuery);
+      this.listQuery.status = tempStatus;
+      this.getList();
+    },
+    handleSizeChange(val) {
+      this.listQuery.limit = val;
+      //   this.$store.dispatch('saveListQuery', { worker_list: this.listQuery });
+      this.getList();
+    },
+    handleCurrentChange(val) {
+      this.listQuery.page = val;
+      //   this.$store.dispatch('saveListQuery', { worker_list: this.listQuery });
+      this.getList();
+    },
+    async handleModifyStatus(row, status) {
+      this.listLoading = true;
+      row.status = status;
+      await updateWorker(row._id, row).then(resp => {
+        if (resp.data.status === 0) {
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
+          this.listLoading = false;
+        }
+      });
+    },
+    getList() {
+      //   if (
+      //     this.$store.state.user.listQuery !== null &&
+      //     this.$store.state.user.listQuery !== undefined &&
+      //     this.$store.state.user.listQuery.worker_list !== undefined
+      //   ) {
+      //     this.listQuery = this.$store.state.user.listQuery.worker_list;
+      //   }
+      //   this.$store.dispatch('saveListQuery', { worker_list: this.listQuery });
+      this.listLoading = true;
+      fetchWorkerList(this.listQuery).then(response => {
+        // console.log(response.data.data.workers)
+        this.list = response.data.data.workers;
+        this.total = response.data.data.total;
+        this.listLoading = false;
+      });
+    },
+    handleUpdate(row) {
+      this.$router.push({
+        path: 'edit',
+        query: {
+          id: row._id
+        }
+      });
+    }
+  }
 };
 </script>
 
