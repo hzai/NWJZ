@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2019-04-22 21:12:49
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-28 22:29:19
+ * @Last Modified time: 2019-04-28 23:45:22
  */
 // import parseTime, formatTime and set to filter
 
@@ -93,11 +93,11 @@ export function ellipsis(value) {
 export function arrayToText(arr) {
     var result = '';
     for (var i = 0; i < arr.length; i++) {
-        result += arr[i] + ',';
+        result += arr[i] + ', ';
     }
     // 去掉最后一个逗号(如果不需要去掉，就不用写)
     if (result.length > 0) {
-        result = result.substr(0, result.length - 1);
+        result = result.substr(0, result.length - 2);
     }
     // if (result.length > 10) {
     //     result = result.slice(0, 10) + '...';

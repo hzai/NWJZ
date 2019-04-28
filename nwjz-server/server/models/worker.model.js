@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-12 23:54:27
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-22 21:26:34
+ * @Last Modified time: 2019-04-28 23:35:01
  */
 
 import Promise from 'bluebird';
@@ -120,6 +120,9 @@ const WorkerSchema = new mongoose.Schema(
         },
         // 身高
         height: {
+            type: Number
+        },
+        weight: {
             type: Number
         },
         // 老家电话

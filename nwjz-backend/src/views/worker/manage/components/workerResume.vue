@@ -49,9 +49,9 @@
       <el-row class="content-info">属&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;相:&nbsp;&nbsp;&nbsp;&nbsp;{{ postForm.zodiac }}</el-row>
       <el-row class="content-info">星&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;座:&nbsp;&nbsp;&nbsp;&nbsp;{{ postForm.astro }}</el-row>
       <el-row class="content-info">身&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;高:&nbsp;&nbsp;&nbsp;&nbsp;{{ postForm.height }}</el-row>
-      <el-row class="content-info">体&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;重:&nbsp;&nbsp;&nbsp;&nbsp;</el-row>
+      <el-row class="content-info">体&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;重:&nbsp;&nbsp;&nbsp;&nbsp;{{ postForm.weight }}</el-row>
       <el-row style="border-bottom:1px dashed #CCCCCC;margin-bottom:15px;" />
-      <el-row class="content-info">专业技能:&nbsp;&nbsp;&nbsp;&nbsp;</el-row>
+      <el-row class="content-info">专业技能:&nbsp;&nbsp;&nbsp;&nbsp;{{ postForm.languages | arrayToText }}, {{ postForm.caixi | arrayToText }}, {{ postForm.credentials | arrayToText }}</el-row>
       <el-row style="border-bottom:1px dashed #CCCCCC;margin-bottom:15px;" />
       <el-row class="content-info">所属门店:&nbsp;&nbsp;&nbsp;&nbsp;从company里取公司名字</el-row>
       <el-row class="content-info">常住地址:&nbsp;&nbsp;&nbsp;&nbsp;{{ postForm.address_area | codeToTextFilter }}{{ postForm.detail_address }}</el-row>
@@ -91,7 +91,7 @@
     </div>
     <div style="padding:12px 20px;">
       <el-row v-for="item in postForm.work_exp" :key="item._id" class="content-info">
-        {{ new Date(item.start_end[0]) | parseTime('{y}-{m}-{d}') }} - {{ new Date(item.start_end[1]) | parseTime('{y}-{m}-{d}') }} &nbsp;&nbsp;&nbsp;&nbsp;{{ item.content }}
+        {{ new Date(item.start_end[0]) | parseTime('{y}/{m}') }} - {{ new Date(item.start_end[1]) | parseTime('{y}/{m}') }} &nbsp;&nbsp;&nbsp;&nbsp;{{ item.content }}
       </el-row>
     </div>
 
