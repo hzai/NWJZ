@@ -2,12 +2,13 @@
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:44:25
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-21 14:18:12
+ * @Last Modified time: 2019-04-28 14:18:42
  */
 import express from 'express';
 import expressJwt from 'express-jwt';
 import workerCtrl from '../controllers/worker.controller';
 import workerServiceCtrl from '../controllers/worker.service.controller';
+import workerCommentCtrl from '../controllers/worker/worker.comment.controller';
 import config from '../../config/config';
 import roles from '../helpers/roles';
 
@@ -68,6 +69,40 @@ router
         workerCtrl.remove
     );
 
-router.param('workerId', workerCtrl.load);
+router
+    .route('/:workerId/comment')
+    .get(
+        authRequired,
+        roles(['admin', 'company', 'company_admin', 'editor']),
+        workerCommentCtrl.getListByWorker
+    )
+    .post(
+        authRequired,
+        roles(['admin', 'company', 'company_admin', 'editor']),
+        workerCommentCtrl.create
+    );
 
+router
+    .route('/:workerId/comment/:commentId')
+    .get(
+        authRequired,
+        roles(['admin', 'company', 'company_admin', 'editor']),
+        workerCommentCtrl.get
+    )
+    .put(
+        authRequired,
+        roles(['admin', 'company', 'company_admin', 'editor']),
+        workerCommentCtrl.update
+    )
+    .delete(
+        authRequired,
+        roles(['admin', 'company', 'company_admin', 'editor']),
+        workerCommentCtrl.remove
+    );
+
+router.param('workerId', workerCtrl.load);
+router.param('commentId', (req, res, next, commentId) => {
+    req.commentId = commentId;
+    return next();
+});
 export default router;
