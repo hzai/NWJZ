@@ -14,6 +14,9 @@
           <router-link style="margin-right:15px;" :to="{ path:'detail?id='+workerId}">
             <el-button>编辑</el-button>
           </router-link>
+          <p>
+            <span style="font-size:20px;font-weight:500;color:white;">{{postForm.status | workerStatusFilter}}</span>
+          </p>
         </el-col>
       </el-row>
     </div>
@@ -99,131 +102,131 @@
 import { fetchWorker } from '@/api/worker';
 import { mapGetters } from 'vuex';
 export default {
-    name: 'WorkerResume',
-    components: {},
-    props: {
-        workerId: {
-            type: String,
-            default: ''
-        }
-    },
-    data() {
-        return {
-            postForm: {
-                status: 0,
-                // 是否受雇为员工，默认false
-                is_employed: false,
-                // 昵称
-                // nickname: '',
-                // 头像
-                avatar: '',
-                // 姓名
-                name: '',
-                // 性别
-                sex: '女',
-                // 籍贯
-                native_place: [],
-                // 民族
-                nation: '',
-                // 属相
-                zodiac: '',
-                // 星座
-                astro: '',
-                // 户籍地址
-                address_area: [],
-                detail_address: '',
-                // 年龄
-                age: undefined,
-                // 婚姻状况
-                marriaged: true,
-                // 生日
-                birth: undefined,
-                // 身份证号
-                id_card: '',
-                // 身份证图片
-                id_card_images: [],
-                id_card_address: '',
-                // 学历
-                academic: '',
-                // 身高
-                height: undefined,
-                // 老家电话
-                town_phone: '',
-                // 紧急电话
-                urgent_phone: '',
-                // 联系电话 本人电话
-                contact_phone: '',
-                // 身体状况
-                healthy: '',
-                // 电子邮箱
-                email: '',
-                // 其他证件
-                other_credentials: '',
-                mandarin_level: '',
-                // 语言能力
-                languages: [],
-                // 证件
-                credentials: [],
-                // 工作类型
-                work_type: [],
-                work_time: [],
-                // 其他工作类型
-                zuofannengli: '',
-                caixi: [],
-                other_work_type: '',
-                // 介绍人或担保人
-                recommend_person: '',
-                // 介绍人联系电话
-                recommend_phone: '',
-                // 家庭成员
-                family: [],
-                work_exp: [],
-                working_age: '',
-                // 工作经验
-                working_experience: '',
-                // 自我介绍
-                introduce: '',
-                // 附件
-                attachment: [],
-                images: [],
-                videos: [],
-                // 后台标记
-                remark: ''
-                // 角色
-                // roles: ['worker']
-            },
-            fetchSuccess: true,
-            loading: false,
-            dialogImageUrl: '',
-            dialogVisible: false
-        };
-    },
-    computed: {
-        ...mapGetters(['roles'])
-    },
-    created() {
-        this.fetchData();
-    },
-    methods: {
-        fetchData() {
-            fetchWorker(this.workerId)
-                .then(response => {
-                    this.postForm = response.data.data.worker;
-                    this.postForm.birth = new Date(this.postForm.birth);
-                    this.imageList = Object.assign([], this.postForm.images);
-                    this.videoList = Object.assign([], this.postForm.videos);
-                    this.fetchSuccess = true;
-                })
-                .catch(err => {
-                    this.fetchSuccess = false;
-                    console.log(err);
-                });
-        },
-        handlePictureCardPreview(url) {
-            this.dialogImageUrl = url;
-            this.dialogVisible = true;
-        }
+  name: 'WorkerResume',
+  components: {},
+  props: {
+    workerId: {
+      type: String,
+      default: ''
     }
+  },
+  data() {
+    return {
+      postForm: {
+        status: 0,
+        // 是否受雇为员工，默认false
+        is_employed: false,
+        // 昵称
+        // nickname: '',
+        // 头像
+        avatar: '',
+        // 姓名
+        name: '',
+        // 性别
+        sex: '女',
+        // 籍贯
+        native_place: [],
+        // 民族
+        nation: '',
+        // 属相
+        zodiac: '',
+        // 星座
+        astro: '',
+        // 户籍地址
+        address_area: [],
+        detail_address: '',
+        // 年龄
+        age: undefined,
+        // 婚姻状况
+        marriaged: true,
+        // 生日
+        birth: undefined,
+        // 身份证号
+        id_card: '',
+        // 身份证图片
+        id_card_images: [],
+        id_card_address: '',
+        // 学历
+        academic: '',
+        // 身高
+        height: undefined,
+        // 老家电话
+        town_phone: '',
+        // 紧急电话
+        urgent_phone: '',
+        // 联系电话 本人电话
+        contact_phone: '',
+        // 身体状况
+        healthy: '',
+        // 电子邮箱
+        email: '',
+        // 其他证件
+        other_credentials: '',
+        mandarin_level: '',
+        // 语言能力
+        languages: [],
+        // 证件
+        credentials: [],
+        // 工作类型
+        work_type: [],
+        work_time: [],
+        // 其他工作类型
+        zuofannengli: '',
+        caixi: [],
+        other_work_type: '',
+        // 介绍人或担保人
+        recommend_person: '',
+        // 介绍人联系电话
+        recommend_phone: '',
+        // 家庭成员
+        family: [],
+        work_exp: [],
+        working_age: '',
+        // 工作经验
+        working_experience: '',
+        // 自我介绍
+        introduce: '',
+        // 附件
+        attachment: [],
+        images: [],
+        videos: [],
+        // 后台标记
+        remark: ''
+        // 角色
+        // roles: ['worker']
+      },
+      fetchSuccess: true,
+      loading: false,
+      dialogImageUrl: '',
+      dialogVisible: false
+    };
+  },
+  computed: {
+    ...mapGetters(['roles'])
+  },
+  created() {
+    this.fetchData();
+  },
+  methods: {
+    fetchData() {
+      fetchWorker(this.workerId)
+        .then(response => {
+          this.postForm = response.data.data.worker;
+          this.postForm.birth = new Date(this.postForm.birth);
+          this.imageList = Object.assign([], this.postForm.images);
+          this.videoList = Object.assign([], this.postForm.videos);
+          this.fetchSuccess = true;
+        })
+        .catch(err => {
+          this.fetchSuccess = false;
+          console.log(err);
+        });
+    },
+    handlePictureCardPreview(url) {
+      this.dialogImageUrl = url;
+      this.dialogVisible = true;
+    }
+  }
 };
 </script>
 

@@ -2,12 +2,12 @@
  * @Author: Roy Chen
  * @Date: 2019-04-22 21:12:49
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-23 14:07:35
+ * @Last Modified time: 2019-04-28 20:37:37
  */
 // import parseTime, formatTime and set to filter
 
 import { CodeToText } from 'element-china-area-data';
-
+import staticOptions from '@/data/options';
 export { parseTime, formatTime } from '@/utils';
 
 /**
@@ -103,4 +103,12 @@ export function arrayToText(arr) {
     //     result = result.slice(0, 10) + '...';
     // }
     return result;
+}
+
+export function workerStatusFilter(status) {
+    const statusMap = [];
+    staticOptions.workerStatus.forEach(item => {
+        statusMap[item.value] = item.label;
+    });
+    return statusMap[status];
 }

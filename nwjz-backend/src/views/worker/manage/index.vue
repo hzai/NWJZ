@@ -12,6 +12,7 @@
 
 <script>
 import { statWorker } from '@/api/worker';
+import staticOptions from '@/data/options';
 import tablePane from './components/tablePane';
 export default {
   name: 'WorkerManage',
@@ -20,8 +21,10 @@ export default {
   props: {},
   data() {
     return {
+      staticOptions,
       total: 0,
       stats: undefined,
+      tabMap: [],
       tabMapOptions: [],
       activeName: 'ALL'
     };
@@ -40,19 +43,32 @@ export default {
       };
       return statusMap[status];
     },
+    initTabMapMap() {
+      const workerStatus = this.staticOptions.workerStatus;
+      workerStatus.forEach(item => {
+        this.tabMap[item.value] = item.label;
+      });
+    },
     statisticsWorker() {
       statWorker().then(response => {
-        console.log(response.data.data.workers);
         this.total = response.data.data.total;
         this.stats = response.data.data.workers;
         this.tabMapOptions.push({
-          label: '全部(' + this.total + ')',
+          label: '全部' + '(' + this.total + ')',
           key: 'ALL'
         });
+        const countMap = [];
         this.stats.forEach(item => {
+          countMap[item._id] = item.count;
+        });
+        const workerStatus = this.staticOptions.workerStatus;
+        workerStatus.forEach(item => {
+          this.tabMap[item.value] = item.label;
           this.tabMapOptions.push({
-            label: this.statusFilter(item._id + '') + '(' + item.count + ')',
-            key: item._id + ''
+            label: countMap[item.value]
+              ? item.label + '(' + countMap[item.value] + ')'
+              : item.label + '(0)',
+            key: item.value + ''
           });
         });
       });
