@@ -2,10 +2,11 @@
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:36:55
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-29 15:59:10
+ * @Last Modified time: 2019-04-29 20:28:25
  */
 import mongoose from 'mongoose';
 import Employer from '../models/employer.model';
+import Communication from '../models/communication/communication.model';
 import Utils from '../helpers/Utils';
 /**
  * Load employer and append to req.
@@ -39,20 +40,31 @@ function get(req, res) {
  * @returns {Employer}
  */
 function create(req, res, next) {
+    console.log(req.payload);
     const employer = new Employer(req.body);
     employer.company = req.payload.company;
     employer.created_by = req.payload.user;
     employer
         .save()
         .then(savedEmployer => {
-            return res.json({
-                status: 0,
-                data: {
-                    employer: savedEmployer
-                },
-                type: 'SUCCESS',
-                message: '创建成功'
-            });
+            if (savedEmployer) {
+                const communication = new Communication();
+                communication.company = req.payload.company;
+                communication.employer = savedEmployer._id;
+                communication.content = '录入客户';
+                communication.status = savedEmployer.status;
+                communication.author = req.payload.name;
+                communication.created_by = req.payload.user;
+                communication.save();
+                return res.json({
+                    status: 0,
+                    data: {
+                        employer: savedEmployer
+                    },
+                    type: 'SUCCESS',
+                    message: '创建成功'
+                });
+            }
         })
         .catch(e => next(e));
 }

@@ -2,11 +2,12 @@
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:36:55
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-22 20:32:03
+ * @Last Modified time: 2019-04-29 20:29:43
  */
 import mongoose from 'mongoose';
 import Worker from '../models/worker.model';
 import Counters from '../models/counters.model';
+import Communication from '../models/communication/communication.model';
 import config from '../../config/config';
 import Utils from '../helpers/Utils';
 const passport = require('passport');
@@ -52,14 +53,24 @@ async function create(req, res, next) {
     worker
         .save()
         .then(savedWorker => {
-            return res.json({
-                status: 0,
-                data: {
-                    worker: savedWorker
-                },
-                type: 'SUCCESS',
-                message: '创建worker成功'
-            });
+            if (savedWorker) {
+                const communication = new Communication();
+                communication.company = req.payload.company;
+                communication.worker = savedWorker._id;
+                communication.content = '录入阿姨';
+                communication.status = savedWorker.status;
+                communication.author = req.payload.name;
+                communication.created_by = req.payload.user;
+                communication.save();
+                return res.json({
+                    status: 0,
+                    data: {
+                        worker: savedWorker
+                    },
+                    type: 'SUCCESS',
+                    message: '创建worker成功'
+                });
+            }
         })
         .catch(e => next(e));
 }

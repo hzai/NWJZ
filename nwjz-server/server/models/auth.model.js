@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-12 23:53:48
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-20 16:42:40
+ * @Last Modified time: 2019-04-29 20:20:07
  */
 import moment from 'moment';
 import jwt from 'jsonwebtoken';
@@ -103,6 +103,7 @@ AuthSchema.method({
         return jwt.sign(
             {
                 user: this.user._id,
+                name: this.user.name,
                 nickname: this.user.nickname,
                 identifier: this.identifier,
                 identity_type: this.identity_type,

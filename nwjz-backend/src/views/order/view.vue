@@ -61,38 +61,38 @@ import FaManage from '@/views/customer/components/faManage';
 import WorkerMapping from '@/views/customer/components/workerMapping';
 import InsurancePane from '@/views/customer/components/insurancePane';
 export default {
-    name: 'OrderView',
-    components: {
-        CommunicationPane,
-        RequirementsDetail,
-        CustomerContract,
-        FaManage,
-        WorkerMapping,
-        InsurancePane
-    },
-    filters: {},
-    data() {
-        return {
-            activeName: 'contract',
-            postForm: {}
-        };
-    },
-    created() {
-        this.fetchData();
-    },
-    methods: {
-        fetchData() {
-            const _id = this.$route.query.employerId;
-            fetchEmployer(_id)
-                .then(response => {
-                    this.postForm = response.data.data.employer;
-                    console.log(this.postForm);
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        }
+  name: 'OrderView',
+  components: {
+    CommunicationPane,
+    RequirementsDetail,
+    CustomerContract,
+    FaManage,
+    WorkerMapping,
+    InsurancePane
+  },
+  filters: {},
+  data() {
+    return {
+      activeName: 'contract',
+      postForm: {}
+    };
+  },
+  created() {
+    this.fetchData();
+  },
+  methods: {
+    fetchData() {
+      const _id = this.$route.query.employerId;
+      fetchEmployer(_id)
+        .then(response => {
+          this.postForm = response.data.data.employer;
+          // console.log(this.postForm);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
+  }
 };
 </script>
 

@@ -783,7 +783,7 @@ export default {
     submitForm() {
       // this.postForm.birth = parseInt(this.birth / 1000)
       this.postForm.nickname = this.postForm.name;
-      console.log(this.postForm);
+      //   console.log(this.postForm);
       this.$refs['postForm'].validate(valid => {
         if (valid) {
           this.loading = true;

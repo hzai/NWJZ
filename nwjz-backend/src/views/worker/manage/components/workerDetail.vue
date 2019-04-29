@@ -128,7 +128,7 @@
         <el-row style="padding-left:30px;">
           <el-col :span="16">
             <el-form-item label="现居地址" prop="detail_address" class="postInfo-container-item">
-              <el-cascader v-model="postForm.address_area" filterable :options="regionDataPlus" style="width:250px;" @change="handleChange" />
+              <el-cascader v-model="postForm.address_area" filterable :options="regionDataPlus" style="width:250px;" />
               <el-input v-model="postForm.detail_address" placeholder="详细地址，如楼层、门牌号等" style="width:250px;" />
             </el-form-item>
           </el-col>
@@ -221,7 +221,7 @@
           <el-col :span="16">
             <el-form-item label="求职意向" class="postInfo-container-item">
               <el-checkbox-group v-model="postForm.work_type" class="checkbox">
-                <el-checkbox-button v-for="(item, key) in staticOptions.job" :key="key" border :label="item.value">{{ item.label }}</el-checkbox-button>
+                <el-checkbox-button v-for="(item, key) in staticOptions.job" :key="key" :label="item.value">{{ item.label }}</el-checkbox-button>
               </el-checkbox-group>
             </el-form-item>
           </el-col>
@@ -362,7 +362,7 @@ export default {
         // 年龄
         age: undefined,
         // 婚姻状况
-        marriaged: '已婚',
+        marriaged: '',
         // 生日
         birth: undefined,
         // 身份证号
@@ -371,7 +371,7 @@ export default {
         id_card_images: [],
         id_card_address: '',
         // 学历
-        academic: '初中',
+        academic: '',
         // 身高
         height: undefined,
         weight: undefined,
@@ -620,7 +620,7 @@ export default {
     submitForm() {
       // this.postForm.birth = parseInt(this.birth / 1000)
       this.postForm.nickname = this.postForm.name;
-      console.log(this.postForm);
+      //   console.log(this.postForm);
       this.$refs['postForm'].validate(valid => {
         if (valid) {
           this.loading = true;
@@ -661,7 +661,7 @@ export default {
     },
     updateForm() {
       this.postForm.nickname = this.postForm.name;
-      console.log(this.postForm);
+      //   console.log(this.postForm);
       this.$refs['postForm'].validate(valid => {
         if (valid) {
           this.loading = true;
