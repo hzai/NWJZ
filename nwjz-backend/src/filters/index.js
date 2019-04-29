@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2019-04-22 21:12:49
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-28 23:45:22
+ * @Last Modified time: 2019-04-29 15:48:23
  */
 // import parseTime, formatTime and set to filter
 
@@ -76,9 +76,9 @@ export function toThousandFilter(num) {
 
 export function codeToTextFilter(value) {
     let result = '';
-    if (value[0]) result = CodeToText[value[0]];
-    if (value[1]) result += CodeToText[value[1]];
-    if (value[2]) result += CodeToText[value[2]];
+    if (value && value[0]) result = CodeToText[value[0]];
+    if (value && value[1]) result += CodeToText[value[1]];
+    if (value && value[2]) result += CodeToText[value[2]];
     return result;
 }
 
@@ -116,6 +116,22 @@ export function workerStatusFilter(status) {
 export function workerStatusColorFilter(status) {
     const colorMap = [];
     staticOptions.workerStatus.forEach(item => {
+        colorMap[item.value] = item.color;
+    });
+    return colorMap[status];
+}
+
+export function employerStatusFilter(status) {
+    const statusMap = [];
+    staticOptions.employerStatus.forEach(item => {
+        statusMap[item.value] = item.label;
+    });
+    return statusMap[status];
+}
+
+export function employerStatusColorFilter(status) {
+    const colorMap = [];
+    staticOptions.employerStatus.forEach(item => {
         colorMap[item.value] = item.color;
     });
     return colorMap[status];

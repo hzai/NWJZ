@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2019-04-19 20:34:39
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-28 12:45:59
+ * @Last Modified time: 2019-04-29 15:26:13
  */
 import Vue from 'vue';
 import Router from 'vue-router';
@@ -193,8 +193,8 @@ export const asyncRoutes = [
                 hidden: true
             },
             {
-                path: 'client',
-                component: () => import('@/views/customer/client'),
+                path: 'list',
+                component: () => import('@/views/customer'),
                 name: 'customer-client',
                 meta: { title: 'customerClient', icon: 'people' }
             }

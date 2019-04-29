@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-19 21:19:02
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-11 00:38:38
+ * @Last Modified time: 2019-04-29 15:35:49
  */
 
 import request from '@/utils/request';
@@ -22,9 +22,9 @@ export function fetchEmployerList(query) {
     });
 }
 
-export function statProspectStatus(query) {
+export function statEmployerStatus(query) {
     return request({
-        url: '/employers/prospect/stat',
+        url: '/employers/stat',
         method: 'get',
         params: query
     });

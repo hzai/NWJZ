@@ -39,6 +39,9 @@ Object.keys(filters).forEach(key => {
     Vue.filter(key, filters[key]);
 });
 
+import common from './function/common';
+Vue.prototype.common = common;
+
 Vue.config.productionTip = false;
 
 new Vue({

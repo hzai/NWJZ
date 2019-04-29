@@ -11,22 +11,22 @@
         <!-- <span>{{scope.row.worker.name}}</span> -->
         <!-- </template> -->
       </el-table-column>
-      <el-table-column align="center" label="工作技能" min-width="100px">
+      <el-table-column align="center" label="工作技能" min-width="150px">
         <template slot-scope="scope">
           <el-rate disabled v-model="scope.row.skill" :colors="colors" show-text :texts="texts" />
         </template>
       </el-table-column>
-      <el-table-column align="center" label="工作态度" min-width="100px">
+      <el-table-column align="center" label="工作态度" min-width="150px">
         <template slot-scope="scope">
           <el-rate disabled v-model="scope.row.attitude" :colors="colors" show-text :texts="texts" />
         </template>
       </el-table-column>
-      <el-table-column align="center" min-width="100px" label="责任心">
+      <el-table-column align="center" min-width="150px" label="责任心">
         <template slot-scope="scope">
           <el-rate disabled v-model="scope.row.responsibility" :colors="colors" show-text :texts="texts" />
         </template>
       </el-table-column>
-      <el-table-column min-width="100px" align="center" label="人品">
+      <el-table-column min-width="150px" align="center" label="人品">
         <template slot-scope="scope">
           <el-rate disabled v-model="scope.row.character" :colors="colors" show-text :texts="texts" />
         </template>
@@ -49,7 +49,7 @@
       </el-table-column>
       <el-table-column align="center" label="操作" min-width="80" class-name="small-padding" fixed="right">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-edit" @click="handleUpdate(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>

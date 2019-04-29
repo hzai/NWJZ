@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:44:25
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-28 17:14:56
+ * @Last Modified time: 2019-04-29 15:34:54
  */
 import express from 'express';
 import expressJwt from 'express-jwt';
@@ -27,11 +27,11 @@ router
     );
 
 router
-    .route('/prospect/stat')
+    .route('/stat')
     .get(
         authRequired,
         roles(['admin', 'company', 'company_admin', 'editor']),
-        employerCtrl.statProspectStatus
+        employerCtrl.statEmployerStatus
     );
 
 router

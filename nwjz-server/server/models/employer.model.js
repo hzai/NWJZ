@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-12 23:54:27
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-28 17:58:25
+ * @Last Modified time: 2019-04-29 15:10:12
  */
 
 import Promise from 'bluebird';
@@ -14,9 +14,10 @@ import APIError from '../helpers/APIError';
  */
 const EmployerSchema = new mongoose.Schema(
     {
-        // 类型 prospect - 潜在客户 client - 客户
-        type: {
-            type: String
+        /* ** 隶属于的公司 */
+        company: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Company'
         },
         // 来源
         source: {
@@ -26,6 +27,22 @@ const EmployerSchema = new mongoose.Schema(
         name: {
             type: String,
             required: true
+        },
+        // 联系电话
+        contact_phone: {
+            type: String
+        },
+        // 现居地址 省市区
+        address_area: {
+            type: []
+        },
+        // 现居详细地址
+        detail_address: {
+            type: String
+        },
+        // 备注（特殊需求
+        remark: {
+            type: String
         },
         // 性别
         sex: {
@@ -47,16 +64,27 @@ const EmployerSchema = new mongoose.Schema(
         id_card_images: {
             type: []
         },
-        // 联系电话 本人电话
-        contact_phone: {
+        requirements: {
             type: String
         },
-        address: {
+        service_time: {
+            type: String
+        },
+        worker_age: {
+            type: String
+        },
+        worker_native_place: {
+            type: []
+        },
+        worker_exp: {
+            type: String
+        },
+        salary_range: {
             type: String
         },
         // 吃饭口味
         taste: {
-            type: String
+            type: []
         },
         // 家庭内人口
         family: {
@@ -66,14 +94,6 @@ const EmployerSchema = new mongoose.Schema(
         area: {
             type: Number
         },
-        // 服务类型（买菜、做饭、遛狗、接送孩子、照顾老人、手洗衣物（多选））
-        service_type: {
-            type: [String]
-        },
-        // 老人类型（健康、患病、瘫痪、特殊（单选）
-        old_man_type: {
-            type: String
-        },
         // 婴儿或幼童数量
         childrens: {
             type: Number
@@ -82,21 +102,14 @@ const EmployerSchema = new mongoose.Schema(
         pets: {
             type: Number
         },
-        requirements: {
-            type: String
+        childbirth: {
+            type: Date
         },
-        salary_range: {
-            type: String
+        images: {
+            type: []
         },
-        work_time: {
-            type: String
-        },
-        working_age: {
-            type: String
-        },
-        // 备注（特殊需求
-        remark: {
-            type: String
+        videos: {
+            type: []
         },
         // 附件
         attachment: {
@@ -117,10 +130,12 @@ const EmployerSchema = new mongoose.Schema(
             default: Date.now
         },
         created_by: {
-            type: mongoose.Schema.Types.ObjectId
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
         },
         updated_by: {
-            type: mongoose.Schema.Types.ObjectId
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
         }
     },
     {

@@ -132,7 +132,7 @@ import {
   fetchFinanceRecords,
   fetchWorkerFinanceRecords
 } from '@/api/finance';
-import { fetchDictsByCat, addDict, updateDict, deleteDict } from '@/api/dictionary';
+import { fetchDictsByCat } from '@/api/dictionary';
 import staticOptions from '@/data/options';
 const defaultModel = {
   worker: '',

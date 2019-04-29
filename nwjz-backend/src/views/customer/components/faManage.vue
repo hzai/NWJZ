@@ -108,6 +108,16 @@ export default {
   components: {
     // Upload
   },
+  props: {
+    isEdit: {
+      type: Boolean,
+      default: false
+    },
+    employerId: {
+      type: String,
+      default: undefined
+    }
+  },
   filters: {
     statusTypeFilter(status) {
       const statusMap = {
@@ -124,12 +134,6 @@ export default {
         2: '无效'
       };
       return statusMap[status];
-    }
-  },
-  props: {
-    isEdit: {
-      type: Boolean,
-      default: false
     }
   },
   data() {
@@ -357,8 +361,7 @@ export default {
       });
     },
     fetchData() {
-      const _id = this.$route.query.employerId;
-      fetchEmployer(_id)
+      fetchEmployer(this.employerId)
         .then(response => {
           this.postForm = response.data.data.employer;
           this.fetchSuccess = true;
@@ -369,12 +372,11 @@ export default {
         });
     },
     fetchContactList() {
-      const _id = this.$route.query.employerId;
       this.listLoading = true;
-      getContractListByEmployer(_id)
+      getContractListByEmployer(this.employerId)
         .then(response => {
           this.list = response.data.data.contracts;
-          console.log(this.list);
+          //   console.log(this.list);
           this.fetchSuccess = true;
           this.listLoading = false;
         })

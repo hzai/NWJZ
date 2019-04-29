@@ -1,8 +1,5 @@
 <template>
   <div class="createPost-container">
-    <!-- <el-steps :active="model.status" finish-status="success">
-      <el-step v-for="(item, key) in staticOptions.workerStatus" :key="key" :title="item.label"></el-step>
-    </el-steps> -->
     <el-form ref="postForm" style="padding:15px;" :model="model" label-width="85px" label-position="right" :rules="rules">
       <div class="createPost-main-container">
         <el-row>
@@ -122,7 +119,7 @@ export default {
       const res = await fetchWorkerComms(this.workerId);
       this.List = res.data.data.communications;
       //   console.log(this.List);
-      this.model.status = res.data.data.communications[0].status;
+      //   this.model.status = res.data.data.communications[0].status;
       // } else if (this.type === 'employer') {
       //     const res = await fetchEmployerComms(this.employerId);
       //     this.List = res.data.data.communications;

@@ -46,7 +46,7 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="阿姨籍贯" prop="native_place" class="postInfo-container-item">
-                  <el-cascader v-model="postForm.native_place" filterable :options="provinceAndCityData" @change="handleChange" />
+                  <el-cascader v-model="postForm.native_place" filterable :options="provinceAndCityData" />
                 </el-form-item>
               </el-col>
               <el-col :span="12">
@@ -288,8 +288,8 @@ import {
   provinceAndCityData,
   // regionData,
   // provinceAndCityDataPlus,
-  regionDataPlus,
-  CodeToText
+  regionDataPlus
+  //   CodeToText
   // TextToCode
 } from 'element-china-area-data';
 import { createWorker, fetchWorker, updateWorker } from '@/api/worker';
@@ -298,7 +298,6 @@ import staticOptions from '@/data/options';
 import city from '@/data/city';
 // import nationData from '@/data/nation';
 import { getShengXiao, getAstro } from '@/utils';
-
 const img_upload_api = process.env.VUE_APP_BASE_API + '/upload/addimg';
 const img_url = process.env.VUE_APP_IMG_URL;
 export default {
@@ -324,7 +323,7 @@ export default {
     };
     return {
       staticOptions,
-      CodeToText,
+      //   CodeToText,
       regionDataPlus,
       provinceAndCityData,
       selectedOptions: [],
@@ -506,10 +505,6 @@ export default {
     }
   },
   methods: {
-    handleChange(value) {
-      console.log(value);
-      console.log(CodeToText[value[2]]);
-    },
     id_card_change(value) {
       if (value.length === 18) {
         const birthStr =

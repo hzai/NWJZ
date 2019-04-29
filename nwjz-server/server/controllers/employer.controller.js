@@ -1,9 +1,10 @@
 /*
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:36:55
- * @Last Modified by: Arnie Carter
- * @Last Modified time: 2019-04-24 19:22:25
+ * @Last Modified by: Roy Chen
+ * @Last Modified time: 2019-04-29 15:59:10
  */
+import mongoose from 'mongoose';
 import Employer from '../models/employer.model';
 import Utils from '../helpers/Utils';
 /**
@@ -38,9 +39,9 @@ function get(req, res) {
  * @returns {Employer}
  */
 function create(req, res, next) {
-    //console.log(req.body)
     const employer = new Employer(req.body);
-    employer.create_by = req.payload.user;
+    employer.company = req.payload.company;
+    employer.created_by = req.payload.user;
     employer
         .save()
         .then(savedEmployer => {
@@ -131,9 +132,16 @@ async function list(req, res, next) {
         _filter.$and.push({
             status: status
         });
+    _filter.$and.push({
+        company: req.payload.company
+    });
     let total = await Employer.count(_filter);
     const query = Utils.handleQuery(req, total);
     Employer.find(_filter)
+        .populate({
+            path: 'created_by',
+            select: 'name'
+        })
         .limit(query.limit)
         .skip(query.skip)
         .sort({
@@ -157,13 +165,13 @@ async function list(req, res, next) {
 }
 
 /**
- * 统计status
+ * 统计status statEmployerStatus
  * @param {*} req
  * @param {*} res
  * @param {*} next
  */
-async function statProspectStatus(req, res, next) {
-    let _filter = {};
+async function statEmployerStatus(req, res, next) {
+    let _filter = { company: mongoose.Types.ObjectId(req.payload.company) };
     let total = await Employer.count(_filter);
     Employer.aggregate([
         { $match: _filter },
@@ -203,6 +211,6 @@ export default {
     create,
     update,
     list,
-    statProspectStatus,
+    statEmployerStatus,
     remove
 };

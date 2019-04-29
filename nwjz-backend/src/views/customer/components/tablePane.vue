@@ -4,26 +4,27 @@
       <el-input v-model="listQuery.name" style="width: 150px;" class="filter-item" placeholder="姓名" @keyup.enter.native="handleFilter" />
       <el-input v-model="listQuery.contact_phone" style="width: 150px;" class="filter-item" placeholder="联系电话" @keyup.enter.native="handleFilter" />
       <el-select v-if="status==='ALL'" v-model="listQuery.requirements" multiple class="filter-item" style="width: 130px" placeholder="需求" @change="handleFilter">
-        <el-option v-for="item in requirementOptions" :key="item.value" :label="item.label" :value="item.value" />
+        <el-option v-for="item in staticOptions.requirements" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
       <el-select v-if="status==='ALL'" v-model="listQuery.status" class="filter-item" style="width: 130px" placeholder="状态" @change="handleFilter">
-        <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
+        <el-option key="ALL" label="所有状态" value="ALL" />
+        <el-option v-for="item in staticOptions.employerStatus" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
       <el-button class="filter-item" style="margin-right:5px;margin-left: 5px;" type="primary" icon="el-icon-search" @click="handleFilter()">查询</el-button>
       <!-- <el-button :loading="downloadLoading" class="filter-item" style="margin-right:5px;margin-left: 5px;" type="primary" icon="el-icon-download" @click="handleDownload()">导出</el-button> -->
       <router-link style="margin-right:5px;" :to="{ path:'create'}">
-        <el-button class="filter-item" style="margin-left: 5px;" type="success" icon="el-icon-plus">{{ 'prospect'===type? '新增潜在客户':'新增雇主' }}</el-button>
+        <el-button class="filter-item" style="margin-left: 5px;" type="success" icon="el-icon-plus">新建客户</el-button>
       </router-link>
     </div>
     <el-table :key="tableKey" v-loading="listLoading" :border="true" :data="list" element-loading-text="给我一点时间" stripe fit highlight-current-row style="width: 100%">
-      <el-table-column align="center" prop="name" label="姓名" width="80">
+      <el-table-column align="center" prop="name" label="姓名" width="100">
         <template slot-scope="scope">
           <span class="link-type" @click="handleUpdate(scope.row)">{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="需求" width="80px">
-        <template>
-          <span>老年护理</span>
+        <template slot-scope="scope">
+          <span>{{scope.row.requirements}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" width="110px" label="联系电话">
@@ -33,7 +34,7 @@
       </el-table-column>
       <el-table-column align="left" label="地址" min-width="120px">
         <template slot-scope="scope">
-          <span>{{ scope.row.address }}</span>
+          <span>{{ scope.row.address_area | codeToTextFilter}}{{scope.row.detail_address}}</span>
         </template>
       </el-table-column>
       <el-table-column align="left" label="备注" min-width="100px">
@@ -44,19 +45,19 @@
 
       <el-table-column class-name="status-col" align="center" label="状态" width="80" sortable prop="status">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusTypeFilter">
-            {{ scope.row.status | statusFilter }}
+          <el-tag :type="scope.row.status | employerStatusColorFilter">
+            {{ scope.row.status | employerStatusFilter }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="来源" width="80px">
-        <template>
-          <span>线上</span>
+        <template slot-scope="scope">
+          <span>{{scope.row.source}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" width="80px" label="跟进人">
         <template slot-scope="scope">
-          <span>{{ scope.row.creater }}</span>
+          <span>{{ scope.row.created_by?scope.row.created_by.name:'' }}</span>
         </template>
       </el-table-column>
       <!-- <el-table-column align="center" label="操作" min-width="80" class-name="small-padding">
@@ -73,161 +74,81 @@
 </template>
 
 <script>
+import staticOptions from '@/data/options';
 import { fetchEmployerList, updateEmployer } from '@/api/employer';
 export default {
-    name: 'CustomerList',
-    filters: {
-        statusTypeFilter(status) {
-            const statusMap = {
-                0: 'primary',
-                1: 'info',
-                2: 'warning',
-                3: 'info',
-                4: 'info',
-                5: 'success',
-                6: 'warning',
-                7: 'danger',
-                8: 'danger'
-            };
-            return statusMap[status];
-        },
-        statusFilter(status) {
-            const statusMap = {
-                '0': '新建',
-                '1': '跟进中',
-                '2': '匹配中',
-                '3': '待面试',
-                '4': '待签单',
-                '5': '已服务',
-                '6': '已放弃',
-                '7': '已私签',
-                '8': '黑名单'
-            };
-            return statusMap[status];
+  name: 'CustomerList',
+  filters: {},
+  props: {
+    status: {
+      type: String,
+      default: 'ALL'
+    }
+  },
+  data() {
+    return {
+      staticOptions,
+      quick_search: 0,
+      tableKey: 0,
+      list: null,
+      total: null,
+      listLoading: true,
+      listQuery: {
+        page: 1,
+        limit: 10,
+        status: this.status,
+        name: undefined,
+        contact_phone: undefined,
+        requirements: []
+      }
+    };
+  },
+  created() {
+    this.getList();
+  },
+  methods: {
+    handleFilter() {
+      this.listQuery.page = 1;
+      this.getList();
+    },
+    handleSizeChange(val) {
+      this.listQuery.limit = val;
+      this.getList();
+    },
+    handleCurrentChange(val) {
+      this.listQuery.page = val;
+      this.getList();
+    },
+    async handleModifyStatus(row, status) {
+      this.listLoading = true;
+      row.status = status;
+      await updateEmployer(row._id, row).then(resp => {
+        if (resp.data.status === 0) {
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
+          this.listLoading = false;
         }
+      });
     },
-    props: {
-        type: {
-            type: String,
-            default: 'prospect'
-        },
-        status: {
-            type: String,
-            default: 'ALL'
+    getList() {
+      this.listLoading = true;
+      fetchEmployerList(this.listQuery).then(response => {
+        this.list = response.data.data.employers;
+        this.total = response.data.data.total;
+        this.listLoading = false;
+        // console.log(this.list);
+      });
+    },
+    handleUpdate(row) {
+      this.$router.push({
+        path: 'edit',
+        query: {
+          id: row._id
         }
-    },
-    data() {
-        return {
-            quick_search: 0,
-            tableKey: 0,
-            list: null,
-            total: null,
-            listLoading: true,
-            listQuery: {
-                page: 1,
-                limit: 10,
-                status: this.status,
-                type: this.type,
-                name: undefined,
-                contact_phone: undefined,
-                requirements: []
-            },
-            downloadLoading: false,
-            // 状态 0 - 新建 1 - 跟进中 2 - 匹配中 3 - 待面试 4 - 待签单 5 - 已服务 6 - 已放弃 7 - 已私签 8 - 黑名单
-            statusOptions: [
-                {
-                    value: 'ALL',
-                    label: '所有状态'
-                },
-                {
-                    value: '0',
-                    label: '新建'
-                },
-                {
-                    value: '1',
-                    label: '跟进中'
-                },
-                {
-                    value: '2',
-                    label: '匹配中'
-                },
-                {
-                    value: '3',
-                    label: '待面试'
-                },
-                {
-                    value: '4',
-                    label: '待签单'
-                },
-                {
-                    value: '5',
-                    label: '已服务'
-                },
-                {
-                    value: '6',
-                    label: '已放弃'
-                },
-                {
-                    value: '7',
-                    label: '已私签'
-                },
-                {
-                    value: '8',
-                    label: '黑名单'
-                }
-            ],
-            requirementOptions: [
-                { value: 'ZJBM', label: '找保姆' },
-                { value: 'ZYYS', label: '月嫂' },
-                { value: 'YYS', label: '育婴师' }
-            ]
-        };
-    },
-    created() {
-        this.getList();
-    },
-    methods: {
-        handleFilter() {
-            this.listQuery.page = 1;
-            this.getList();
-        },
-        handleSizeChange(val) {
-            this.listQuery.limit = val;
-            this.getList();
-        },
-        handleCurrentChange(val) {
-            this.listQuery.page = val;
-            this.getList();
-        },
-        async handleModifyStatus(row, status) {
-            this.listLoading = true;
-            row.status = status;
-            await updateEmployer(row._id, row).then(resp => {
-                if (resp.data.status === 0) {
-                    this.$message({
-                        message: '操作成功',
-                        type: 'success'
-                    });
-                    this.listLoading = false;
-                }
-            });
-        },
-        getList() {
-            this.listLoading = true;
-            fetchEmployerList(this.listQuery).then(response => {
-                this.list = response.data.data.employers;
-                this.total = response.data.data.total;
-                this.listLoading = false;
-            });
-        },
-        handleUpdate(row) {
-            this.$router.push({
-                path: 'edit',
-                query: {
-                    employerId: row._id
-                }
-            });
-        }
+      });
+    }
     // async handleDownload() {
     //     this.downloadLoading = true;
     //     const ExportJsonExcel = require('js-export-excel');
@@ -238,7 +159,7 @@ export default {
     //     toExcel.saveExcel(); // 保存
     //     this.downloadLoading = false;
     // }
-    }
+  }
 };
 </script>
 

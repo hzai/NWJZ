@@ -19,7 +19,7 @@
             </el-col>
             <el-col :span="10">
               <el-form-item label="服务时段" class="postInfo-container-item" prop="work_time">
-                <el-select v-model="postForm.work_time" style="width:180px;" placeholder="请选择">
+                <el-select v-model="postForm.service_time" style="width:180px;" placeholder="请选择">
                   <el-option v-for="(item, key) in staticOptions.serviceTime" :key="key" :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
@@ -36,7 +36,7 @@
             </el-col>
             <el-col :span="10">
               <el-form-item label="籍贯要求" class="postInfo-container-item">
-                <el-input v-model="postForm.name" placeholder="籍贯要求" style="width:180px;" />
+                <el-cascader v-model="postForm.worker_native_place" filterable :options="provinceAndCityData" style="width:180px;" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -50,17 +50,19 @@
               </el-form-item>
             </el-col>
             <el-col :span="10">
-              <el-form-item label="从业经验" class="postInfo-container-item" prop="working_age">
-                <el-select v-model="postForm.working_age" style="width:180px;" placeholder="请选择">
+              <el-form-item label="从业经验" class="postInfo-container-item" prop="worker_exp">
+                <el-select v-model="postForm.worker_exp" style="width:180px;" placeholder="请选择">
                   <el-option v-for="(item, key) in staticOptions.workingAge" :key="key" :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row style="padding-left:30px;">
-            <el-col :span="10">
+            <el-col :span="16">
               <el-form-item label="吃饭口味" prop="taste" class="postInfo-container-item">
-                <el-input v-model="postForm.taste" placeholder="吃饭口味" style="min-width:150px;" />
+                <el-checkbox-group v-model="postForm.taste">
+                  <el-checkbox-button v-for="(item, key) in staticOptions.caixi" :key="key" :label="item.value">{{ item.label }}</el-checkbox-button>
+                </el-checkbox-group>
               </el-form-item>
             </el-col>
           </el-row>
@@ -71,21 +73,26 @@
             </span>
           </div>
           <el-row style="padding-left:30px;">
-            <el-col :span="10">
+            <el-col :span="8">
               <el-form-item label="家庭人口" prop="family" class="postInfo-container-item">
                 <el-input v-model.number="postForm.family" placeholder="家庭人口" style="min-width:150px;" :maxlength="2" />
               </el-form-item>
             </el-col>
-            <el-col :span="10">
+            <el-col :span="8">
               <el-form-item label="面积" prop="area" class="postInfo-container-item">
-                <el-input v-model.number="postForm.area" placeholder="面积" style="min-width:150px;" :maxlength="5" />
+                <el-input v-model.number="postForm.area" placeholder="面积(平方米)" style="min-width:150px;" :maxlength="5" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row style="padding-left:30px;">
-            <el-col :span="10">
+            <el-col :span="8">
+              <el-form-item label="宝宝数量" class="postInfo-container-item" prop="childrens">
+                <el-input v-model.number="postForm.childrens" placeholder="宝宝数量" style="min-width:150px;" :maxlength="10" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
               <el-form-item label="预产期" class="postInfo-container-item" prop="childrens">
-                <el-input v-model.number="postForm.childrens" placeholder="幼童数量" style="min-width:150px;" :maxlength="10" />
+                <el-date-picker v-model="postForm.childbirth" type="date" format="yyyy-MM-dd" placeholder="选择日期" style="width:180px;" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -98,12 +105,14 @@
 
           <el-row style="padding-left:30px;">
             <el-col :span="18">
-              <el-upload ref="attachment_uploader" :on-success="handelDetailPicSuccess" :file-list="postForm.attachment" :action="img_upload_api" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
-                <i class="el-icon-plus" />
-              </el-upload>
-              <el-dialog :visible.sync="dialogVisible" size="tiny">
-                <img width="100%" :src="dialogImageUrl" alt="">
-              </el-dialog>
+              <el-form-item label="照片" class="postInfo-container-item">
+                <el-upload ref="attachment_uploader" :on-success="handleImagesSuccess" :file-list="imageList" :action="img_upload_api" list-type="picture-card" :on-preview="handleImagesPreview" :on-remove="handleRemoveImage">
+                  <i class="el-icon-plus" />
+                </el-upload>
+                <el-dialog :visible.sync="dialogVisible" size="tiny">
+                  <img width="100%" :src="dialogImageUrl" alt="">
+                </el-dialog>
+              </el-form-item>
             </el-col>
           </el-row>
 
@@ -124,15 +133,13 @@
 </template>
 
 <script>
-// import Upload from '@/components/Upload/singleImage3';
-// import BackCorner from '@/components/BackCorner';
+import { regionDataPlus, provinceAndCityData } from 'element-china-area-data';
 import { fetchEmployer, updateEmployer } from '@/api/employer';
 import requirementsData from '@/data/requirements';
 import { mapGetters } from 'vuex';
 import staticOptions from '@/data/options';
-// import city from '@/data/city';
-const img_upload_api = process.env.BASE_API + '/upload/addimg';
-const img_url = process.env.IMG_URL;
+const img_upload_api = process.env.VUE_APP_BASE_API + '/upload/addimg';
+const img_url = process.env.VUE_APP_IMG_URL;
 export default {
   name: 'RequirementsDetail',
   components: {
@@ -161,14 +168,22 @@ export default {
     isEdit: {
       type: Boolean,
       default: false
+    },
+    employerId: {
+      type: String,
+      default: undefined
     }
   },
   data() {
     return {
       staticOptions,
+      regionDataPlus,
+      provinceAndCityData,
       dialogImageUrl: '',
       dialogVisible: false,
-      requirementsData,
+      dialogVideoVisible: false,
+      imageList: [],
+      videoList: [],
       img_upload_api,
       img_url,
       tableKey: 0,
@@ -180,157 +195,62 @@ export default {
         limit: 10
       },
       postForm: {
-        // 状态 0 - 未分配、1 - 已分配、2 -需更换
-        status: 0,
+        /* ** 隶属于的公司 */
+        company: '',
+        // 来源
+        source: '',
         // 姓名
         name: '',
+        // 联系电话
+        contact_phone: '',
+        // 现居地址 省市区
+        address_area: [],
+        // 现居详细地址
+        detail_address: '',
+        // 备注（特殊需求
+        remark: '',
         // 性别
-        sex: '男',
+        sex: '',
         // 籍贯
-        native_place: '',
+        native_place: [],
         // 年龄
         age: undefined,
         // 身份证号
         id_card: '',
-        // 联系电话
-        contact_phone: '',
-        // 地址
-        address: '',
+        // 身份证号图片
+        id_card_images: [],
+        requirements: '',
+        service_time: '',
+        worker_age: '',
+        worker_native_place: [],
+        worker_exp: '',
+        salary_range: '',
         // 吃饭口味
-        taste: '',
+        taste: [],
         // 家庭内人口
         family: undefined,
         // 面积
         area: undefined,
-        // 服务类型（买菜、做饭、遛狗、接送孩子、照顾老人、手洗衣物（多选））
-        service_type: [],
-        // 老人类型（健康、患病、瘫痪、特殊（单选）
-        old_man_type: '',
         // 婴儿或幼童数量
         childrens: undefined,
         // 宠物数量
         pets: undefined,
-        requirements: '',
-        work_time: '',
-        working_age: '',
-        salary_range: '',
-        // 备注（特殊需求
-        remark: '',
+        childbirth: new Date(),
         // 附件
-        attachment: []
+        attachment: [],
+        images: [],
+        videos: [],
+        // 状态 0: '待跟进' 1: '跟进中' 2: '已面试'  3: '已签约' 4: '已失效'
+        status: 0
       },
       contractForm: null,
       fetchSuccess: true,
       loading: false,
-      rules: {},
-      statusOptions: [
-        {
-          value: 0,
-          label: '待跟进'
-        },
-        {
-          value: 1,
-          label: '跟进中'
-        },
-        {
-          value: 2,
-          label: '已面试'
-        },
-        {
-          value: 3,
-          label: '已签约'
-        },
-        {
-          value: 4,
-          label: '已失效'
-        },
-        {
-          value: 5,
-          label: '黑名单'
-        }
-      ],
-      workEspOptions: [
-        {
-          value: '1年',
-          label: '1年'
-        },
-        {
-          value: '2年',
-          label: '2年'
-        },
-        {
-          value: '3年',
-          label: '3年'
-        },
-        {
-          value: '4年',
-          label: '4年'
-        },
-        {
-          value: '5年',
-          label: '5年'
-        },
-        {
-          value: '6年',
-          label: '6年'
-        },
-        {
-          value: '7年',
-          label: '7年'
-        },
-        {
-          value: '8年',
-          label: '8年'
-        },
-        {
-          value: '9年',
-          label: '9年'
-        },
-        {
-          value: '10年以上',
-          label: '10年以上'
-        }
-      ],
-
-      sourceOption: [
-        {
-          value: '0',
-          label: '线上'
-        },
-        {
-          value: '1',
-          label: '线下'
-        },
-        {
-          value: '2',
-          label: '客户转介绍'
-        }
-      ],
-      oldManOptions: [
-        {
-          value: '0',
-          label: '健康'
-        },
-        {
-          value: '1',
-          label: '患病'
-        },
-        {
-          value: '2',
-          label: '瘫痪'
-        },
-        {
-          value: '3',
-          label: '特殊'
-        }
-      ]
+      rules: {}
     };
   },
   computed: {
-    ...mapGetters(['roles']),
-    contentRemarkShortLength() {
-      return this.postForm.remark.length;
-    }
+    ...mapGetters(['roles'])
   },
   created() {
     if (this.isEdit) {
@@ -366,6 +286,42 @@ export default {
       }
       return isJPG && isLt2M;
     },
+    handleRemoveImage(file, fileList) {
+      //   this.postForm.images = [];
+      //   fileList.forEach(item => {
+      //     this.postForm.images.push(item);
+      //   });
+      this.postForm.images.splice(this.postForm.images.indexOf(file), 1);
+    },
+    handleImagesPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handleImagesSuccess(res, file, fileList) {
+      if (res.status === 0) {
+        this.postForm.images.push({
+          url: img_url + res.image_path
+        });
+      }
+    },
+    handleRemoveVideo(file, fileList) {
+      //   this.postForm.videos = [];
+      //   fileList.forEach(item => {
+      //     this.postForm.videos.push(item);
+      //   });
+      this.postForm.videos.splice(this.postForm.videos.indexOf(file), 1);
+    },
+    handleVideosPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVideoVisible = true;
+    },
+    handleVideosSuccess(res, file, fileList) {
+      if (res.status === 0) {
+        this.postForm.videos.push({
+          url: img_url + res.image_path
+        });
+      }
+    },
     handleUpdate(row) {
       this.$router.push({
         path: 'editContract',
@@ -383,11 +339,13 @@ export default {
       });
     },
     fetchData() {
-      const _id = this.$route.query.employerId;
-      fetchEmployer(_id)
+      fetchEmployer(this.employerId)
         .then(response => {
           this.postForm = response.data.data.employer;
+          this.imageList = Object.assign([], this.postForm.images);
+          this.videoList = Object.assign([], this.postForm.videos);
           this.fetchSuccess = true;
+          //   console.log(this.postForm);
         })
         .catch(err => {
           this.fetchSuccess = false;
@@ -396,12 +354,12 @@ export default {
     },
 
     updateForm() {
-      console.log(this.postForm);
+      //   console.log(this.postForm);
       this.$refs['postForm'].validate(valid => {
         if (valid) {
           this.loading = true;
           updateEmployer(this.postForm._id, this.postForm).then(resp => {
-            console.log(resp);
+            // console.log(resp);
             if (!resp.data) {
               this.$notify({
                 title: '失败',

@@ -8,6 +8,13 @@ export default {
         { value: 5, label: '转行', color: 'info' },
         { value: 6, label: '黑名单', color: 'danger' }
     ],
+    employerStatus: [
+        { value: 0, label: '待跟进', color: '' },
+        { value: 1, label: '跟进中', color: 'warning' },
+        { value: 2, label: '已面试', color: 'warning' },
+        { value: 3, label: '已签约', color: 'success' },
+        { value: 4, label: '已失效', color: 'info' }
+    ],
     zodiac: [
         { value: '猴', label: '猴' },
         { value: '鸡', label: '鸡' },
@@ -195,11 +202,11 @@ export default {
         { value: '维修', label: '维修' }
     ],
     serviceTime: [
-        { value: '0', label: '住家' },
-        { value: '1', label: '走家' },
-        { value: '2', label: '上午中餐' },
-        { value: '3', label: '下午晚餐' },
-        { value: '4', label: '全天白班' },
-        { value: '5', label: '晚班' }
+        { value: '住家', label: '住家' },
+        { value: '走家', label: '走家' },
+        { value: '上午中餐', label: '上午中餐' },
+        { value: '下午晚餐', label: '下午晚餐' },
+        { value: '全天白班', label: '全天白班' },
+        { value: '晚班', label: '晚班' }
     ]
 };

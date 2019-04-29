@@ -7,46 +7,40 @@
           <span>{{ postForm.name }}&nbsp;&nbsp;&nbsp;&nbsp;{{ postForm.contact_phone }}</span>
         </el-col>
         <el-col :span="6">
-          <span>需求:保姆(来源) &nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <span>需求:{{postForm.requirements}}({{postForm.source}}) &nbsp;&nbsp;&nbsp;&nbsp;</span>
         </el-col>
         <el-col :span="2">
-          <el-tag>{{ postForm.status }}</el-tag>
+          <el-tag :type="postForm.status | employerStatusColorFilter">{{ postForm.status | employerStatusFilter}}</el-tag>
         </el-col>
       </el-row>
       <el-row style="padding-top:3px;">
         <el-col :span="12">
-          <span>地址:&nbsp;&nbsp;{{ postForm.native_place + postForm.address }}</span>
+          <span>地址:&nbsp;&nbsp;{{ postForm.address_area | codeToTextFilter}}{{ postForm.detail_address }}</span>
         </el-col>
         <el-col :span="12">
           <span>备注:&nbsp;&nbsp;{{ postForm.remark }}</span>
         </el-col>
       </el-row>
-      <!-- <el-row style="padding-top:8px;">
-        <el-col :span="15">
-          <span>备注:&nbsp;&nbsp;{{ postForm.remark }}</span>
-        </el-col>
-      </el-row> -->
     </div>
 
-    <el-tabs v-model="activeName">
-      <el-tab-pane key="communication" label="跟进记录" name="communication">
-        <communication-pane :employer-id="this.$route.query.employerId" />
-      </el-tab-pane>
+    <el-tabs v-model="activeName" @tab-click="clickParent">
       <el-tab-pane key="detail" label="需求情况" name="detail">
-        <requirements-detail :is-edit="true" />
+        <requirements-detail :is-edit="true" :employer-id="this.$route.query.id" />
+      </el-tab-pane>
+      <el-tab-pane key="communication" label="跟进记录" name="communication">
+        <communication-pane ref="comm" :employer-id="this.$route.query.id" />
       </el-tab-pane>
       <el-tab-pane key="workersearch" label="阿姨筛选" name="workersearch">
-        <worker-mapping :is-edit="true" />
+        <worker-mapping :is-edit="true" :employer-id="this.$route.query.id" />
       </el-tab-pane>
       <el-tab-pane key="contract" label="合同管理" name="contract">
-        <customer-contract :is-edit="true" />
+        <customer-contract :is-edit="true" :employer-id="this.$route.query.id" />
       </el-tab-pane>
       <el-tab-pane key="insurance" label="保险记录" name="insurance">
-        <!-- TODO 要fix -->
-        <insurance-pane :is-edit="true" :worker-id="this.$route.query.employerId" />
+        <insurance-pane :is-edit="true" :employer-id="this.$route.query.id" />
       </el-tab-pane>
       <el-tab-pane key="moneyio" label="收支记录" name="moneyio">
-        <fa-manage :is-edit="true" />
+        <fa-manage :is-edit="true" :employer-id="this.$route.query.id" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -74,7 +68,7 @@ export default {
   filters: {},
   data() {
     return {
-      activeName: 'communication',
+      activeName: 'detail',
       postForm: {}
     };
   },
@@ -82,12 +76,18 @@ export default {
     this.fetchData();
   },
   methods: {
+    clickParent(tab, event) {
+      switch (tab.label) {
+        case '跟进记录':
+          this.$refs.comm.parentHandleclick(this.postForm);
+      }
+    },
     fetchData() {
-      const _id = this.$route.query.employerId;
+      const _id = this.$route.query.id;
       fetchEmployer(_id)
         .then(response => {
           this.postForm = response.data.data.employer;
-          console.log(this.postForm);
+          //   console.log(this.postForm);
         })
         .catch(err => {
           console.log(err);
