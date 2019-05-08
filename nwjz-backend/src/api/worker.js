@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2017-12-19 21:19:02
- * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-28 14:33:44
+ * @Last Modified by: Arnie Carter
+ * @Last Modified time: 2019-05-08 07:27:20
  */
 
 import request from '@/utils/request';
@@ -24,6 +24,14 @@ export function fetchWorker(_id) {
 export function fetchWorkerList(query) {
     return request({
         url: '/workers',
+        method: 'get',
+        params: query
+    });
+}
+
+export function queryWorkers(query) {
+    return request({
+        url: '/queryWorkers',
         method: 'get',
         params: query
     });

@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2017-12-12 23:54:27
- * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-03-27 14:50:19
+ * @Last Modified by: Arnie Carter
+ * @Last Modified time: 2019-05-08 07:02:26
  */
 import Promise from 'bluebird';
 import mongoose from 'mongoose';
@@ -18,6 +18,23 @@ const WorkerRecordSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Worker',
         required: true
+    },
+    // 合同劳务报酬  元/月
+    service_payment: {
+        type: Number,
+        required: false
+    },
+    // 每月休息天数
+    rest_day: {
+        type: Number
+    },
+     // 加班费用 每天
+     overtime_expenses: {
+        type: Number
+    },
+    // 阿姨中介费用
+    worker_intermediaty_cost: {
+        type: Number
     },
     // 开始日期
     start_date: {
@@ -45,12 +62,20 @@ const ReviewRecordSchema = new mongoose.Schema({
     review_type: {
         type: String
     },
-    // 回访情况
+    // 满意度
+    review_race: {
+        type: String
+    },
+    // 回访内容
     review_content: {
         type: String
     },
     // 回访人
     review_person: {
+        type: String
+    },
+    // 备注
+    remark: {
         type: String
     }
 });
@@ -63,6 +88,11 @@ const ContractSchema = new mongoose.Schema(
         contract_no: {
             type: String,
         },
+        /* ** 隶属于的公司 */
+        company: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Company'
+        },
         // 关联 contract
         employer: {
             type: mongoose.Schema.Types.ObjectId,
@@ -74,6 +104,14 @@ const ContractSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Worker',
             required: true
+        },
+        // 合同类型 1 - 合同 2 - 订单
+        contact_type: {
+            type: Number
+        },
+        // 合同详细类型
+        contact_detail_type: {
+            type: String
         },
         // 地址
         address: {
@@ -99,6 +137,10 @@ const ContractSchema = new mongoose.Schema(
             type: Number,
             required: false
         },
+        // 钟点工订单应收费用
+        order_payment: {
+            type: Number
+        },
         // 每月休息天数
         rest_day: {
             type: Number
@@ -113,6 +155,10 @@ const ContractSchema = new mongoose.Schema(
         },
         // 合同中介费用
         contract_intermediary_cost: {
+            type: Number
+        },
+        // 阿姨中介费用
+        worker_intermediaty_cost: {
             type: Number
         },
         // 每次中介费用

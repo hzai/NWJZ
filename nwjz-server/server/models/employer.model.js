@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2017-12-12 23:54:27
- * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-29 15:10:12
+ * @Last Modified by: Arnie Carter
+ * @Last Modified time: 2019-05-08 06:20:58
  */
 
 import Promise from 'bluebird';
@@ -70,21 +70,33 @@ const EmployerSchema = new mongoose.Schema(
         service_time: {
             type: String
         },
-        worker_age: {
-            type: String
-        },
+        // 阿姨籍贯要求
         worker_native_place: {
             type: []
         },
+        // 阿姨从业经验
         worker_exp: {
             type: String
         },
-        salary_range: {
-            type: String
+        // 阿姨薪资要求最低
+        salary_min: {
+            type: Number
+        },
+        // 阿姨薪资要求最低
+        salary_max: {
+            type: Number
         },
         // 吃饭口味
         taste: {
             type: []
+        },
+        // 年龄要求最小
+        age_min: {
+            type: Number
+        },
+        // 年龄要求最大
+        age_max: {
+            type: Number
         },
         // 家庭内人口
         family: {
@@ -102,6 +114,7 @@ const EmployerSchema = new mongoose.Schema(
         pets: {
             type: Number
         },
+        // 预产期
         childbirth: {
             type: Date
         },

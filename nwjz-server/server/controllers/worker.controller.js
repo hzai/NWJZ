@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:36:55
- * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-29 20:29:43
+ * @Last Modified by: Arnie Carter
+ * @Last Modified time: 2019-05-08 07:39:52
  */
 import mongoose from 'mongoose';
 import Worker from '../models/worker.model';
@@ -290,6 +290,50 @@ async function getFreeWorkers(req, res, next) {
 }
 
 /**
+ * 获取保姆，联想输入 - 根据公司
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+async function queryWorkers(req, res, next) {
+    const { is_employed = true } = req.query;
+    let _filter = {
+        is_employed: is_employed
+    };
+
+    if (Utils.isCompany(req.payload.roles)) {
+        _filter.$and.push({
+            belong_to: req.payload.user
+        });
+    } else {
+        _filter.$and.push({
+            belong_to: null
+        });
+    }
+
+    let total = await Worker.count(_filter);
+    const query = Utils.handleQuery(req, total);
+    Worker.find(_filter)
+        .projection({'name': 1, 'contact_phone': 1, '_id': 1})
+        .sort({
+            created_time: 1
+        })
+        .exec()
+        .then(workers => {
+            res.json({
+                status: 0,
+                type: 'SUCCESS',
+                data: {
+                    total,
+                    workers
+                },
+                message: '获取保姆服务人员列表成功'
+            });
+        })
+        .catch(e => next(e));
+}
+
+/**
  * 统计status
  * @param {*} req
  * @param {*} res
@@ -339,5 +383,6 @@ export default {
     getWorkers,
     getFreeWorkers,
     statWorkerStatus,
+    queryWorkers,
     remove
 };
