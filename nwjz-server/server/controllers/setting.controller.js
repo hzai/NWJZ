@@ -2,20 +2,15 @@
  * @Author = Roy Chen
  * @Date = 2017-12-13 00:36:55
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2018-04-05 13:42:10
+ * @Last Modified time: 2019-05-08 14:19:52
  */
-import User from '../models/user.model';
 import Setting from '../models/setting.model';
-import Auth from '../models/auth.model';
-import config from '../../config/config';
-import Utils from '../helpers/Utils';
-const passport = require('passport');
 /**
  * Load setting and append to req.
  */
 function load(req, res, next, id) {
     Setting.get(id)
-        .then((setting) => {
+        .then(setting => {
             req.setting = setting; // eslint-disable-line no-param-reassign
             return next();
         })
@@ -44,7 +39,7 @@ function get(req, res) {
 function create(req, res, next) {
     // console.log(req.body)
     const setting = new Setting(req.body);
-    setting.create_by = req.payload.user;
+    setting.created_by = req.payload.user;
     setting
         .save()
         .then(savedSetting =>
@@ -90,7 +85,7 @@ function getUserProtocol(req, res, next) {
     const _filter = { isSystem: true };
     Setting.findOne(_filter, 'user_protocol')
         .exec()
-        .then((setting) => {
+        .then(setting => {
             res.json({
                 status: 0,
                 type: 'SUCCESS',
@@ -111,7 +106,7 @@ function getBanners(req, res, next) {
     const _filter = { isSystem: true };
     Setting.findOne(_filter, 'banner')
         .exec()
-        .then((setting) => {
+        .then(setting => {
             res.json({
                 status: 0,
                 type: 'SUCCESS',

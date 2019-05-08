@@ -2,7 +2,7 @@
  * @Author = Roy Chen
  * @Date = 2017-12-13 00:36:55
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2018-07-05 17:07:59
+ * @Last Modified time: 2019-04-29 21:55:14
  */
 import Message from '../models/message.model';
 import User from '../models/user.model';
@@ -44,7 +44,7 @@ function get(req, res) {
 function create(req, res, next) {
     //console.log(req.body)
     const message = new Message(req.body);
-    message.create_by = req.payload.user;
+    message.created_by = req.payload.user;
     message
         .save()
         .then(savedMessage => {
@@ -109,7 +109,8 @@ async function list(req, res, next) {
 
     Message.find(_filter)
         .populate({
-            path: 'user', select: 'nickname avatar'
+            path: 'user',
+            select: 'nickname avatar'
         })
         .sort({
             created_time: -1

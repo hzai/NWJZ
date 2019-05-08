@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2019-04-01 21:07:26
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-01 22:02:24
+ * @Last Modified time: 2019-04-29 21:55:09
  */
 
 import InsCompany from '../models/inscompany.model';
@@ -43,7 +43,7 @@ function get(req, res) {
  */
 async function create(req, res, next) {
     const insurance_company = new InsCompany(req.body);
-    insurance_company.create_by = req.payload.user;
+    insurance_company.created_by = req.payload.user;
     insurance_company
         .save()
         .then(savedInsCompany => {
@@ -64,7 +64,7 @@ async function create(req, res, next) {
  * @returns {InsCompany}
  */
 function update(req, res, next) {
-    console.log('req.inscomId = ',req.inscomId)
+    console.log('req.inscomId = ', req.inscomId);
     const insurance_company = req.body;
     insurance_company.updated_time = Date.now();
     insurance_company.updated_by = req.payload.user;
@@ -89,11 +89,8 @@ function update(req, res, next) {
  * @param {*} next
  */
 async function getInsCompanys(req, res, next) {
-    const {
-        status = 'ALL',
-    } = req.query;
-    let _filter = {
-    };
+    const { status = 'ALL' } = req.query;
+    let _filter = {};
     if (status !== 'ALL') {
         _filter.$and.push({
             status: status
