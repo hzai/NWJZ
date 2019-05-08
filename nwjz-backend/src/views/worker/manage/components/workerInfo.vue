@@ -64,8 +64,10 @@ export default {
       switch (tab.label) {
         case '沟通记录':
           this.$refs.comm.parentHandleclick(this.worker);
+          break;
         case '阿姨简历':
           this.$refs.resume.parentHandleclick(this.worker);
+          break;
       }
     },
     fetchData() {

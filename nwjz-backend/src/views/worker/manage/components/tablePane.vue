@@ -20,7 +20,7 @@
       </el-select>
        -->
       <el-select v-model="listQuery.work_type" class="filter-item" style="width: 130px" multiple placeholder="工作意向" @change="handleFilter">
-        <el-option v-for="item in workTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
+        <el-option v-for="item in staticOptions.job" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleReset">重置</el-button>
@@ -31,19 +31,19 @@
         <el-collapse-item title="详细筛选（点击展开）" name="1">
           <div>
             <el-select v-model="listQuery.native_place" class="filter-item" style="width: 130px" filterable multiple placeholder="籍贯" @change="handleFilter">
-              <el-option v-for="item in nativePlaceOptions" :key="item.value" :label="item.label" :value="item.value" />
+              <el-option v-for="item in provinceAndCityData" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
             <el-select v-model="listQuery.credentials" class="filter-item" style="width: 130px;margin-left:15px;" multiple placeholder="资格证书" @change="handleFilter">
-              <el-option v-for="item in credentialOptions" :key="item.value" :label="item.label" :value="item.value" />
+              <el-option v-for="item in staticOptions.credentials" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
-            <el-input v-model="listQuery.name" style="width: 100px;margin-left:15px;" class="filter-item" placeholder="最小年龄" />
+            <el-input v-model="listQuery.ageMin" style="width: 100px;margin-left:15px;" class="filter-item" placeholder="最小年龄" @keyup.enter.native="handleFilter" />
             <span> - </span>
-            <el-input v-model="listQuery.name" style="width: 100px;" class="filter-item" placeholder="最大年龄" />
-            <el-input v-model="listQuery.name" style="width: 100px;margin-left:15px;" class="filter-item" placeholder="最低薪资" />
+            <el-input v-model="listQuery.ageMax" style="width: 100px;" class="filter-item" placeholder="最大年龄" @keyup.enter.native="handleFilter" />
+            <el-input v-model="listQuery.salaryMin" style="width: 100px;margin-left:15px;" class="filter-item" placeholder="最低薪资" @keyup.enter.native="handleFilter" />
             <span> - </span>
-            <el-input v-model="listQuery.name" style="width: 100px;" class="filter-item" placeholder="最高薪资" />
+            <el-input v-model="listQuery.salaryMax" style="width: 100px;" class="filter-item" placeholder="最高薪资" @keyup.enter.native="handleFilter" />
             <el-select v-model="listQuery.zodiac" class="filter-item" style="width: 130px;margin-left:15px;" placeholder="属相" @change="handleFilter">
-              <el-option v-for="item in zodiacOptions" :key="item.value" :label="item.label" :value="item.value" />
+              <el-option v-for="item in staticOptions.zodiac" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </div>
         </el-collapse-item>
@@ -87,7 +87,7 @@
       </el-table-column>
       <el-table-column align="center" label="籍贯" width="120">
         <template slot-scope="scope">
-          <span>{{ scope.row.native_place | codeToTextFilter | ellipsis }}</span>
+          <span>{{ scope.row.native_place | nativePlaceFilter }}</span>
         </template>
       </el-table-column>
       <!-- <el-table-column align="center" label="民族" width="100">
@@ -135,33 +135,15 @@
 </template>
 
 <script>
+import { provinceAndCityData } from 'element-china-area-data';
 import { fetchWorkerList, updateWorker } from '@/api/worker';
-// import staticOptions from '@/data/options';
+import staticOptions from '@/data/options';
 import place from '@/data/place';
 import nation from '@/data/nation';
 import zodiac from '@/data/zodiac';
 export default {
   name: 'WorkerManageTable',
-  filters: {
-    statusTypeFilter(status) {
-      const statusMap = {
-        0: 'warning',
-        1: 'success',
-        2: 'info',
-        3: 'danger'
-      };
-      return statusMap[status];
-    },
-    statusFilter(status) {
-      const statusMap = {
-        0: '待岗',
-        1: '在岗',
-        2: '离职',
-        3: '黑名单'
-      };
-      return statusMap[status];
-    }
-  },
+  filters: {},
   props: {
     status: {
       type: String,
@@ -170,6 +152,8 @@ export default {
   },
   data() {
     return {
+      provinceAndCityData,
+      staticOptions,
       tableKey: 0,
       list: null,
       total: null,
@@ -187,6 +171,10 @@ export default {
         native_place: [],
         nation: '',
         zodiac: '',
+        ageMin: undefined,
+        ageMax: undefined,
+        salaryMin: undefined,
+        salaryMax: undefined,
         working_experience: undefined,
         introduce: undefined
       },
@@ -202,126 +190,13 @@ export default {
         work_type: [],
         native_place: [],
         zodiac: '',
+        ageMin: undefined,
+        ageMax: undefined,
+        salaryMin: undefined,
+        salaryMax: undefined,
         working_experience: undefined,
         introduce: undefined
-      },
-      statusOptions: [
-        {
-          value: 'ALL',
-          label: '所有状态'
-        },
-        {
-          value: 0,
-          label: '待岗'
-        },
-        {
-          value: 1,
-          label: '在岗'
-        },
-        {
-          value: 2,
-          label: '离职'
-        },
-        {
-          value: 3,
-          label: '黑名单'
-        }
-      ],
-      employedOptions: [
-        {
-          value: 'ALL',
-          label: '所有'
-        },
-        {
-          value: true,
-          label: '是'
-        },
-        {
-          value: false,
-          label: '否'
-        }
-      ],
-      languageOptions: [
-        {
-          value: '普通话',
-          lable: '普通话'
-        },
-        {
-          value: '广东话',
-          lable: '广东话'
-        },
-        {
-          value: '客家话',
-          lable: '客家话'
-        },
-        {
-          value: '潮州话',
-          lable: '潮州话'
-        }
-      ],
-      credentialOptions: [
-        {
-          value: '月嫂证',
-          lable: '月嫂证'
-        },
-        {
-          value: '育婴师证',
-          lable: '育婴师证'
-        },
-        {
-          value: '护理证',
-          lable: '护理证'
-        },
-        {
-          value: '等级上岗证',
-          lable: '等级上岗证'
-        },
-        {
-          value: '其他证',
-          lable: '其他证'
-        }
-      ],
-      workTypeOptions: [
-        {
-          value: '钟点工',
-          lable: '钟点工'
-        },
-        {
-          value: '日常保洁',
-          lable: '日常保洁'
-        },
-        {
-          value: '做饭阿姨',
-          lable: '做饭阿姨'
-        },
-        {
-          value: '住家保姆',
-          lable: '住家保姆'
-        },
-        {
-          value: '不住家保姆',
-          lable: '不住家保姆'
-        },
-        {
-          value: '专业月嫂',
-          lable: '专业月嫂'
-        },
-        {
-          value: '育婴师',
-          lable: '育婴师'
-        },
-        {
-          value: '养老服务',
-          lable: '养老服务'
-        },
-        {
-          value: '专项保洁',
-          lable: '专项保洁'
-        }
-      ],
-      nativePlaceOptions: place,
-      nationOptions: nation,
-      zodiacOptions: zodiac
+      }
     };
   },
   created() {

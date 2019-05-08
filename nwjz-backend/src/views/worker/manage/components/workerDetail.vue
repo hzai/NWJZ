@@ -46,7 +46,10 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="阿姨籍贯" prop="native_place" class="postInfo-container-item">
-                  <el-cascader v-model="postForm.native_place" filterable :options="provinceAndCityData" />
+                  <!-- <el-cascader v-model="postForm.native_place" filterable :options="provinceAndCityDataPlus" /> -->
+                  <el-select v-model="postForm.native_place" filterable style="width:180px;" placeholder="请选择">
+                    <el-option v-for="(item, key) in provinceAndCityData" :key="key" :label="item.label" :value="item.value" />
+                  </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
@@ -238,8 +241,8 @@
 
         <el-row style="padding-left:30px;">
           <el-col :span="16">
-            <el-form-item label="薪资要求" class="postInfo-container-item">
-              <el-input placeholder="薪资" style="max-width:180px;margin-right:10px;" :maxlength="5" />
+            <el-form-item label="薪资要求" prop="salary" class="postInfo-container-item">
+              <el-input v-model.number="postForm.salary" placeholder="薪资要求" style="width:180px;" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -287,7 +290,7 @@
 import {
   provinceAndCityData,
   // regionData,
-  // provinceAndCityDataPlus,
+  provinceAndCityDataPlus,
   regionDataPlus
   //   CodeToText
   // TextToCode
@@ -326,6 +329,7 @@ export default {
       //   CodeToText,
       regionDataPlus,
       provinceAndCityData,
+      provinceAndCityDataPlus,
       selectedOptions: [],
       activeTab: 'worker',
       dialogImageUrl: '',
@@ -349,7 +353,7 @@ export default {
         // 性别
         sex: '女',
         // 籍贯
-        native_place: [],
+        native_place: '',
         // 民族
         nation: '',
         // 属相
@@ -392,6 +396,7 @@ export default {
         languages: [],
         // 证件
         credentials: [],
+        salary: undefined,
         // 工作类型
         work_type: [],
         work_time: [],
@@ -484,6 +489,13 @@ export default {
           {
             required: true,
             message: '请输入联系电话',
+            trigger: 'blur'
+          }
+        ],
+        salary: [
+          {
+            type: 'number',
+            message: '必须为数字值',
             trigger: 'blur'
           }
         ]

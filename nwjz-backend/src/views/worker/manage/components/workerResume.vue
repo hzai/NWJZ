@@ -8,7 +8,7 @@
         <el-col :span="12" style="padding-top:8px;">
           <div style="font-size:20px;font-weight:500;color:white;">{{ postForm.name }}</div>
           <div style="font-size:14px;font-weight:500;margin-top:8px;color:white;">{{ postForm.age }}岁&nbsp;&nbsp; {{ postForm.working_age }}</div>
-          <div style="font-size:14px;font-weight:500;margin-top:8px;color:white;">{{ postForm.native_place | codeToTextFilter }}</div>
+          <div style="font-size:14px;font-weight:500;margin-top:8px;color:white;">{{ postForm.native_place | nativePlaceFilter }}</div>
         </el-col>
         <el-col :span="4" style="float:right;margin-right:15px;">
           <router-link style="margin-right:15px;" :to="{ path:'detail?id='+workerId}">
@@ -41,7 +41,7 @@
       </span>
     </div>
     <div style="padding:12px 20px;">
-      <el-row class="content-info">籍贯民族:&nbsp;&nbsp;&nbsp;&nbsp;{{ postForm.native_place | codeToTextFilter }} {{ postForm.nation }}</el-row>
+      <el-row class="content-info">籍贯民族:&nbsp;&nbsp;&nbsp;&nbsp;{{ postForm.native_place | nativePlaceFilter }} {{ postForm.nation }}</el-row>
       <el-row class="content-info">工作经验:&nbsp;&nbsp;&nbsp;&nbsp;{{ postForm.working_age }}</el-row>
       <el-row class="content-info">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;历:&nbsp;&nbsp;&nbsp;&nbsp;{{ postForm.academic }}</el-row>
       <el-row class="content-info">身份证号:&nbsp;&nbsp;&nbsp;&nbsp;{{ postForm.id_card }}</el-row>
@@ -125,7 +125,7 @@ export default {
         // 性别
         sex: '女',
         // 籍贯
-        native_place: [],
+        native_place: '',
         // 民族
         nation: '',
         // 属相
