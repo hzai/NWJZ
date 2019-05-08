@@ -189,6 +189,7 @@ export default {
               });
               this.dialogVisible = false;
               this.List.unshift(resp.data.data.communication);
+              this.model.content = '';
               this.employer.status = this.model.status;
               updateEmployer(this.employer._id, this.employer);
             }
