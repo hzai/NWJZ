@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2017-12-12 23:54:27
- * @Last Modified by: Arnie Carter
- * @Last Modified time: 2019-05-08 06:20:58
+ * @Last Modified by: Roy Chen
+ * @Last Modified time: 2019-05-08 20:02:28
  */
 
 import Promise from 'bluebird';
@@ -72,7 +72,7 @@ const EmployerSchema = new mongoose.Schema(
         },
         // 阿姨籍贯要求
         worker_native_place: {
-            type: []
+            type: String
         },
         // 阿姨从业经验
         worker_exp: {

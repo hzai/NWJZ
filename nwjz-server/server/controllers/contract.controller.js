@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:36:55
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-03-27 14:53:08
+ * @Last Modified time: 2019-04-29 21:57:08
  */
 import Contract from '../models/contract.model';
 import Worker from '../models/worker.model';
@@ -46,8 +46,12 @@ function get(req, res) {
  */
 async function create(req, res, next) {
     const counter = await Counters.getNextContractNo('contract_no');
-    req.body.contract_no = 'HT' + moment().format('YYYY') + Utils.buquan(counter.contract_no_seq, 5);
+    req.body.contract_no =
+        'HT' +
+        moment().format('YYYY') +
+        Utils.buquan(counter.contract_no_seq, 5);
     const contract = new Contract(req.body);
+    contract.company = req.payload.company;
     const worker_record = [
         {
             worker: contract.worker,
@@ -57,22 +61,22 @@ async function create(req, res, next) {
         }
     ];
     contract.worker_record = worker_record;
+    contract.created_by = req.payload.user;
     console.log(contract);
-    contract.create_by = req.payload.user;
     contract
         .save()
         .then(savedContract => {
-            // 更改保姆的状态 = 1 已分配
+            // 更改保姆的状态 = 1 上户中
             Worker.findByIdAndUpdate(savedContract.worker, {
-                status: 1, // 已分配
+                status: 1, // 上户中
                 updated_time: Date.now(),
                 updated_by: req.payload.user
             })
                 .then(resp => {})
                 .catch(e => next(e));
-            // 更改雇主的状态 = 1 已分配
+            // 更改雇主的状态 = 3 已签约
             Employer.findByIdAndUpdate(savedContract.employer, {
-                status: 1, // 已分配
+                status: 3, // 已签约
                 updated_time: Date.now(),
                 updated_by: req.payload.user
             })

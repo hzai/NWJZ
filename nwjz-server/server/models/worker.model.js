@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-12 23:54:27
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-28 23:35:01
+ * @Last Modified time: 2019-05-08 22:43:26
  */
 
 import Promise from 'bluebird';
@@ -68,7 +68,7 @@ const WorkerSchema = new mongoose.Schema(
         },
         // 籍贯
         native_place: {
-            type: [String]
+            type: String
         },
         // 民族
         nation: {
@@ -169,6 +169,10 @@ const WorkerSchema = new mongoose.Schema(
         // 工作类型
         work_type: {
             type: [String]
+        },
+        // 薪资要求
+        salary: {
+            type: Number
         },
         // 工作时间
         work_time: {

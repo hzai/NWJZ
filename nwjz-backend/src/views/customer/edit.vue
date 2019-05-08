@@ -31,7 +31,7 @@
         <communication-pane ref="comm" :employer-id="this.$route.query.id" />
       </el-tab-pane>
       <el-tab-pane key="workersearch" label="阿姨筛选" name="workersearch">
-        <worker-mapping :is-edit="true" :employer-id="this.$route.query.id" />
+        <worker-mapping ref="workersearch" :is-edit="true" :employer-id="this.$route.query.id" />
       </el-tab-pane>
       <el-tab-pane key="contract" label="合同管理" name="contract">
         <customer-contract :is-edit="true" :employer-id="this.$route.query.id" />
@@ -79,7 +79,15 @@ export default {
     clickParent(tab, event) {
       switch (tab.label) {
         case '跟进记录':
+          console.log('click 跟进记录');
+          this.fetchData();
           this.$refs.comm.parentHandleclick(this.postForm);
+          break;
+        case '阿姨筛选':
+          console.log('click 阿姨筛选');
+          this.fetchData();
+          this.$refs.workersearch.parentHandleclick(this.postForm);
+          break;
       }
     },
     fetchData() {

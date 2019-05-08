@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:36:55
- * @Last Modified by: Arnie Carter
- * @Last Modified time: 2019-05-08 07:39:52
+ * @Last Modified by: Roy Chen
+ * @Last Modified time: 2019-05-08 23:37:21
  */
 import mongoose from 'mongoose';
 import Worker from '../models/worker.model';
@@ -117,7 +117,11 @@ async function getWorkers(req, res, next) {
         working_experience = undefined,
         native_place = undefined,
         nation = undefined,
-        zodiac = undefined
+        zodiac = undefined,
+        ageMin = undefined,
+        ageMax = undefined,
+        salaryMin = undefined,
+        salaryMax = undefined
     } = req.query;
     let _filter = {
         $and: [
@@ -182,11 +186,15 @@ async function getWorkers(req, res, next) {
             }
         });
     }
-    if (native_place !== undefined) {
+    console.log('native_place = ', native_place);
+    if (
+        native_place !== undefined &&
+        native_place[0] !== undefined &&
+        native_place[0] != ''
+    ) {
         _filter.$and.push({
             native_place: {
-                $regex: native_place,
-                $options: '$i'
+                $in: native_place
             }
         });
     }
@@ -200,6 +208,34 @@ async function getWorkers(req, res, next) {
             zodiac: {
                 $regex: zodiac,
                 $options: '$i'
+            }
+        });
+    }
+    if (ageMin !== undefined && ageMin !== '') {
+        _filter.$and.push({
+            age: {
+                $gte: ageMin
+            }
+        });
+    }
+    if (ageMax !== undefined && ageMax !== '') {
+        _filter.$and.push({
+            age: {
+                $lte: ageMax
+            }
+        });
+    }
+    if (salaryMin !== undefined && salaryMin !== '') {
+        _filter.$and.push({
+            salary: {
+                $gte: salaryMin
+            }
+        });
+    }
+    if (salaryMax !== undefined && salaryMax !== '') {
+        _filter.$and.push({
+            salary: {
+                $lte: salaryMax
             }
         });
     }
@@ -314,7 +350,7 @@ async function queryWorkers(req, res, next) {
     let total = await Worker.count(_filter);
     const query = Utils.handleQuery(req, total);
     Worker.find(_filter)
-        .projection({'name': 1, 'contact_phone': 1, '_id': 1})
+        .projection({ name: 1, contact_phone: 1, _id: 1 })
         .sort({
             created_time: 1
         })

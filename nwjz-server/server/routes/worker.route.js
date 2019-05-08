@@ -1,8 +1,8 @@
 /*
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:44:25
- * @Last Modified by: Arnie Carter
- * @Last Modified time: 2019-05-08 07:26:13
+ * @Last Modified by: Roy Chen
+ * @Last Modified time: 2019-05-08 19:57:16
  */
 import express from 'express';
 import expressJwt from 'express-jwt';
@@ -48,7 +48,7 @@ router
         authRequired,
         roles(['admin', 'company', 'editor']),
         workerCtrl.queryWorkers
-    )
+    );
 router
     .route('/stat')
     .get(

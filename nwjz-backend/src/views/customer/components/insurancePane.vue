@@ -219,7 +219,7 @@ export default {
   },
   created() {
     // Mock: get all routes and roles list from server
-    this.getList();
+    // this.getList();
   },
   methods: {
     async getList() {

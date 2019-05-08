@@ -111,13 +111,14 @@ export default {
     ...mapGetters(['name'])
   },
   created() {
-    this.getList();
+    // this.getList();
   },
   methods: {
     parentHandleclick(employerFromParent) {
       //   console.log(employerFromParent);
       this.employer = employerFromParent;
       this.model.status = employerFromParent.status;
+      this.getList();
     },
     timelinetitle(author, createtime) {
       return author + '  ' + parseTime(createtime, '{y}-{m}-{d} {h}:{i}');
