@@ -2,11 +2,11 @@
  * @Author: Roy Chen
  * @Date: 2019-04-22 21:12:49
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-29 15:48:23
+ * @Last Modified time: 2019-05-08 19:44:56
  */
 // import parseTime, formatTime and set to filter
 
-import { CodeToText } from 'element-china-area-data';
+import { CodeToText, provinceAndCityData } from 'element-china-area-data';
 import staticOptions from '@/data/options';
 export { parseTime, formatTime } from '@/utils';
 
@@ -103,6 +103,14 @@ export function arrayToText(arr) {
     //     result = result.slice(0, 10) + '...';
     // }
     return result;
+}
+
+export function nativePlaceFilter(native_place) {
+    const map = [];
+    provinceAndCityData.forEach(item => {
+        map[item.value] = item.label;
+    });
+    return map[native_place];
 }
 
 export function workerStatusFilter(status) {
