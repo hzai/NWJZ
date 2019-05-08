@@ -95,10 +95,54 @@
       </el-row>
     </div>
 
+    <div class="tip" v-if="commentList.length>0">
+      <span>
+        老师评价
+      </span>
+    </div>
+    <div style="padding:12px 20px;">
+      <el-row v-for="item in commentList" :key="item._id" class="content-info">
+        <el-row>
+          <el-col :span="12">
+            <p>
+              <img :src="item.created_by.avatar" alt="" class="comment-avatar">
+              {{item.created_by.name}}
+            </p>
+          </el-col>
+          <el-col :span="8">
+            {{item.created_time | parseTime('{y}-{m}-{d} {h}:{i}')}}
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            工作技能:
+            <el-rate disabled v-model="item.skill" :colors="colors" show-text :texts="texts" />
+          </el-col>
+          <el-col :span="12">
+            工作态度:
+            <el-rate disabled v-model="item.attitude" :colors="colors" show-text :texts="texts" />
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            责任心:
+            <el-rate disabled v-model="item.responsibility" :colors="colors" show-text :texts="texts" />
+          </el-col>
+          <el-col :span="12">
+            人品:
+            <el-rate disabled v-model="item.character" :colors="colors" show-text :texts="texts" />
+          </el-col>
+        </el-row>
+
+        评价: {{item.comment}}
+      </el-row>
+    </div>
+
   </div>
 </template>
 
 <script>
+import { fetchWorkerCommentList } from '@/api/worker';
 import { fetchWorker } from '@/api/worker';
 import { mapGetters } from 'vuex';
 export default {
@@ -112,6 +156,7 @@ export default {
   },
   data() {
     return {
+      commentList: [],
       postForm: {
         status: 0,
         // 是否受雇为员工，默认false
@@ -198,7 +243,9 @@ export default {
       fetchSuccess: true,
       loading: false,
       dialogImageUrl: '',
-      dialogVisible: false
+      dialogVisible: false,
+      colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
+      texts: ['非常不满', '不满意', '一般', '满意', '非常满意']
     };
   },
   computed: {
@@ -225,6 +272,14 @@ export default {
           this.fetchSuccess = false;
           console.log(err);
         });
+      fetchWorkerCommentList(this.workerId).then(response => {
+        const comments = response.data.data.workerComments;
+        comments.forEach(item => {
+          if (item.isDisplay) {
+            this.commentList.push(item);
+          }
+        });
+      });
     },
     handlePictureCardPreview(url) {
       this.dialogImageUrl = url;
@@ -270,6 +325,13 @@ export default {
   display: block;
   border: 3px solid #2db7f5;
   border-radius: 5px;
+  object-fit: cover;
+}
+.comment-avatar {
+  width: 30px;
+  height: 30px;
+  display: block;
+  border-radius: 15px;
   object-fit: cover;
 }
 .photo {

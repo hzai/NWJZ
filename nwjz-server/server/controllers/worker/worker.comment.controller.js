@@ -2,7 +2,7 @@
  * @Author = Roy Chen
  * @Date = 2017-12-13 00:36:55
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-28 16:49:17
+ * @Last Modified time: 2019-05-09 00:58:24
  */
 import WorkerComment from '../../models/worker/worker.comment.model';
 import Utils from '../../helpers/Utils';
@@ -105,9 +105,10 @@ async function list(req, res, next) {
     const skip = query.skip;
 
     WorkerComment.find(_filter)
-        // .populate({
-        //     path: 'worker'
-        // })
+        .populate({
+            path: 'created_by',
+            select: 'avatar name'
+        })
         .sort({
             created_time: -1
         })

@@ -6,10 +6,9 @@
     <el-table :key="tableKey" v-loading="listLoading" border :data="list" element-loading-text="给我一点时间" stripe fit highlight-current-row style="width: 100%">
       <el-table-column type="index" align="center" width="50" />
       <el-table-column align="center" prop="name" label="评价方" min-width="100">
-        <!-- <template slot-scope="scope"> -->
-        <!-- <span class="link-type" @click="gotoWorker(scope.row.worker._id)">{{ scope.row.worker.name }}</span> -->
-        <!-- <span>{{scope.row.worker.name}}</span> -->
-        <!-- </template> -->
+        <template slot-scope="scope">
+          <span>{{scope.row.commentator}}</span>
+        </template>
       </el-table-column>
       <el-table-column align="center" label="工作技能" min-width="150px">
         <template slot-scope="scope">
@@ -116,6 +115,7 @@ export default {
         limit: 10
       },
       postForm: {
+        commentator: '',
         worker: '',
         // 工作技能
         skill: undefined,
@@ -168,6 +168,7 @@ export default {
     },
     resetTemp() {
       this.postForm = {
+        commentator: '',
         worker: '',
         // 工作技能
         skill: undefined,
@@ -184,6 +185,7 @@ export default {
     },
     handleCreate() {
       this.resetTemp();
+      this.postForm.commentator = '老师评价';
       this.postForm.worker = this.workerId;
       this.dialogType = 'new';
       this.dialogFormVisible = true;

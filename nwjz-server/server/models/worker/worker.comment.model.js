@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-12 23:54:27
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-04-28 16:17:53
+ * @Last Modified time: 2019-05-09 00:29:39
  */
 
 import Promise from 'bluebird';
@@ -25,6 +25,10 @@ const WorkerCommentSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Compnay',
             required: true
+        },
+        // 评价方
+        commentator: {
+            type: String
         },
         // 工作技能
         skill: {
