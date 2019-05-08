@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:36:55
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-05-08 23:49:13
+ * @Last Modified time: 2019-05-08 23:50:17
  */
 import mongoose from 'mongoose';
 import Worker from '../models/worker.model';
@@ -357,7 +357,7 @@ async function queryWorkers(req, res, next) {
     let total = await Worker.count(_filter);
     // const query = Utils.handleQuery(req, total);
     Worker.find(_filter)
-        .projection({ name: 1, contact_phone: 1, _id: 1 })
+        .select({ name: 1, contact_phone: 1, _id: 1 })
         .sort({
             created_time: 1
         })
