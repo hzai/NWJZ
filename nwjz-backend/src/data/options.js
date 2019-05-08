@@ -157,14 +157,15 @@ export default {
         { value: '驾驶证', label: '驾驶证' }
     ],
     job: [
-        { value: '保洁', label: '保洁' },
         { value: '月嫂', label: '月嫂' },
+        { value: '保姆', label: '保姆' },
         { value: '育婴师', label: '育婴师' },
-        { value: '长期钟点工', label: '长期钟点工' },
-        { value: '住家保姆', label: '住家保姆' },
-        { value: '不住家保姆', label: '不住家保姆' },
-        { value: '老人陪护', label: '老人陪护' },
-        { value: '病人陪护', label: '病人陪护' }
+        { value: '钟点工', label: '钟点工' },
+        { value: '家电保洁', label: '家电保洁' },
+        { value: '老年护理', label: '老年护理' },
+        { value: '病人护理', label: '病人护理' },
+        { value: '管家', label: '管家' },
+        { value: '维修', label: '维修' }
     ],
     workingAge: [
         { value: '1年', label: '1年' },
