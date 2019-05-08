@@ -2,7 +2,7 @@
  * @Author: Roy Chen
  * @Date: 2017-12-13 00:36:55
  * @Last Modified by: Roy Chen
- * @Last Modified time: 2019-05-08 23:37:21
+ * @Last Modified time: 2019-05-08 23:49:13
  */
 import mongoose from 'mongoose';
 import Worker from '../models/worker.model';
@@ -332,23 +332,30 @@ async function getFreeWorkers(req, res, next) {
  * @param {*} next
  */
 async function queryWorkers(req, res, next) {
-    const { is_employed = true } = req.query;
+    const { name = '', contact_phone = '' } = req.query;
     let _filter = {
-        is_employed: is_employed
+        $and: [
+            {
+                name: {
+                    $regex: name,
+                    $options: '$i'
+                }
+            },
+            {
+                contact_phone: {
+                    $regex: contact_phone,
+                    $options: '$i'
+                }
+            }
+        ]
     };
 
-    if (Utils.isCompany(req.payload.roles)) {
-        _filter.$and.push({
-            belong_to: req.payload.user
-        });
-    } else {
-        _filter.$and.push({
-            belong_to: null
-        });
-    }
+    _filter.$and.push({
+        company: req.payload.company
+    });
 
     let total = await Worker.count(_filter);
-    const query = Utils.handleQuery(req, total);
+    // const query = Utils.handleQuery(req, total);
     Worker.find(_filter)
         .projection({ name: 1, contact_phone: 1, _id: 1 })
         .sort({
